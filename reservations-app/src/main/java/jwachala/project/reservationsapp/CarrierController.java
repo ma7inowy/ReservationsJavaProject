@@ -45,6 +45,9 @@ public class CarrierController {
         return carrierOrderRepository.getCarrierOrderList();
     }
 
+    //here getCarrierOrdersById
+
+    //here getCarrierOrdersByCarrierId
 
 
 }

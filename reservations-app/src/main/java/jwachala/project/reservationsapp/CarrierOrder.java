@@ -3,8 +3,6 @@ package jwachala.project.reservationsapp;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.UUID;
 
 @Data
 public class CarrierOrder {
@@ -13,7 +11,7 @@ public class CarrierOrder {
     private String name;
     private String surname;
     private LocalDate date;
-    private String carrierID;
+    private String carrierId;
     private String destinationCity;
     private static int counterID  = 0;
 
@@ -23,7 +21,7 @@ public class CarrierOrder {
         this.name = name;
         this.surname = surname;
         this.date = date;
-        this.carrierID = carrierID;
+        this.carrierId = carrierID;
         this.destinationCity = destinationCity;
         counterID++;
 

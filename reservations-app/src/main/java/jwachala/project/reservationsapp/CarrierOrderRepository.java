@@ -19,13 +19,13 @@ public class CarrierOrderRepository {
         carrierOrderList.add(new CarrierOrder("Jan", "Kowalski4", LocalDate.now().plusDays(4), "4", "City4"));
     }
 
-    public List<CarrierOrder> getCarrierOrdersById(String carrierId) {
-        List<CarrierOrder> carrierOrdersById = new ArrayList<>();
+    public List<CarrierOrder> getCarrierOrdersByCarrierId(String carrierId) {
+        List<CarrierOrder> carrierOrdersByCarrierId = new ArrayList<>();
         for (CarrierOrder carrierOrder : carrierOrderList) {
-            if (carrierOrder.getId().equals(carrierId)) {
-                carrierOrdersById.add(carrierOrder);
+            if (carrierOrder.getCarrierId().equals(carrierId)) {
+                carrierOrdersByCarrierId.add(carrierOrder);
             }
         }
-        return carrierOrdersById;
+        return carrierOrdersByCarrierId;
     }
 }
