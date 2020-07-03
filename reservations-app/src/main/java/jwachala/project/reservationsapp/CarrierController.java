@@ -13,11 +13,14 @@ import java.util.List;
 public class CarrierController {
 
     private CarrierRepostiory carrierRepostiory;
+    private CarrierOrderRepository carrierOrderRepository;
 
     public CarrierController() {
         carrierRepostiory = new CarrierRepostiory();
+        carrierOrderRepository = new CarrierOrderRepository();
     }
 
+    //carriers operations
     @GetMapping("carriers")
     public List<Carrier> getCarriers() {
         return carrierRepostiory.getCarrierList();
@@ -35,5 +38,13 @@ public class CarrierController {
 
         return ResponseEntity.created(uri).build();
     }
+
+    //carrierOrders operations
+    @GetMapping("/carrierOrders")
+    public List<CarrierOrder> getCarrierOrders() {
+        return carrierOrderRepository.getCarrierOrderList();
+    }
+
+
 
 }
