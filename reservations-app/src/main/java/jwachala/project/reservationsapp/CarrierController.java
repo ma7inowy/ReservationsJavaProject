@@ -1,40 +1,48 @@
 package jwachala.project.reservationsapp;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
-@RequestMapping("carrierapi")
+@RequestMapping("api/carrier")
 public class CarrierController {
 
+    @Autowired
     private CarrierRepostiory carrierRepostiory;
     private CarrierOrderRepository carrierOrderRepository;
 
     public CarrierController() {
-        carrierRepostiory = new CarrierRepostiory();
         carrierOrderRepository = new CarrierOrderRepository();
     }
 
     //carriers operations
     @GetMapping("carriers")
-    public List<Carrier> getCarriers() {
+    public List<CarrierModel> getCarriers() {
         return carrierRepostiory.getCarrierList();
     }
 
+    // musze zwracac liste z obiektami dto
     @GetMapping("/carriers/{city}")
-    public List<Carrier> getCarriersByCity(@PathVariable(value = "city") String city) {
+    public List<CarrierModel> getCarriersByCity(@PathVariable(value = "city") String city) {
         return carrierRepostiory.getCarriersbyCity(city);
     }
 
     @PostMapping("carriers")
-    public ResponseEntity<?> createCarrier(@RequestBody Carrier carrier) {
-        carrierRepostiory.getCarrierList().add(carrier);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(carrier.getId()).toUri();
+    public ResponseEntity<?> createCarrier(@RequestBody CarrierDTO dto) {
+         var model = new CarrierModel();
+         model.setCity(dto.getCity());
+         model.setCity(dto.getCompanyName());
+         model.setId(UUID.randomUUID().toString());
+
+        carrierRepostiory.getCarrierList().add(model);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(model.getId()).toUri();
 
         return ResponseEntity.created(uri).build();
     }
@@ -48,6 +56,8 @@ public class CarrierController {
     //here getCarrierOrdersById
 
     //here getCarrierOrdersByCarrierId
+
+    //ile os bedzie jechalo, anulowanie, akceptowanie
 
 
 }

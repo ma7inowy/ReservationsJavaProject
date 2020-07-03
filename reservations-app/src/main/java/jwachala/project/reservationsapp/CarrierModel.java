@@ -1,20 +1,20 @@
 package jwachala.project.reservationsapp;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+        import lombok.Data;
+        import lombok.NoArgsConstructor;
 
-import java.util.Random;
-import java.util.UUID;
+        import java.util.Random;
+        import java.util.UUID;
 
 @Data
-public class Carrier {
+public class CarrierModel {
 
     private String id;
     private String city;
     private String companyName;
     private static int counterID = 0;
 
-    public Carrier(String city, String companyName) {
+    public CarrierModel(String city, String companyName) {
         this.city = city;
         this.companyName = companyName;
 //        this.id = UUID.randomUUID().toString();

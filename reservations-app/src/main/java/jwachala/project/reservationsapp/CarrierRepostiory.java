@@ -1,27 +1,29 @@
 package jwachala.project.reservationsapp;
 
 import lombok.Data;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 @Data
 public class CarrierRepostiory {
 
-    private List<Carrier> carrierList;
+    private List<CarrierModel> carrierList;
 
     public CarrierRepostiory() {
         this.carrierList = new ArrayList<>();
-        carrierList.add(new Carrier("City1", "Company1"));
-        carrierList.add(new Carrier("City1", "Company2"));
-        carrierList.add(new Carrier("City1", "Company3"));
-        carrierList.add(new Carrier("City2", "Company4"));
-        carrierList.add(new Carrier("City3", "Company5"));
+        carrierList.add(new CarrierModel("City1", "Company1"));
+        carrierList.add(new CarrierModel("City1", "Company2"));
+        carrierList.add(new CarrierModel("City1", "Company3"));
+        carrierList.add(new CarrierModel("City2", "Company4"));
+        carrierList.add(new CarrierModel("City3", "Company5"));
     }
 
-    public List<Carrier> getCarriersbyCity(String city) {
-        List<Carrier> carrierListbyCity = new ArrayList<>();
-        for (Carrier carrier : carrierList) {
+    public List<CarrierModel> getCarriersbyCity(String city) {
+        List<CarrierModel> carrierListbyCity = new ArrayList<>();
+        for (CarrierModel carrier : carrierList) {
             if (carrier.getCity().toLowerCase().equals(city.toLowerCase())) {
                 carrierListbyCity.add(carrier);
             }
@@ -29,9 +31,9 @@ public class CarrierRepostiory {
         return carrierListbyCity;
     }
 
-    public List<Carrier> getCarriersbyCompanyName(String companyName) {
-        List<Carrier> carrierListbyCompanyName = new ArrayList<>();
-        for (Carrier carrier : carrierList) {
+    public List<CarrierModel> getCarriersbyCompanyName(String companyName) {
+        List<CarrierModel> carrierListbyCompanyName = new ArrayList<>();
+        for (CarrierModel carrier : carrierList) {
             if (carrier.getCompanyName().toLowerCase().equals(companyName.toLowerCase())) {
                 carrierListbyCompanyName.add(carrier);
             }
