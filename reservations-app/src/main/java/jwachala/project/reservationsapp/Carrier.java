@@ -7,7 +7,6 @@ import java.util.Random;
 import java.util.UUID;
 
 @Data
-@NoArgsConstructor
 public class Carrier {
 
     private String id;

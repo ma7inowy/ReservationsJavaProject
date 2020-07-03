@@ -1,18 +1,20 @@
 package jwachala.project.reservationsapp;
 
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("travelerapi")
-public class TravelerController {
+@RequestMapping("carrierapi")
+public class CarrierController {
 
     private CarrierRepostiory carrierRepostiory;
 
-    public TravelerController() {
+    public CarrierController() {
         carrierRepostiory = new CarrierRepostiory();
     }
 
@@ -26,10 +28,12 @@ public class TravelerController {
         return carrierRepostiory.getCarriersbyCity(city);
     }
 
-    // better address for query needed
-    @GetMapping("/carriers/name/{companyName}")
-    public List<Carrier> getCarriersByCompanyName(@PathVariable(value = "companyName") String companyName) {
-        return carrierRepostiory.getCarriersbyCompanyName(companyName);
+    @PostMapping("carriers")
+    public ResponseEntity<?> createCarrier(@RequestBody Carrier carrier) {
+        carrierRepostiory.getCarrierList().add(carrier);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(carrier.getId()).toUri();
+
+        return ResponseEntity.created(uri).build();
     }
 
 }

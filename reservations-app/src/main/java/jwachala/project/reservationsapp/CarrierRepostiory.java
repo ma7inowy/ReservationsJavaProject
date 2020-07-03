@@ -28,4 +28,14 @@ public class CarrierRepostiory {
         }
         return carrierListbyCity;
     }
+
+    public List<Carrier> getCarriersbyCompanyName(String companyName) {
+        List<Carrier> carrierListbyCompanyName = new ArrayList<>();
+        for (Carrier carrier : carrierList) {
+            if (carrier.getCompanyName().toLowerCase().equals(companyName.toLowerCase())) {
+                carrierListbyCompanyName.add(carrier);
+            }
+        }
+        return carrierListbyCompanyName;
+    }
 }
