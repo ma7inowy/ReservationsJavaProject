@@ -6,7 +6,8 @@ import lombok.NoArgsConstructor;
 @Data
 public class CarrierDTO {
 
-    private String city;
+    private String startCity;
+    private String destinationCity;
     private String companyName;
 //    private Details details;
 

@@ -14,17 +14,17 @@ public class CarrierRepostiory {
 
     public CarrierRepostiory() {
         this.carrierList = new ArrayList<>();
-        carrierList.add(new CarrierModel("City1", "Company1"));
-        carrierList.add(new CarrierModel("City1", "Company2"));
-        carrierList.add(new CarrierModel("City1", "Company3"));
-        carrierList.add(new CarrierModel("City2", "Company4"));
-        carrierList.add(new CarrierModel("City3", "Company5"));
+        carrierList.add(new CarrierModel("City1", "destCity1", "Company1"));
+        carrierList.add(new CarrierModel("City2", "destCity2", "Company2"));
+        carrierList.add(new CarrierModel("City3", "destCity3", "Company2"));
+        carrierList.add(new CarrierModel("City3", "destCity4", "Company3"));
+
     }
 
-    public List<CarrierModel> getCarriersbyCity(String city) {
+    public List<CarrierModel> getCarriersbyStartCity(String city) {
         List<CarrierModel> carrierListbyCity = new ArrayList<>();
         for (CarrierModel carrier : carrierList) {
-            if (carrier.getCity().toLowerCase().equals(city.toLowerCase())) {
+            if (carrier.getStartCity().toLowerCase().equals(city.toLowerCase())) {
                 carrierListbyCity.add(carrier);
             }
         }

@@ -21,9 +21,9 @@ public class TravelerController {
         return carrierRepostiory.getCarrierList();
     }
 
-    @GetMapping("/carriers/{city}")
-    public List<CarrierModel> getCarriersByCity(@PathVariable(value = "city") String city) {
-        return carrierRepostiory.getCarriersbyCity(city);
+    @GetMapping("/carriers/{startCity}")
+    public List<CarrierModel> getCarriersByCity(@PathVariable(value = "startCity") String startCity) {
+        return carrierRepostiory.getCarriersbyStartCity(startCity);
     }
 
     // better address for query needed
@@ -38,10 +38,8 @@ public class TravelerController {
         var model = new CarrierOrderModel();
         model.setName(dto.getName());
         model.setSurname(dto.getSurname());
-        model.setDate(dto.getDate());
+        model.setOrderDate(dto.getOrderDate());
         model.setCarrierId(dto.getCarrierId());
-        model.setDestinationCity(dto.getDestinationCity());
-
 
         carrierOrderRepository.getCarrierOrderList().add(model);
         var uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(model.getId()).toUri();

@@ -15,10 +15,10 @@ public class CarrierOrderRepository {
 
     public CarrierOrderRepository() {
         this.carrierOrderList = new ArrayList<>();
-        carrierOrderList.add(new CarrierOrderModel("Jan", "Kowalski1", LocalDate.now().plusDays(1), "1", "City1"));
-        carrierOrderList.add(new CarrierOrderModel("Jan", "Kowalski2", LocalDate.now().plusDays(2), "2", "City2"));
-        carrierOrderList.add(new CarrierOrderModel("Jan", "Kowalski3", LocalDate.now().plusDays(3), "3", "City3"));
-        carrierOrderList.add(new CarrierOrderModel("Jan", "Kowalski4", LocalDate.now().plusDays(4), "4", "City4"));
+        carrierOrderList.add(new CarrierOrderModel("Jan", "Kowalski1", LocalDate.now().plusDays(1), "1"));
+        carrierOrderList.add(new CarrierOrderModel("Jan", "Kowalski2", LocalDate.now().plusDays(2), "2"));
+        carrierOrderList.add(new CarrierOrderModel("Jan", "Kowalski3", LocalDate.now().plusDays(3), "3"));
+        carrierOrderList.add(new CarrierOrderModel("Jan", "Kowalski4", LocalDate.now().plusDays(4), "4"));
     }
 
     public List<CarrierOrderModel> getCarrierOrdersByCarrierId(String carrierId) {

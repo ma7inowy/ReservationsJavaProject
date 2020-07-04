@@ -6,9 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("api/carrier")
@@ -26,15 +24,16 @@ public class CarrierController {
     }
 
     // musze zwracac liste z obiektami dto
-    @GetMapping("/carriers/{city}")
-    public List<CarrierModel> getCarriersByCity(@PathVariable(value = "city") String city) {
-        return carrierRepostiory.getCarriersbyCity(city);
+    @GetMapping("/carriers/{startCity}")
+    public List<CarrierModel> getCarriersByCity(@PathVariable(value = "startCity") String startCity) {
+        return carrierRepostiory.getCarriersbyStartCity(startCity);
     }
 
     @PostMapping("carriers")
     public ResponseEntity<?> createCarrier(@RequestBody CarrierDTO dto) {
          var model = new CarrierModel();
-         model.setCity(dto.getCity());
+         model.setStartCity(dto.getStartCity());
+         model.setDestinationCity(dto.getDestinationCity());
          model.setCompanyName(dto.getCompanyName());
 //       model.setId(UUID.randomUUID().toString()); // czy moze id w konstr
 
@@ -57,6 +56,8 @@ public class CarrierController {
     }
 
     //ile os bedzie jechalo, anulowanie, akceptowanie
+
+    //how much people want to use this carrier
 
 
 }

@@ -10,9 +10,8 @@ public class CarrierOrderModel {
     private String id;
     private String name;
     private String surname;
-    private LocalDate date;
+    private LocalDate orderDate;
     private String carrierId;
-    private String destinationCity;
     private static int counterID  = 0;
 
     public CarrierOrderModel(){
@@ -20,14 +19,13 @@ public class CarrierOrderModel {
         counterID++;
     }
 
-    public CarrierOrderModel(String name, String surname, LocalDate date, String carrierID, String destinationCity) {
+    public CarrierOrderModel(String name, String surname, LocalDate date, String carrierID) {
 //        this.id = UUID.randomUUID().toString();
         this.id = Integer.toString(counterID);
         this.name = name;
         this.surname = surname;
-        this.date = date;
+        this.orderDate = date;
         this.carrierId = carrierID; // samo id czy caly obiekt Carrier?
-        this.destinationCity = destinationCity;
         counterID++;
 
     }

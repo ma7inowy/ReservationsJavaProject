@@ -9,8 +9,6 @@ public class CarrierOrderDTO {
 
     private String name;
     private String surname;
-    private LocalDate date;
+    private LocalDate orderDate;
     private String carrierId;
-    private String destinationCity;
-
 }
