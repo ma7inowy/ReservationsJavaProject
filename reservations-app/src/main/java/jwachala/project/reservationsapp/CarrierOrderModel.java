@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.LocalDate;
 
 @Data
-public class CarrierOrder {
+public class CarrierOrderModel {
 
     private String id;
     private String name;
@@ -15,7 +15,12 @@ public class CarrierOrder {
     private String destinationCity;
     private static int counterID  = 0;
 
-    public CarrierOrder(String name, String surname, LocalDate date, String carrierID, String destinationCity) {
+    public CarrierOrderModel(){
+        this.id = Integer.toString(counterID);
+        counterID++;
+    }
+
+    public CarrierOrderModel(String name, String surname, LocalDate date, String carrierID, String destinationCity) {
 //        this.id = UUID.randomUUID().toString();
         this.id = Integer.toString(counterID);
         this.name = name;

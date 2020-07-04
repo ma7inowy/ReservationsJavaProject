@@ -34,9 +34,17 @@ public class TravelerController {
 
     // for making orders by travelers
     @PostMapping("order")
-    public ResponseEntity<?> createOrder(@RequestBody CarrierOrder carrierOrder){
-        carrierOrderRepository.getCarrierOrderList().add(carrierOrder);
-        var uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(carrierOrder.getId()).toUri();
+    public ResponseEntity<?> createOrder(@RequestBody CarrierOrderDTO dto){
+        var model = new CarrierOrderModel();
+        model.setName(dto.getName());
+        model.setSurname(dto.getSurname());
+        model.setDate(dto.getDate());
+        model.setCarrierId(dto.getCarrierId());
+        model.setDestinationCity(dto.getDestinationCity());
+
+
+        carrierOrderRepository.getCarrierOrderList().add(model);
+        var uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(model.getId()).toUri();
 
         return ResponseEntity.created(uri).build();
     }

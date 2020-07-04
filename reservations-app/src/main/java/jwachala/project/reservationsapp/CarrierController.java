@@ -36,23 +36,23 @@ public class CarrierController {
          var model = new CarrierModel();
          model.setCity(dto.getCity());
          model.setCompanyName(dto.getCompanyName());
-         model.setId(UUID.randomUUID().toString()); // czy moze id w konstr
+//       model.setId(UUID.randomUUID().toString()); // czy moze id w konstr
 
         carrierRepostiory.getCarrierList().add(model);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(model.getId()).toUri();
+        var uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(model.getId()).toUri();
 
         return ResponseEntity.created(uri).build();
     }
 
     //carrierOrders operations
     @GetMapping("/orders")
-    public List<CarrierOrder> getCarrierOrders() {
+    public List<CarrierOrderModel> getCarrierOrders() {
         return carrierOrderRepository.getCarrierOrderList();
     }
 
     //here getCarrierOrdersByCarrierId
     @GetMapping("/orders/{carrierId}")
-    public List<CarrierOrder> getCarrierOrdersByCarrierId(@PathVariable(value = "carrierId") String carrierId){
+    public List<CarrierOrderModel> getCarrierOrdersByCarrierId(@PathVariable(value = "carrierId") String carrierId){
         return carrierOrderRepository.getCarrierOrdersByCarrierId(carrierId);
     }
 
