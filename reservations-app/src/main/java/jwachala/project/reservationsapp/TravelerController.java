@@ -13,11 +13,8 @@ import java.util.List;
 public class TravelerController {
     @Autowired
     private CarrierRepostiory carrierRepostiory;
+    @Autowired
     private CarrierOrderRepository carrierOrderRepository;
-
-    public TravelerController() {
-        carrierOrderRepository = new CarrierOrderRepository();
-    }
 
     @GetMapping("carriers")
     public List<CarrierModel> getCarriers() {

@@ -8,11 +8,11 @@ public class CarrierDTO {
 
     private String city;
     private String companyName;
-    private Details details;
+//    private Details details;
 
-    @Data
-    static class Details{
-        private int distance;
-    }
+//    @Data
+//    static class Details{
+//        private int distance;
+//    }
 
 }

@@ -21,7 +21,7 @@ public class CarrierOrder {
         this.name = name;
         this.surname = surname;
         this.date = date;
-        this.carrierId = carrierID;
+        this.carrierId = carrierID; // samo id czy caly obiekt Carrier?
         this.destinationCity = destinationCity;
         counterID++;
 

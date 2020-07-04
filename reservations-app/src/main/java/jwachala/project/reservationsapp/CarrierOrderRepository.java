@@ -1,11 +1,13 @@
 package jwachala.project.reservationsapp;
 
 import lombok.Data;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 @Data
 public class CarrierOrderRepository {
 

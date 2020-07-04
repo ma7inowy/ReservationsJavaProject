@@ -16,11 +16,8 @@ public class CarrierController {
 
     @Autowired
     private CarrierRepostiory carrierRepostiory;
+    @Autowired
     private CarrierOrderRepository carrierOrderRepository;
-
-    public CarrierController() {
-        carrierOrderRepository = new CarrierOrderRepository();
-    }
 
     //carriers operations
     @GetMapping("carriers")
@@ -38,8 +35,8 @@ public class CarrierController {
     public ResponseEntity<?> createCarrier(@RequestBody CarrierDTO dto) {
          var model = new CarrierModel();
          model.setCity(dto.getCity());
-         model.setCity(dto.getCompanyName());
-         model.setId(UUID.randomUUID().toString());
+         model.setCompanyName(dto.getCompanyName());
+         model.setId(UUID.randomUUID().toString()); // czy moze id w konstr
 
         carrierRepostiory.getCarrierList().add(model);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(model.getId()).toUri();
@@ -48,14 +45,16 @@ public class CarrierController {
     }
 
     //carrierOrders operations
-    @GetMapping("/carrierOrders")
+    @GetMapping("/orders")
     public List<CarrierOrder> getCarrierOrders() {
         return carrierOrderRepository.getCarrierOrderList();
     }
 
-    //here getCarrierOrdersById
-
     //here getCarrierOrdersByCarrierId
+    @GetMapping("/orders/{carrierId}")
+    public List<CarrierOrder> getCarrierOrdersByCarrierId(@PathVariable(value = "carrierId") String carrierId){
+        return carrierOrderRepository.getCarrierOrdersByCarrierId(carrierId);
+    }
 
     //ile os bedzie jechalo, anulowanie, akceptowanie
 
