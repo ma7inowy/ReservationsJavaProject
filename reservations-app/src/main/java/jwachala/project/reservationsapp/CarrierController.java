@@ -31,11 +31,11 @@ public class CarrierController {
 
     @PostMapping("carriers")
     public ResponseEntity<?> createCarrier(@RequestBody CarrierDTO dto) {
-         var model = new CarrierModel();
-         model.setStartCity(dto.getStartCity());
-         model.setDestinationCity(dto.getDestinationCity());
-         model.setDate(dto.getDate());
-         model.setCompanyName(dto.getCompanyName());
+        var model = new CarrierModel();
+        model.setStartCity(dto.getStartCity());
+        model.setDestinationCity(dto.getDestinationCity());
+        model.setDate(dto.getDate());
+        model.setCompanyName(dto.getCompanyName());
 //       model.setId(UUID.randomUUID().toString()); // czy moze id w konstr
 
         carrierRepostiory.getCarrierList().add(model);
@@ -50,11 +50,19 @@ public class CarrierController {
         return carrierOrderRepository.getCarrierOrderList();
     }
 
-    //to get all orders for specific Carrier
-    @GetMapping("/orders/{carrierId}")
-    public List<CarrierOrderModel> getCarrierOrdersByCarrierId(@PathVariable(value = "carrierId") String carrierId){
-        return carrierOrderRepository.getCarrierOrdersByCarrierId(carrierId);
+    //to get all orders by company Name
+    @GetMapping("/orders/{companyName}")
+    public List<CarrierOrderModel> getCarrierOrdersByCompanyName(@PathVariable(value = "companyName") String companyName) {
+        return carrierOrderRepository.getCarrierOrdersByCompanyName(companyName);
     }
+
+    //to get all orders by company Name and specific City
+    @GetMapping("/orders/{companyName}/{startCity}")
+    public List<CarrierOrderModel> getCarrierOrdersByCompanyNameAndCity(@PathVariable(value = "companyName") String companyName,
+                                                                        @PathVariable(value = "startCity") String startCity) {
+        return carrierOrderRepository.getCarrierOrdersByCompanyNameAndCity(companyName, startCity);
+    }
+
 
     //ile os bedzie jechalo, anulowanie, akceptowanie
 

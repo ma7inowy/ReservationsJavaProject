@@ -11,7 +11,7 @@ public class CarrierOrderModel {
     private String name;
     private String surname;
     private LocalDate orderDate;
-    private String carrierId; // lub caly obiekt
+    private String carrierId; // lub caly obiekt, carrierId to konkretny "przewóz"
     private static int counterID  = 0;
 
     public CarrierOrderModel(){
