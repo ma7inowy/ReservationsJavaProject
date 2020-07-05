@@ -34,6 +34,7 @@ public class CarrierController {
          var model = new CarrierModel();
          model.setStartCity(dto.getStartCity());
          model.setDestinationCity(dto.getDestinationCity());
+         model.setDate(dto.getDate());
          model.setCompanyName(dto.getCompanyName());
 //       model.setId(UUID.randomUUID().toString()); // czy moze id w konstr
 
@@ -49,7 +50,7 @@ public class CarrierController {
         return carrierOrderRepository.getCarrierOrderList();
     }
 
-    //here getCarrierOrdersByCarrierId
+    //to get all orders for specific Carrier
     @GetMapping("/orders/{carrierId}")
     public List<CarrierOrderModel> getCarrierOrdersByCarrierId(@PathVariable(value = "carrierId") String carrierId){
         return carrierOrderRepository.getCarrierOrdersByCarrierId(carrierId);

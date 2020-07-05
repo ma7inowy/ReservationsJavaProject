@@ -3,6 +3,7 @@ package jwachala.project.reservationsapp;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,10 +15,10 @@ public class CarrierRepostiory {
 
     public CarrierRepostiory() {
         this.carrierList = new ArrayList<>();
-        carrierList.add(new CarrierModel("City1", "destCity1", "Company1"));
-        carrierList.add(new CarrierModel("City2", "destCity2", "Company2"));
-        carrierList.add(new CarrierModel("City3", "destCity3", "Company2"));
-        carrierList.add(new CarrierModel("City3", "destCity4", "Company3"));
+        carrierList.add(new CarrierModel("City1", "destCity1", LocalDate.now(), "Company1"));
+        carrierList.add(new CarrierModel("City2", "destCity2",LocalDate.now().plusDays(5), "Company2"));
+        carrierList.add(new CarrierModel("City3", "destCity3",LocalDate.now().plusDays(3), "Company2"));
+        carrierList.add(new CarrierModel("City3", "destCity4",LocalDate.now().plusDays(1), "Company3"));
 
     }
 
