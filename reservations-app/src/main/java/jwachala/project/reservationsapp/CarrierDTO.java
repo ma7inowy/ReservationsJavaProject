@@ -12,6 +12,7 @@ public class CarrierDTO {
     private String destinationCity;
     private LocalDate date;
     private String companyName;
+    private int availability;
 //    private Details details;
 
 //    @Data

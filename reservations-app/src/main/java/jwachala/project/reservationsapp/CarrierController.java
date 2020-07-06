@@ -28,6 +28,7 @@ public class CarrierController {
             cDTO.setDate(cM.getDate());
             cDTO.setStartCity(cM.getStartCity());
             cDTO.setDestinationCity(cM.getDestinationCity());
+            cDTO.setAvailability(cM.getAvailability());
             dtoList.add(cDTO);
         }
 
@@ -43,6 +44,7 @@ public class CarrierController {
             cDTO.setDate(cM.getDate());
             cDTO.setStartCity(cM.getStartCity());
             cDTO.setDestinationCity(cM.getDestinationCity());
+            cDTO.setAvailability(cM.getAvailability());
             dtoList.add(cDTO);
         }
 
@@ -56,6 +58,7 @@ public class CarrierController {
         model.setDestinationCity(dto.getDestinationCity());
         model.setDate(dto.getDate());
         model.setCompanyName(dto.getCompanyName());
+        model.setAvailability(dto.getAvailability());
         carrierRepostiory.getCarrierList().add(model);
         var uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(model.getId()).toUri();
 
@@ -80,6 +83,7 @@ public class CarrierController {
         return dtoList;
     }
 
+    // PODGLAD ZLECEN DANEJ FIRMY
     @GetMapping("/orders/{companyName}")
     public List<CarrierOrderDTO> getCarrierOrdersByCompanyName(@PathVariable(value = "companyName") String companyName) {
         List<CarrierOrderDTO> dtoList = new ArrayList<>();

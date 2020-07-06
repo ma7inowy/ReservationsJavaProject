@@ -2,6 +2,7 @@ package jwachala.project.reservationsapp;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -17,6 +18,7 @@ public class TravelerController {
     @Autowired
     private CarrierOrderRepository carrierOrderRepository;
 
+    //PLAN PODROZNY
     @GetMapping("carriers")
     public List<CarrierDTO> getCarriers() {
         // wg mnie podroznik powinien widziec id przewozu zeby moc stworzyc zlecenie
@@ -27,6 +29,7 @@ public class TravelerController {
             cDTO.setDate(cM.getDate());
             cDTO.setStartCity(cM.getStartCity());
             cDTO.setDestinationCity(cM.getDestinationCity());
+            cDTO.setAvailability(cM.getAvailability());
             dtoList.add(cDTO);
         }
 
@@ -42,6 +45,7 @@ public class TravelerController {
             cDTO.setDate(cM.getDate());
             cDTO.setStartCity(cM.getStartCity());
             cDTO.setDestinationCity(cM.getDestinationCity());
+            cDTO.setAvailability(cM.getAvailability());
             dtoList.add(cDTO);
         }
 
@@ -57,6 +61,7 @@ public class TravelerController {
             cDTO.setDate(cM.getDate());
             cDTO.setStartCity(cM.getStartCity());
             cDTO.setDestinationCity(cM.getDestinationCity());
+            cDTO.setAvailability(cM.getAvailability());
             dtoList.add(cDTO);
         }
 
@@ -70,10 +75,13 @@ public class TravelerController {
         model.setSurname(dto.getSurname());
         model.setOrderDate(dto.getOrderDate());
         model.setCarrierId(dto.getCarrierId());
-        carrierOrderRepository.getCarrierOrderList().add(model);
         var uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(model.getId()).toUri();
+        if (carrierRepostiory.availabilityMinusOne(dto.getCarrierId())) {
+            carrierOrderRepository.getCarrierOrderList().add(model);
+            return ResponseEntity.created(uri).build();
+        }
+        else return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Operation forbidden! No availability!");
 
-        return ResponseEntity.created(uri).build();
     }
 
     // sprawdzenie czy dany przewoz jest odwolany czy zaakceptowany

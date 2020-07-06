@@ -12,6 +12,7 @@ public class CarrierModel {
     private String destinationCity;
     private LocalDate date;
     private String companyName;
+    private int availability;
     private static int counterID = 0;
 
     public CarrierModel() {
@@ -25,6 +26,7 @@ public class CarrierModel {
         this.companyName = companyName;
         this.id = Integer.toString(counterID);
         this.date = date;
+        this.availability = 10 + counterID;
         counterID++;
     }
 }

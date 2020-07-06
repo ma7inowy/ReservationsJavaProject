@@ -42,4 +42,17 @@ public class CarrierRepostiory {
         }
         return carrierListbyCompanyName;
     }
+
+    // dodaj zlecenie do Carrier
+    public boolean availabilityMinusOne(String id){
+        for(CarrierModel cM : carrierList){
+            if(cM.getId().equals(id)){
+                if(cM.getAvailability()>0){
+                    cM.setAvailability(cM.getAvailability()-1);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }
