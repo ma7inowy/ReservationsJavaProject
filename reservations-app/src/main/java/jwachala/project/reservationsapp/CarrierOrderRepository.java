@@ -36,13 +36,14 @@ public class CarrierOrderRepository {
         }
         return carrierOrdersByCarrierId;
     }
+
     // czy tak jest okej? i czy w tej klasie moze byc logika czy bardziej w kontrolerze
-    public List<CarrierOrderModel> getCarrierOrdersByCompanyName(String companyName){
+    public List<CarrierOrderModel> getCarrierOrdersByCompanyName(String companyName) {
         List<CarrierOrderModel> carrierOrderNewList = new ArrayList<>();
-        for(var coModel : carrierOrderList){
-            for(var cModel : carrierRepostiory.getCarrierList()) {
-                if (coModel.getCarrierId().equals(cModel.getId())){
-                    if(cModel.getCompanyName().equals(companyName)){
+        for (var coModel : carrierOrderList) {
+            for (var cModel : carrierRepostiory.getCarrierList()) {
+                if (coModel.getCarrierId().equals(cModel.getId())) {
+                    if (cModel.getCompanyName().toLowerCase().equals(companyName.toLowerCase())) {
                         carrierOrderNewList.add(coModel);
                     }
                 }
@@ -52,15 +53,15 @@ public class CarrierOrderRepository {
     }
 
     // na te chwile nie wiem jak to bardziej zoptymalizować
-    public List<CarrierOrderModel> getCarrierOrdersByCompanyNameAndCity(String companyName, String startCity){
+    public List<CarrierOrderModel> getCarrierOrdersByCompanyNameAndCity(String companyName, String startCity) {
         List<CarrierOrderModel> carrierOrderByCompanyName = getCarrierOrdersByCompanyName(companyName);
         List<CarrierOrderModel> carrierOrderListByCnAndCity = new ArrayList<>();
 
-        for(var coModel : carrierOrderByCompanyName){
-            for(var cModel : carrierRepostiory.getCarrierList()) {
-                if (coModel.getCarrierId().equals(cModel.getId())){
-                    if(cModel.getCompanyName().equals(companyName)){
-                        if(cModel.getStartCity().equals(startCity)) {
+        for (var coModel : carrierOrderByCompanyName) {
+            for (var cModel : carrierRepostiory.getCarrierList()) {
+                if (coModel.getCarrierId().equals(cModel.getId())) {
+                    if (cModel.getCompanyName().toLowerCase().equals(companyName.toLowerCase())) {
+                        if (cModel.getStartCity().toLowerCase().equals(startCity.toLowerCase())) {
                             carrierOrderListByCnAndCity.add(coModel);
                         }
                     }
@@ -69,6 +70,5 @@ public class CarrierOrderRepository {
         }
         return carrierOrderListByCnAndCity;
     }
-
 
 }

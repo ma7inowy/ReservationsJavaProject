@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -17,31 +18,58 @@ public class TravelerController {
     private CarrierOrderRepository carrierOrderRepository;
 
     @GetMapping("carriers")
-    public List<CarrierModel> getCarriers() {
-        return carrierRepostiory.getCarrierList();
+    public List<CarrierDTO> getCarriers() {
+        // wg mnie podroznik powinien widziec id przewozu zeby moc stworzyc zlecenie
+        List<CarrierDTO> dtoList = new ArrayList<>();
+        for (var cM : carrierRepostiory.getCarrierList()) {
+            var cDTO = new CarrierDTO();
+            cDTO.setCompanyName(cM.getCompanyName());
+            cDTO.setDate(cM.getDate());
+            cDTO.setStartCity(cM.getStartCity());
+            cDTO.setDestinationCity(cM.getDestinationCity());
+            dtoList.add(cDTO);
+        }
+
+        return dtoList;
     }
 
     @GetMapping("/carriers/{startCity}")
-    public List<CarrierModel> getCarriersByCity(@PathVariable(value = "startCity") String startCity) {
-        return carrierRepostiory.getCarriersbyStartCity(startCity);
+    public List<CarrierDTO> getCarriersByCity(@PathVariable(value = "startCity") String startCity) {
+        List<CarrierDTO> dtoList = new ArrayList<>();
+        for (var cM : carrierRepostiory.getCarriersbyStartCity(startCity)) {
+            var cDTO = new CarrierDTO();
+            cDTO.setCompanyName(cM.getCompanyName());
+            cDTO.setDate(cM.getDate());
+            cDTO.setStartCity(cM.getStartCity());
+            cDTO.setDestinationCity(cM.getDestinationCity());
+            dtoList.add(cDTO);
+        }
+
+        return dtoList;
     }
 
-    // better address for query needed
     @GetMapping("/carriers/name/{companyName}")
-    public List<CarrierModel> getCarriersByCompanyName(@PathVariable(value = "companyName") String companyName) {
-        return carrierRepostiory.getCarriersbyCompanyName(companyName);
+    public List<CarrierDTO> getCarriersByCompanyName(@PathVariable(value = "companyName") String companyName) {
+        List<CarrierDTO> dtoList = new ArrayList<>();
+        for (var cM : carrierRepostiory.getCarriersbyCompanyName(companyName)) {
+            var cDTO = new CarrierDTO();
+            cDTO.setCompanyName(cM.getCompanyName());
+            cDTO.setDate(cM.getDate());
+            cDTO.setStartCity(cM.getStartCity());
+            cDTO.setDestinationCity(cM.getDestinationCity());
+            dtoList.add(cDTO);
+        }
+
+        return dtoList;
     }
 
-    // for making orders by travelers
     @PostMapping("order")
-    public ResponseEntity<?> createOrder(@RequestBody CarrierOrderDTO dto){
+    public ResponseEntity<?> createOrder(@RequestBody CarrierOrderDTO dto) {
         var model = new CarrierOrderModel();
         model.setName(dto.getName());
         model.setSurname(dto.getSurname());
         model.setOrderDate(dto.getOrderDate());
         model.setCarrierId(dto.getCarrierId());
-
-
         carrierOrderRepository.getCarrierOrderList().add(model);
         var uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(model.getId()).toUri();
 
@@ -49,5 +77,4 @@ public class TravelerController {
     }
 
     // sprawdzenie czy dany przewoz jest odwolany czy zaakceptowany
-
 }

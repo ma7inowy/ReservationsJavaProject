@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -19,14 +20,33 @@ public class CarrierController {
 
     //carriers operations
     @GetMapping("carriers")
-    public List<CarrierModel> getCarriers() {
-        return carrierRepostiory.getCarrierList();
+    public List<CarrierDTO> getCarriers() {
+        List<CarrierDTO> dtoList = new ArrayList<>();
+        for (CarrierModel cM : carrierRepostiory.getCarrierList()) {
+            CarrierDTO cDTO = new CarrierDTO();
+            cDTO.setCompanyName(cM.getCompanyName());
+            cDTO.setDate(cM.getDate());
+            cDTO.setStartCity(cM.getStartCity());
+            cDTO.setDestinationCity(cM.getDestinationCity());
+            dtoList.add(cDTO);
+        }
+
+        return dtoList;
     }
 
-    // musze zwracac liste z obiektami dto
     @GetMapping("/carriers/{startCity}")
-    public List<CarrierModel> getCarriersByCity(@PathVariable(value = "startCity") String startCity) {
-        return carrierRepostiory.getCarriersbyStartCity(startCity);
+    public List<CarrierDTO> getCarriersByCity(@PathVariable(value = "startCity") String startCity) {
+        List<CarrierDTO> dtoList = new ArrayList<>();
+        for (CarrierModel cM : carrierRepostiory.getCarriersbyStartCity(startCity)) {
+            CarrierDTO cDTO = new CarrierDTO();
+            cDTO.setCompanyName(cM.getCompanyName());
+            cDTO.setDate(cM.getDate());
+            cDTO.setStartCity(cM.getStartCity());
+            cDTO.setDestinationCity(cM.getDestinationCity());
+            dtoList.add(cDTO);
+        }
+
+        return dtoList;
     }
 
     @PostMapping("carriers")
@@ -36,8 +56,6 @@ public class CarrierController {
         model.setDestinationCity(dto.getDestinationCity());
         model.setDate(dto.getDate());
         model.setCompanyName(dto.getCompanyName());
-//       model.setId(UUID.randomUUID().toString()); // czy moze id w konstr
-
         carrierRepostiory.getCarrierList().add(model);
         var uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(model.getId()).toUri();
 
@@ -46,27 +64,54 @@ public class CarrierController {
 
     //carrierOrders operations
     @GetMapping("/orders")
-    public List<CarrierOrderModel> getCarrierOrders() {
-        return carrierOrderRepository.getCarrierOrderList();
+    //wg mnie musi byc id zeby przewoznik wiedzial z ktorego przewozu chce skorzystac podroznik. Wiec pytanie czy
+    // samo id czy cale obiekty, żeby od razu widzial jaki dokladnie przewoźnik to wykona
+    public List<CarrierOrderDTO> getCarrierOrders() {
+        List<CarrierOrderDTO> dtoList = new ArrayList<>();
+        for (CarrierOrderModel coM : carrierOrderRepository.getCarrierOrderList()) {
+            CarrierOrderDTO coDTO = new CarrierOrderDTO();
+            coDTO.setCarrierId(coM.getCarrierId());
+            coDTO.setName(coM.getName());
+            coDTO.setOrderDate(coM.getOrderDate());
+            coDTO.setSurname(coM.getSurname());
+            dtoList.add(coDTO);
+        }
+
+        return dtoList;
     }
 
-    //to get all orders by company Name
     @GetMapping("/orders/{companyName}")
-    public List<CarrierOrderModel> getCarrierOrdersByCompanyName(@PathVariable(value = "companyName") String companyName) {
-        return carrierOrderRepository.getCarrierOrdersByCompanyName(companyName);
+    public List<CarrierOrderDTO> getCarrierOrdersByCompanyName(@PathVariable(value = "companyName") String companyName) {
+        List<CarrierOrderDTO> dtoList = new ArrayList<>();
+        for (var coM : carrierOrderRepository.getCarrierOrdersByCompanyName(companyName)) {
+            var coDTO = new CarrierOrderDTO();
+            coDTO.setCarrierId(coM.getCarrierId());
+            coDTO.setName(coM.getName());
+            coDTO.setOrderDate(coM.getOrderDate());
+            coDTO.setSurname(coM.getSurname());
+            dtoList.add(coDTO);
+        }
+
+        return dtoList;
     }
 
-    //to get all orders by company Name and specific City
     @GetMapping("/orders/{companyName}/{startCity}")
-    public List<CarrierOrderModel> getCarrierOrdersByCompanyNameAndCity(@PathVariable(value = "companyName") String companyName,
-                                                                        @PathVariable(value = "startCity") String startCity) {
-        return carrierOrderRepository.getCarrierOrdersByCompanyNameAndCity(companyName, startCity);
+    public List<CarrierOrderDTO> getCarrierOrdersByCompanyNameAndCity(@PathVariable(value = "companyName") String companyName,
+                                                                      @PathVariable(value = "startCity") String startCity) {
+        List<CarrierOrderDTO> dtoList = new ArrayList<>();
+        for (var coM : carrierOrderRepository.getCarrierOrdersByCompanyNameAndCity(companyName, startCity)) {
+            var coDTO = new CarrierOrderDTO();
+            coDTO.setCarrierId(coM.getCarrierId());
+            coDTO.setName(coM.getName());
+            coDTO.setOrderDate(coM.getOrderDate());
+            coDTO.setSurname(coM.getSurname());
+            dtoList.add(coDTO);
+        }
+
+        return dtoList;
     }
 
 
     //ile os bedzie jechalo, anulowanie, akceptowanie
-
     //how much people want to use this carrier
-
-
 }
