@@ -7,8 +7,7 @@ import java.time.LocalDate;
 @Data
 public class CarrierOrderDTO {
 
-    private String name;
-    private String surname;
+    private String email;
     private LocalDate orderDate;
     private String carrierId;
 }

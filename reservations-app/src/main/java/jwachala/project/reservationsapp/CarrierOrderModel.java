@@ -1,29 +1,25 @@
 package jwachala.project.reservationsapp;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
 @Data
+@NoArgsConstructor
 public class CarrierOrderModel {
 
     private String id = UUID.randomUUID().toString();
-    private String name;
-    private String surname; // zmien na maila
+    private String email;
     private LocalDate orderDate;
     private String carrierId;
-    private static int counterID = 0;
 
-    public CarrierOrderModel() {
-    }
 
-    public CarrierOrderModel(String name, String surname, LocalDate date, String carrierID) {
-        this.name = name;
-        this.surname = surname;
+
+    public CarrierOrderModel(String email, LocalDate date, String carrierID) {
+        this.email = email;
         this.orderDate = date;
         this.carrierId = carrierID;
-        counterID++;
-
     }
 }

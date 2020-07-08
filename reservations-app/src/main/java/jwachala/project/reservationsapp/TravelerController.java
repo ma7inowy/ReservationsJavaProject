@@ -37,7 +37,7 @@ public class TravelerController {
         return dtoList;
     }
 
-    @GetMapping("/carriers/{startCity}")
+    @GetMapping("/carriers/city/start/{startCity}")
     public List<CarrierDTO> getCarriersByCity(@PathVariable(value = "startCity") String startCity) {
         List<CarrierDTO> dtoList = new ArrayList<>();
         for (var cM : carrierRepostiory.getCarriersbyStartCity(startCity)) {
@@ -54,7 +54,7 @@ public class TravelerController {
         return dtoList;
     }
 
-    @GetMapping("/carriers/name/{companyName}")
+    @GetMapping("/carriers/company/{companyName}")
     public List<CarrierDTO> getCarriersByCompanyName(@PathVariable(value = "companyName") String companyName) {
         List<CarrierDTO> dtoList = new ArrayList<>();
         for (var cM : carrierRepostiory.getCarriersbyCompanyName(companyName)) {
@@ -74,8 +74,7 @@ public class TravelerController {
     @PostMapping("order")
     public ResponseEntity<?> createOrder(@RequestBody CarrierOrderDTO dto) {
         var model = new CarrierOrderModel();
-        model.setName(dto.getName());
-        model.setSurname(dto.getSurname());
+        model.setEmail(dto.getEmail());
         model.setOrderDate(dto.getOrderDate());
         model.setCarrierId(dto.getCarrierId());
         var uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(model.getId()).toUri();

@@ -37,7 +37,7 @@ public class CarrierController {
         return dtoList;
     }
 
-    @GetMapping("/carriers/{startCity}")
+    @GetMapping("/carriers/city/start/{startCity}")
     public List<CarrierDTO> getCarriersByCity(@PathVariable(value = "startCity") String startCity) {
         List<CarrierDTO> dtoList = new ArrayList<>();
         for (CarrierModel cM : carrierRepostiory.getCarriersbyStartCity(startCity)) {
@@ -54,7 +54,7 @@ public class CarrierController {
         return dtoList;
     }
 
-    @PostMapping("carriers")
+    @PostMapping("carrier")
     public ResponseEntity<?> createCarrier(@RequestBody CarrierDTO dto) {
         var model = new CarrierModel();
         model.setStartCity(dto.getStartCity());
@@ -75,9 +75,8 @@ public class CarrierController {
         for (CarrierOrderModel coM : carrierOrderRepository.getCarrierOrderList()) {
             CarrierOrderDTO coDTO = new CarrierOrderDTO();
             coDTO.setCarrierId(coM.getCarrierId());
-            coDTO.setName(coM.getName());
+            coDTO.setEmail(coM.getEmail());
             coDTO.setOrderDate(coM.getOrderDate());
-            coDTO.setSurname(coM.getSurname());
             dtoList.add(coDTO);
         }
 
@@ -85,31 +84,29 @@ public class CarrierController {
     }
 
     // PODGLAD ZLECEN DANEJ FIRMY
-    @GetMapping("/orders/{companyName}")
+    @GetMapping("/orders/company/{companyName}")
     public List<CarrierOrderDTO> getCarrierOrdersByCompanyName(@PathVariable(value = "companyName") String companyName) {
         var dtoList = new ArrayList<CarrierOrderDTO>();
         for (var coM : carrierOrderRepository.getCarrierOrdersByCompanyName(companyName)) {
             var coDTO = new CarrierOrderDTO();
             coDTO.setCarrierId(coM.getCarrierId());
-            coDTO.setName(coM.getName());
+            coDTO.setEmail(coM.getEmail());
             coDTO.setOrderDate(coM.getOrderDate());
-            coDTO.setSurname(coM.getSurname());
             dtoList.add(coDTO);
         }
 
         return dtoList;
     }
 
-    @GetMapping("/orders/{companyName}/{startCity}")
+    @GetMapping("/orders/company/{companyName}/city/start/{startCity}")
     public List<CarrierOrderDTO> getCarrierOrdersByCompanyNameAndCity(@PathVariable(value = "companyName") String companyName,
                                                                       @PathVariable(value = "startCity") String startCity) {
         List<CarrierOrderDTO> dtoList = new ArrayList<>();
         for (var coM : carrierOrderRepository.getCarrierOrdersByCompanyNameAndCity(companyName, startCity)) {
             var coDTO = new CarrierOrderDTO();
             coDTO.setCarrierId(coM.getCarrierId());
-            coDTO.setName(coM.getName());
             coDTO.setOrderDate(coM.getOrderDate());
-            coDTO.setSurname(coM.getSurname());
+            coDTO.setEmail(coM.getEmail());
             dtoList.add(coDTO);
         }
 
@@ -118,12 +115,12 @@ public class CarrierController {
 
     @GetMapping("/load")
     public void loadDataToOrderList() {
-        carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("Jan", "Kowalski1", LocalDate.now().plusDays(1), carrierRepostiory.getCarrierList().get(0).getId()));
-        carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("Jan", "Kowalski2", LocalDate.now().plusDays(2), carrierRepostiory.getCarrierList().get(0).getId()));
-        carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("Jan", "Kowalski3", LocalDate.now().plusDays(3), carrierRepostiory.getCarrierList().get(1).getId()));
-        carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("Jan", "Kowalski4", LocalDate.now().plusDays(3), carrierRepostiory.getCarrierList().get(2).getId()));
-        carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("Jan", "Kowalski5", LocalDate.now().plusDays(3), carrierRepostiory.getCarrierList().get(3).getId()));
-        carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("Jan", "Kowalski6", LocalDate.now().plusDays(4), carrierRepostiory.getCarrierList().get(3).getId()));
+        carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("jankowalski1@wp.pl", LocalDate.now().plusDays(1), carrierRepostiory.getCarrierList().get(0).getId()));
+        carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("jankowalski2@wp.pl", LocalDate.now().plusDays(2), carrierRepostiory.getCarrierList().get(0).getId()));
+        carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("jankowalski3@wp.pl", LocalDate.now().plusDays(3), carrierRepostiory.getCarrierList().get(1).getId()));
+        carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("jankowalski4@wp.pl", LocalDate.now().plusDays(3), carrierRepostiory.getCarrierList().get(2).getId()));
+        carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("jankowalski5@wp.pl", LocalDate.now().plusDays(3), carrierRepostiory.getCarrierList().get(3).getId()));
+        carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("jankowalski6@wp.pl", LocalDate.now().plusDays(4), carrierRepostiory.getCarrierList().get(3).getId()));
     }
 
 
