@@ -19,6 +19,9 @@ public class CarrierController {
     @Autowired
     private CarrierOrderRepository carrierOrderRepository;
 
+    @Autowired
+    private CarrierHistory carrierHistory;
+
     //carriers operations
     @GetMapping("carriers")
     public List<CarrierDTO> getCarriers() {
@@ -123,6 +126,40 @@ public class CarrierController {
         carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("jankowalski6@wp.pl", LocalDate.now().plusDays(4), carrierRepostiory.getCarrierList().get(3).getId()));
     }
 
+    //history
+    @GetMapping("/carriers/company/{companyName}/history")
+    public List<CarrierDTO> getHistoryByCompanyName(@PathVariable(value = "companyName") String companyName) {
+        List<CarrierDTO> dtoList = new ArrayList<>();
+        for (var cM : carrierHistory.getHistoryCarriersbyCompanyName(companyName)) {
+            var cDTO = new CarrierDTO();
+            cDTO.setCompanyName(cM.getCompanyName());
+            cDTO.setDate(cM.getDate());
+            cDTO.setStartCity(cM.getStartCity());
+            cDTO.setDestinationCity(cM.getDestinationCity());
+            cDTO.setAvailability(cM.getAvailability());
+            cDTO.setId(cM.getId());
+            dtoList.add(cDTO);
+        }
 
-    // anulowanie, akceptowanie
+        return dtoList;
+    }
+
+    // na te chwile nie mam pomyslu jak inaczej odswiezac dane
+    @GetMapping("historyrefresh")
+    public List<CarrierModel> refreshHistory() {
+        List<CarrierModel> cMList = carrierRepostiory.getCarrierList();
+        List<CarrierModel> forRemoveList = new ArrayList<>();
+        for (int i = 0; i< cMList.size();i++) {
+            if (cMList.get(i).getDate().compareTo(LocalDate.now()) < 0) {
+                carrierHistory.getCarrierHistoryList().add(cMList.get(i));
+                forRemoveList.add(cMList.get(i));
+            }
+        }
+        for(CarrierModel i : forRemoveList)
+            carrierRepostiory.getCarrierList().remove(i);
+
+
+        // anulowanie, akceptowanie
+        return forRemoveList;
+    }
 }

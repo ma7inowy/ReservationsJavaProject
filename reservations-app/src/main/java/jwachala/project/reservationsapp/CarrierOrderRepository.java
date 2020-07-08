@@ -64,4 +64,13 @@ public class CarrierOrderRepository {
         return carrierOrderListByCnAndCity;
     }
 
+//    public boolean checkIfCanAddOrder(CarrierOrderDTO dto, CarrierOrderModel model) {
+//        if (carrierRepostiory.availabilityMinusOne(dto.getCarrierId())) {
+//            carrierOrderList.add(model);
+//            // dodanie pasażera na listę chętnych do skorzystania z usługi przewozu
+//            carrierRepostiory.getCarrierById(dto.getCarrierId()).getPassengers().add(model);
+//            return true;
+//        } else
+//        return false;
+//    }
 }

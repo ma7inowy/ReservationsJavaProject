@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,11 +79,16 @@ public class TravelerController {
         model.setOrderDate(dto.getOrderDate());
         model.setCarrierId(dto.getCarrierId());
         var uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(model.getId()).toUri();
+
         if (carrierRepostiory.availabilityMinusOne(dto.getCarrierId())) {
             carrierOrderRepository.getCarrierOrderList().add(model);
+            // dodanie pasażera na listę chętnych do skorzystania z usługi przewozu
+            carrierRepostiory.getCarrierById(dto.getCarrierId()).getPassengers().add(model);
             return ResponseEntity.created(uri).build();
+        } else {
+
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Sorry, No availability! Can't make order");
         }
-        else return ResponseEntity.status(HttpStatus.ACCEPTED).body("Sorry, No availability! Can't make order");
 
     }
 
