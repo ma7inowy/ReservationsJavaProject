@@ -80,6 +80,7 @@ public class CarrierController {
             coDTO.setCarrierId(coM.getCarrierId());
             coDTO.setEmail(coM.getEmail());
             coDTO.setOrderDate(coM.getOrderDate());
+            coDTO.setStatus(coM.getStatus());
             dtoList.add(coDTO);
         }
 
@@ -95,6 +96,7 @@ public class CarrierController {
             coDTO.setCarrierId(coM.getCarrierId());
             coDTO.setEmail(coM.getEmail());
             coDTO.setOrderDate(coM.getOrderDate());
+            coDTO.setStatus(coM.getStatus());
             dtoList.add(coDTO);
         }
 
@@ -110,6 +112,7 @@ public class CarrierController {
             coDTO.setCarrierId(coM.getCarrierId());
             coDTO.setOrderDate(coM.getOrderDate());
             coDTO.setEmail(coM.getEmail());
+            coDTO.setStatus(coM.getStatus());
             dtoList.add(coDTO);
         }
 
@@ -158,8 +161,7 @@ public class CarrierController {
         for(CarrierModel i : forRemoveList)
             carrierRepostiory.getCarrierList().remove(i);
 
-
-        // anulowanie, akceptowanie
         return forRemoveList;
     }
+    // anulowanie, akceptowanie
 }

@@ -14,6 +14,7 @@ public class CarrierOrderModel {
     private String email;
     private LocalDate orderDate;
     private String carrierId;
+    private String status = "not paid";
 
 
 

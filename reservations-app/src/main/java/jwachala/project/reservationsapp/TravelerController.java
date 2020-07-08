@@ -86,7 +86,6 @@ public class TravelerController {
             carrierRepostiory.getCarrierById(dto.getCarrierId()).getPassengers().add(model);
             return ResponseEntity.created(uri).build();
         } else {
-
             return ResponseEntity.status(HttpStatus.ACCEPTED).body("Sorry, No availability! Can't make order");
         }
 
