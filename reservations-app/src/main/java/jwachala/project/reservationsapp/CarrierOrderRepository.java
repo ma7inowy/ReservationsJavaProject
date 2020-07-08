@@ -15,16 +15,10 @@ public class CarrierOrderRepository {
     List<CarrierOrderModel> carrierOrderList;
 
     @Autowired
-    CarrierRepostiory carrierRepostiory; // nie wiem jak inaczej zeby robic getCarrierOrdersByCompanyName
+    CarrierRepostiory carrierRepostiory;
 
     public CarrierOrderRepository() {
         this.carrierOrderList = new ArrayList<>();
-        carrierOrderList.add(new CarrierOrderModel("Jan", "Kowalski1", LocalDate.now().plusDays(1), "1"));
-        carrierOrderList.add(new CarrierOrderModel("Jan", "Kowalski2", LocalDate.now().plusDays(2), "2"));
-        carrierOrderList.add(new CarrierOrderModel("Jan", "Kowalski3", LocalDate.now().plusDays(3), "3"));
-        carrierOrderList.add(new CarrierOrderModel("Jan", "Kowalski4", LocalDate.now().plusDays(3), "3"));
-        carrierOrderList.add(new CarrierOrderModel("Jan", "Kowalski5", LocalDate.now().plusDays(3), "3"));
-        carrierOrderList.add(new CarrierOrderModel("Jan", "Kowalski6", LocalDate.now().plusDays(4), "4"));
     }
 
     public List<CarrierOrderModel> getCarrierOrdersByCarrierId(String carrierId) {
@@ -37,7 +31,6 @@ public class CarrierOrderRepository {
         return carrierOrdersByCarrierId;
     }
 
-    // czy tak jest okej? i czy w tej klasie moze byc logika czy bardziej w kontrolerze
     public List<CarrierOrderModel> getCarrierOrdersByCompanyName(String companyName) {
         List<CarrierOrderModel> carrierOrderNewList = new ArrayList<>();
         for (var coModel : carrierOrderList) {

@@ -8,6 +8,7 @@ import java.time.LocalDate;
 @Data
 public class CarrierDTO {
 
+    private String id;
     private String startCity;
     private String destinationCity;
     private LocalDate date;

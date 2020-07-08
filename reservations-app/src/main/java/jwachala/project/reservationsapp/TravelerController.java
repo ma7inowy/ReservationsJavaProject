@@ -30,6 +30,7 @@ public class TravelerController {
             cDTO.setStartCity(cM.getStartCity());
             cDTO.setDestinationCity(cM.getDestinationCity());
             cDTO.setAvailability(cM.getAvailability());
+            cDTO.setId(cM.getId());
             dtoList.add(cDTO);
         }
 
@@ -46,6 +47,7 @@ public class TravelerController {
             cDTO.setStartCity(cM.getStartCity());
             cDTO.setDestinationCity(cM.getDestinationCity());
             cDTO.setAvailability(cM.getAvailability());
+            cDTO.setId(cM.getId());
             dtoList.add(cDTO);
         }
 
@@ -62,6 +64,7 @@ public class TravelerController {
             cDTO.setStartCity(cM.getStartCity());
             cDTO.setDestinationCity(cM.getDestinationCity());
             cDTO.setAvailability(cM.getAvailability());
+            cDTO.setId(cM.getId());
             dtoList.add(cDTO);
         }
 
@@ -80,7 +83,7 @@ public class TravelerController {
             carrierOrderRepository.getCarrierOrderList().add(model);
             return ResponseEntity.created(uri).build();
         }
-        else return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Operation forbidden! No availability!");
+        else return ResponseEntity.status(HttpStatus.ACCEPTED).body("Sorry, No availability! Can't make order");
 
     }
 

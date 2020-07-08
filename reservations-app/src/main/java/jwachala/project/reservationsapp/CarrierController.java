@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +30,7 @@ public class CarrierController {
             cDTO.setStartCity(cM.getStartCity());
             cDTO.setDestinationCity(cM.getDestinationCity());
             cDTO.setAvailability(cM.getAvailability());
+            cDTO.setId(cM.getId());
             dtoList.add(cDTO);
         }
 
@@ -45,6 +47,7 @@ public class CarrierController {
             cDTO.setStartCity(cM.getStartCity());
             cDTO.setDestinationCity(cM.getDestinationCity());
             cDTO.setAvailability(cM.getAvailability());
+            cDTO.setId(cM.getId());
             dtoList.add(cDTO);
         }
 
@@ -67,8 +70,6 @@ public class CarrierController {
 
     //carrierOrders operations
     @GetMapping("/orders")
-    //wg mnie musi byc id zeby przewoznik wiedzial z ktorego przewozu chce skorzystac podroznik. Wiec pytanie czy
-    // samo id czy cale obiekty, żeby od razu widzial jaki dokladnie przewoźnik to wykona
     public List<CarrierOrderDTO> getCarrierOrders() {
         List<CarrierOrderDTO> dtoList = new ArrayList<>();
         for (CarrierOrderModel coM : carrierOrderRepository.getCarrierOrderList()) {
@@ -86,7 +87,7 @@ public class CarrierController {
     // PODGLAD ZLECEN DANEJ FIRMY
     @GetMapping("/orders/{companyName}")
     public List<CarrierOrderDTO> getCarrierOrdersByCompanyName(@PathVariable(value = "companyName") String companyName) {
-        List<CarrierOrderDTO> dtoList = new ArrayList<>();
+        var dtoList = new ArrayList<CarrierOrderDTO>();
         for (var coM : carrierOrderRepository.getCarrierOrdersByCompanyName(companyName)) {
             var coDTO = new CarrierOrderDTO();
             coDTO.setCarrierId(coM.getCarrierId());
@@ -115,7 +116,16 @@ public class CarrierController {
         return dtoList;
     }
 
+    @GetMapping("/load")
+    public void loadDataToOrderList() {
+        carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("Jan", "Kowalski1", LocalDate.now().plusDays(1), carrierRepostiory.getCarrierList().get(0).getId()));
+        carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("Jan", "Kowalski2", LocalDate.now().plusDays(2), carrierRepostiory.getCarrierList().get(0).getId()));
+        carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("Jan", "Kowalski3", LocalDate.now().plusDays(3), carrierRepostiory.getCarrierList().get(1).getId()));
+        carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("Jan", "Kowalski4", LocalDate.now().plusDays(3), carrierRepostiory.getCarrierList().get(2).getId()));
+        carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("Jan", "Kowalski5", LocalDate.now().plusDays(3), carrierRepostiory.getCarrierList().get(3).getId()));
+        carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("Jan", "Kowalski6", LocalDate.now().plusDays(4), carrierRepostiory.getCarrierList().get(3).getId()));
+    }
 
-    //ile os bedzie jechalo, anulowanie, akceptowanie
-    //how much people want to use this carrier
+
+    // anulowanie, akceptowanie
 }
