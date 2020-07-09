@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+// API PODROZNIKA
 @RestController
 @RequestMapping("api/traveler")
 public class TravelerController {
@@ -19,7 +20,7 @@ public class TravelerController {
     @Autowired
     private CarrierOrderRepository carrierOrderRepository;
 
-    //PLAN PODROZNY
+    //PLAN PODROZNY - WSZYSTKIE OFERTY PRZEJAZDOW
     @GetMapping("carriers")
     public List<CarrierDTO> getCarriers() {
         // wg mnie podroznik powinien widziec id przewozu zeby moc stworzyc zlecenie
@@ -32,12 +33,14 @@ public class TravelerController {
             cDTO.setDestinationCity(cM.getDestinationCity());
             cDTO.setAvailability(cM.getAvailability());
             cDTO.setId(cM.getId());
+            cDTO.setRealized(cM.isRealized());
             dtoList.add(cDTO);
         }
 
         return dtoList;
     }
 
+    //PLAN PODROZNY - WSZYSTKIE OFERTY PRZEJAZDOW Z OKRESLONEGO MIASTA
     @GetMapping("/carriers/city/start/{startCity}")
     public List<CarrierDTO> getCarriersByCity(@PathVariable(value = "startCity") String startCity) {
         List<CarrierDTO> dtoList = new ArrayList<>();
@@ -49,12 +52,14 @@ public class TravelerController {
             cDTO.setDestinationCity(cM.getDestinationCity());
             cDTO.setAvailability(cM.getAvailability());
             cDTO.setId(cM.getId());
+            cDTO.setRealized(cM.isRealized());
             dtoList.add(cDTO);
         }
 
         return dtoList;
     }
 
+    //PLAN PODROZNY - WSZYSTKIE OFERTY PRZEJAZDOW DANEJ FIRMY
     @GetMapping("/carriers/company/{companyName}")
     public List<CarrierDTO> getCarriersByCompanyName(@PathVariable(value = "companyName") String companyName) {
         List<CarrierDTO> dtoList = new ArrayList<>();
@@ -66,12 +71,14 @@ public class TravelerController {
             cDTO.setDestinationCity(cM.getDestinationCity());
             cDTO.setAvailability(cM.getAvailability());
             cDTO.setId(cM.getId());
+            cDTO.setRealized(cM.isRealized());
             dtoList.add(cDTO);
         }
 
         return dtoList;
     }
 
+    //UTWORZENIE OFERTY PRZEWOZU
     @PostMapping("order")
     public ResponseEntity<?> createOrder(@RequestBody CarrierOrderDTO dto) {
         var model = new CarrierOrderModel();

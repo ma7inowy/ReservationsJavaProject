@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.util.UUID;
 
+
+//OBIEKT BILETU/ZLECENIA NA DANY PRZEJAZD JAKO PODROZNIK
 @Data
 @NoArgsConstructor
 public class CarrierOrderModel {
@@ -14,7 +16,7 @@ public class CarrierOrderModel {
     private String email;
     private LocalDate orderDate;
     private String carrierId;
-    private String status = "not paid";
+    private boolean paid = false;
 
 
 

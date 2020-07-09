@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+// BAZA DANYCH Z WSZYSTKIMI OFERTAMI PRZEWOZOW
 @Component
 @Data
 public class CarrierRepostiory {

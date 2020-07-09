@@ -10,5 +10,6 @@ public class CarrierOrderDTO {
     private String email;
     private LocalDate orderDate;
     private String carrierId;
-    private String status;
+    private boolean paid;
+
 }

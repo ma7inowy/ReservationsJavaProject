@@ -14,6 +14,7 @@ public class CarrierDTO {
     private LocalDate date;
     private String companyName;
     private int availability;
+    private boolean realized;
 //    private Details details;
 
 //    @Data

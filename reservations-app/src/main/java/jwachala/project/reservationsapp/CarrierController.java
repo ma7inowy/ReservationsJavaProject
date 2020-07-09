@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+// API PRZEWOZNIKA
 @RestController
 @RequestMapping("api/carrier")
 public class CarrierController {
@@ -23,6 +24,8 @@ public class CarrierController {
     private CarrierHistory carrierHistory;
 
     //carriers operations
+
+    // WSZYSTKIE OFERT PRZEWOZOW
     @GetMapping("carriers")
     public List<CarrierDTO> getCarriers() {
         List<CarrierDTO> dtoList = new ArrayList<>();
@@ -34,12 +37,14 @@ public class CarrierController {
             cDTO.setDestinationCity(cM.getDestinationCity());
             cDTO.setAvailability(cM.getAvailability());
             cDTO.setId(cM.getId());
+            cDTO.setRealized(cM.isRealized());
             dtoList.add(cDTO);
         }
 
         return dtoList;
     }
 
+    // WSZYSTKIE OFERT PRZEWOZOW WG MIASTA STARTOWEGO
     @GetMapping("/carriers/city/start/{startCity}")
     public List<CarrierDTO> getCarriersByCity(@PathVariable(value = "startCity") String startCity) {
         List<CarrierDTO> dtoList = new ArrayList<>();
@@ -51,12 +56,14 @@ public class CarrierController {
             cDTO.setDestinationCity(cM.getDestinationCity());
             cDTO.setAvailability(cM.getAvailability());
             cDTO.setId(cM.getId());
+            cDTO.setRealized(cM.isRealized());
             dtoList.add(cDTO);
         }
 
         return dtoList;
     }
 
+    // DODANIE NOWEJ OFERTY PRZEWOZU
     @PostMapping("carrier")
     public ResponseEntity<?> createCarrier(@RequestBody CarrierDTO dto) {
         var model = new CarrierModel();
@@ -72,6 +79,8 @@ public class CarrierController {
     }
 
     //carrierOrders operations
+
+    // WSZYSTKIE ZAMOWIENIA/BILETY ZAKUPIONE PRZEZ PODROZNIKOW
     @GetMapping("/orders")
     public List<CarrierOrderDTO> getCarrierOrders() {
         List<CarrierOrderDTO> dtoList = new ArrayList<>();
@@ -80,14 +89,14 @@ public class CarrierController {
             coDTO.setCarrierId(coM.getCarrierId());
             coDTO.setEmail(coM.getEmail());
             coDTO.setOrderDate(coM.getOrderDate());
-            coDTO.setStatus(coM.getStatus());
+            coDTO.setPaid(coM.isPaid());
             dtoList.add(coDTO);
         }
 
         return dtoList;
     }
 
-    // PODGLAD ZLECEN DANEJ FIRMY
+    // WSZYSTKIE ZAMOWIENIA/BILETY ZAKUPIONE PRZEZ PODROZNIKOW U DANEJ FIRMY
     @GetMapping("/orders/company/{companyName}")
     public List<CarrierOrderDTO> getCarrierOrdersByCompanyName(@PathVariable(value = "companyName") String companyName) {
         var dtoList = new ArrayList<CarrierOrderDTO>();
@@ -96,13 +105,14 @@ public class CarrierController {
             coDTO.setCarrierId(coM.getCarrierId());
             coDTO.setEmail(coM.getEmail());
             coDTO.setOrderDate(coM.getOrderDate());
-            coDTO.setStatus(coM.getStatus());
+            coDTO.setPaid(coM.isPaid());
             dtoList.add(coDTO);
         }
 
         return dtoList;
     }
 
+    // WSZYSTKIE ZAMOWIENIA/BILETY ZAKUPIONE PRZEZ PODROZNIKOW U DANEJ FIRMY, Z KONKRETNEGO MIASTA STARTOWEGO
     @GetMapping("/orders/company/{companyName}/city/start/{startCity}")
     public List<CarrierOrderDTO> getCarrierOrdersByCompanyNameAndCity(@PathVariable(value = "companyName") String companyName,
                                                                       @PathVariable(value = "startCity") String startCity) {
@@ -112,13 +122,14 @@ public class CarrierController {
             coDTO.setCarrierId(coM.getCarrierId());
             coDTO.setOrderDate(coM.getOrderDate());
             coDTO.setEmail(coM.getEmail());
-            coDTO.setStatus(coM.getStatus());
+            coDTO.setPaid(coM.isPaid());
             dtoList.add(coDTO);
         }
 
         return dtoList;
     }
 
+    // DO ZALADOWANIA PRZYKLADOWYCH ZAMOWIEN/BILETOW (korzystam z CarrierRepo wiec musialem w ten sposob bo inaczej error)
     @GetMapping("/load")
     public void loadDataToOrderList() {
         carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("jankowalski1@wp.pl", LocalDate.now().plusDays(1), carrierRepostiory.getCarrierList().get(0).getId()));
@@ -130,6 +141,8 @@ public class CarrierController {
     }
 
     //history
+
+    //HISTORIA WSZYSTKICH PRZEWOZOW DLA DANEJ FIRMY (TRAFIAJA TAM TE PRZEWOZY KTORYCH DATA < LocalDate.now() LUB KTORE MAJA POLE realized = true)
     @GetMapping("/carriers/company/{companyName}/history")
     public List<CarrierDTO> getHistoryByCompanyName(@PathVariable(value = "companyName") String companyName) {
         List<CarrierDTO> dtoList = new ArrayList<>();
@@ -141,27 +154,18 @@ public class CarrierController {
             cDTO.setDestinationCity(cM.getDestinationCity());
             cDTO.setAvailability(cM.getAvailability());
             cDTO.setId(cM.getId());
+            cDTO.setRealized(cM.isRealized());
             dtoList.add(cDTO);
         }
 
         return dtoList;
     }
 
-    // na te chwile nie mam pomyslu jak inaczej odswiezac dane
+    // ODSWIEZANIE HISTORII (TRAFIAJA TAM TE PRZEWOZY KTORYCH DATA < LocalDate.now() LUB KTORE MAJA POLE realized = true)
     @GetMapping("historyrefresh")
-    public List<CarrierModel> refreshHistory() {
-        List<CarrierModel> cMList = carrierRepostiory.getCarrierList();
-        List<CarrierModel> forRemoveList = new ArrayList<>();
-        for (int i = 0; i< cMList.size();i++) {
-            if (cMList.get(i).getDate().compareTo(LocalDate.now()) < 0) {
-                carrierHistory.getCarrierHistoryList().add(cMList.get(i));
-                forRemoveList.add(cMList.get(i));
-            }
-        }
-        for(CarrierModel i : forRemoveList)
-            carrierRepostiory.getCarrierList().remove(i);
-
-        return forRemoveList;
+    public List<CarrierOrderModel> refreshHistory() {
+        return carrierHistory.refreshHistory();
     }
+
     // anulowanie, akceptowanie
 }

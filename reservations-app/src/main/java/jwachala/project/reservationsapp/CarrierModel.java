@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+//OBIEKT OFERTY PRZEWOZU DANEGO PRZEWOZNIKA NP PIOTRKOW->LODZ 23.07.2020, FIRMA MURAPOL
 @Data
 public class CarrierModel {
 
@@ -17,8 +18,9 @@ public class CarrierModel {
     private String companyName;
     private int availability;
     private static int counterID = 0;
-    // jeszcze nie wiem czy przechowywac taka liste czy nie (potrzebne do zabawy z rezerwacjami)
-    private List<CarrierOrderModel> passengers = new ArrayList<>();
+    private boolean realized = false; // FLAGA INFORMUJACA CZY PRZEWOZ ZOSTAL JUZ ZREALIZOWANY
+
+    private List<CarrierOrderModel> passengers = new ArrayList<>(); // jeszcze nie wiem czy przechowywac taka liste czy nie (potrzebne do zabawy z rezerwacjami)???
 
     public CarrierModel() {
     }
