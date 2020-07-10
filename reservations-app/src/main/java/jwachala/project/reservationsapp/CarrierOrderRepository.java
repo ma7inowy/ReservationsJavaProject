@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -66,13 +67,19 @@ public class CarrierOrderRepository {
         return carrierOrderListByCnAndCity;
     }
 
-//    public boolean checkIfCanAddOrder(CarrierOrderDTO dto, CarrierOrderModel model) {
-//        if (carrierRepostiory.availabilityMinusOne(dto.getCarrierId())) {
-//            carrierOrderList.add(model);
-//            // dodanie pasażera na listę chętnych do skorzystania z usługi przewozu
-//            carrierRepostiory.getCarrierById(dto.getCarrierId()).getPassengers().add(model);
-//            return true;
-//        } else
-//        return false;
-//    }
+    public List<CarrierOrderModel> getCarrierOrdersByCarrierIdSorted(String carrierId) {
+        List<CarrierOrderModel> carrierOrdersByCarrierId = new ArrayList<>();
+        for (var carrierOrder : carrierOrderList) {
+            if (carrierOrder.getCarrierId().equals(carrierId)) {
+                carrierOrdersByCarrierId.add(carrierOrder);
+            }
+        }
+
+        sort(carrierOrdersByCarrierId);
+        return carrierOrdersByCarrierId;
+    }
+
+    public void sort(List<CarrierOrderModel> coList){
+        Collections.sort(coList, new CarrierOrderComparator());
+    }
 }

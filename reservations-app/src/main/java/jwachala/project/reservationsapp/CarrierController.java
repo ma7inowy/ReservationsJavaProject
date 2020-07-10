@@ -133,7 +133,11 @@ public class CarrierController {
     @GetMapping("/load")
     public void loadDataToOrderList() {
         carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("jankowalski1@wp.pl", LocalDate.now().plusDays(1), carrierRepostiory.getCarrierList().get(0).getId()));
-        carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("jankowalski2@wp.pl", LocalDate.now().plusDays(2), carrierRepostiory.getCarrierList().get(0).getId()));
+        carrierOrderRepository.getCarrierOrderList().get(0).setPaid(true);
+        carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("jankowalski2@wp.pl", LocalDate.now().plusDays(9), carrierRepostiory.getCarrierList().get(0).getId()));
+        carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("jankowalski2@wp.pl", LocalDate.now().plusDays(7), carrierRepostiory.getCarrierList().get(0).getId()));
+        carrierOrderRepository.getCarrierOrderList().get(2).setPaid(true);
+        carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("jankowalski2@wp.pl", LocalDate.now().plusDays(5), carrierRepostiory.getCarrierList().get(0).getId()));
         carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("jankowalski3@wp.pl", LocalDate.now().plusDays(3), carrierRepostiory.getCarrierList().get(1).getId()));
         carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("jankowalski4@wp.pl", LocalDate.now().plusDays(3), carrierRepostiory.getCarrierList().get(2).getId()));
         carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("jankowalski5@wp.pl", LocalDate.now().plusDays(3), carrierRepostiory.getCarrierList().get(3).getId()));
@@ -168,4 +172,9 @@ public class CarrierController {
     }
 
     // anulowanie, akceptowanie
+
+    @GetMapping("/orders/{carrierID}")
+    public List<CarrierOrderModel> getCarrierOrdersByCarrierIdSorted(@PathVariable(value = "carrierID") String carrierID) {
+        return carrierOrderRepository.getCarrierOrdersByCarrierIdSorted(carrierID);
+    }
 }
