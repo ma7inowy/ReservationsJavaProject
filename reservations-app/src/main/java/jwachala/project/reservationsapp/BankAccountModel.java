@@ -11,7 +11,7 @@ public class BankAccountModel {
         this.email = email;
     }
 
-    public void addMoney(int money){
+    public void depositMoney(int money){
         accountBalance += money;
     }
 }
