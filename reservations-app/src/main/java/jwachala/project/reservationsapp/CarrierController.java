@@ -145,6 +145,7 @@ public class CarrierController {
         carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("jankowalski9@wp.pl", LocalDate.now().plusDays(3), carrierRepostiory.getCarrierList().get(2).getId()));
         carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("jankowalski10@wp.pl", LocalDate.now().plusDays(3), carrierRepostiory.getCarrierList().get(3).getId()));
         carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("jankowalski11@wp.pl", LocalDate.now().plusDays(4), carrierRepostiory.getCarrierList().get(3).getId()));
+        carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("jankowalski11@wp.pl", LocalDate.now().plusDays(4), carrierRepostiory.getCarrierList().get(2).getId()));
     }
 
     //history
@@ -189,6 +190,4 @@ public class CarrierController {
 
     // ODSWIEZA LISTE ZLECEN, NP JESLI NIE OPLACONE 1 TYDZ PRZED WYJAZDEM TO ANULOWANE
     // anulowanie, akceptowanie
-
-
 }

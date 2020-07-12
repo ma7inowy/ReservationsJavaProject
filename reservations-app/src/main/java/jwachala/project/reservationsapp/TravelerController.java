@@ -102,21 +102,37 @@ public class TravelerController {
 
     //OPLAC ZAREZERWOWANY BILET
     @PostMapping("order/email/{email}/pay")
-    public ResponseEntity<?> payOrder(@PathVariable(value = "email") String email, @RequestBody String carrierId){
+    public ResponseEntity<?> payOrder(@PathVariable(value = "email") String email, @RequestBody String carrierId) {
         var account = bankAccountRepository.getBankAccountByEmail(email);
-        var coModel = carrierOrderRepository.getCarrierOrderByEmailAndCarrierId(email,carrierId);
+        var coModel = carrierOrderRepository.getCarrierOrderByEmailAndCarrierId(email, carrierId);
         var uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(coModel.getId()).toUri();
 
         // ZAMIAST 10ZL BEDZIE KONKRETNA KWOTA JAK DODAM POLE W CARRIER O CENIE
-        if(account.getAccountBalance() >= 10) {
+        if (account.getAccountBalance() >= 10) {
             carrierOrderRepository.makePayment(coModel.getId());
             account.setAccountBalance(account.getAccountBalance() - 10);
             return ResponseEntity.created(uri).build();
-        }
-        else return ResponseEntity.status(HttpStatus.ACCEPTED).body("Sorry, Too less money in your Bank!");
+        } else return ResponseEntity.status(HttpStatus.ACCEPTED).body("Sorry, Too less money in your Bank!");
     }
 
     // get ktory pokaze nieoplacone bilety dla konkretnego uzytkownika
+    @GetMapping("orders/notpaid/email/{email}")
+    public List<CarrierOrderDTO> getNotPayedOrders(@PathVariable(value = "email") String email) {
+        List<CarrierOrderDTO> dtoList = new ArrayList<>();
+
+        for (CarrierOrderModel coModel : carrierOrderRepository.getCarrierOrderList()) {
+            if (!coModel.isPaid() && coModel.getEmail().equals(email)) {
+                CarrierOrderDTO coDTO = new CarrierOrderDTO();
+                coDTO.setEmail(coModel.getEmail());
+                coDTO.setOrderDate(coModel.getOrderDate());
+                coDTO.setCarrierId(coModel.getCarrierId());
+                coDTO.setPaid(coModel.isPaid()); // bedzie mozna to ukryc
+                dtoList.add(coDTO);
+            }
+        }
+        return dtoList;
+
+    }
     // zwracac ma carrierid
 
     // sprawdzenie czy dany przewoz jest odwolany czy zaakceptowany
