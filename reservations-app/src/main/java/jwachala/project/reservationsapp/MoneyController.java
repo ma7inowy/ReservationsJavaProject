@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/bank")
-public class BankController {
+public class MoneyController {
     @Autowired
     private BankAccountRepository bankAccountRepository;
 
@@ -29,6 +29,7 @@ public class BankController {
     public ResponseEntity<?> addMoneyToAccount(@PathVariable(value = "email") String email,
                                                @RequestBody int money) {
         BankAccountModel ba = bankAccountRepository.getBankAccountByEmail(email);
+        // add -> desposit
         ba.addMoney(money);
 
         // uri do poprawy

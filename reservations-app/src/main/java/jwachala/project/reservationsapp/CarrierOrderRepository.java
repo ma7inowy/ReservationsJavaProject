@@ -79,7 +79,30 @@ public class CarrierOrderRepository {
         return carrierOrdersByCarrierId;
     }
 
-    public void sort(List<CarrierOrderModel> coList){
+    public void sort(List<CarrierOrderModel> coList) {
         Collections.sort(coList, new CarrierOrderComparator());
+    }
+
+    public void makePayment(String id) {
+        for (CarrierOrderModel co : carrierOrderList) {
+            if (co.getId().equals(id))
+                co.setPaid(true);
+        }
+    }
+
+    public CarrierOrderModel getCarrierOrderById(String id) {
+        for (CarrierOrderModel co : carrierOrderList) {
+            if (co.getId().equals(id))
+                return co;
+        }
+        return null;
+    }
+
+    public CarrierOrderModel getCarrierOrderByEmailAndCarrierId(String email, String carrierId) {
+        for (CarrierOrderModel co : carrierOrderList) {
+            if (co.getEmail().equals(email) && co.getCarrierId().equals(carrierId))
+                return co;
+        }
+        return null;
     }
 }

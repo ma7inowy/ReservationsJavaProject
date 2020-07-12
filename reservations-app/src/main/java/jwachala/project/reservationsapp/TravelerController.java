@@ -19,6 +19,8 @@ public class TravelerController {
     private CarrierRepostiory carrierRepostiory;
     @Autowired
     private CarrierOrderRepository carrierOrderRepository;
+    @Autowired
+    private BankAccountRepository bankAccountRepository;
 
     //PLAN PODROZNY - WSZYSTKIE OFERTY PRZEJAZDOW
     @GetMapping("carriers")
@@ -93,10 +95,31 @@ public class TravelerController {
             carrierRepostiory.getCarrierById(dto.getCarrierId()).getPassengers().add(model);
             return ResponseEntity.created(uri).build();
         } else {
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Sorry, No availability! Can't make order");
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Sorry, No availability!");
         }
 
     }
 
+    //OPLAC ZAREZERWOWANY BILET
+    @PostMapping("order/email/{email}/pay")
+    public ResponseEntity<?> payOrder(@PathVariable(value = "email") String email, @RequestBody String carrierId){
+        var account = bankAccountRepository.getBankAccountByEmail(email);
+        var coModel = carrierOrderRepository.getCarrierOrderByEmailAndCarrierId(email,carrierId);
+        var uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(coModel.getId()).toUri();
+
+        // ZAMIAST 10ZL BEDZIE KONKRETNA KWOTA JAK DODAM POLE W CARRIER O CENIE
+        if(account.getAccountBalance() >= 10) {
+            carrierOrderRepository.makePayment(coModel.getId());
+            account.setAccountBalance(account.getAccountBalance() - 10);
+            return ResponseEntity.created(uri).build();
+        }
+        else return ResponseEntity.status(HttpStatus.ACCEPTED).body("Sorry, Too less money in your Bank!");
+    }
+
+    // get ktory pokaze nieoplacone bilety dla konkretnego uzytkownika
+    // zwracac ma carrierid
+
     // sprawdzenie czy dany przewoz jest odwolany czy zaakceptowany
+
+    //ZEBY PODROZNIK MOGL SPRAWDZIC KTORY JEST NA LISCIE CHETNYCH?
 }

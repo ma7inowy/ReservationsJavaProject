@@ -13,8 +13,11 @@ public class CarrierDTO {
     private String destinationCity;
     private LocalDate date;
     private String companyName;
-    private int availability;
+    private int availability; // nie pokazywac ile wolnych tylko pokazac
     private boolean realized;
+    // POLE CENA ???
+
+
 //    private Details details;
 
 //    @Data
