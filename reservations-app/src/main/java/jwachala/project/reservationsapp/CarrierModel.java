@@ -20,8 +20,6 @@ public class CarrierModel {
     private static int counterID = 0;
     private boolean realized = false; // FLAGA INFORMUJACA CZY PRZEWOZ ZOSTAL JUZ ZREALIZOWANY
 
-    private List<CarrierOrderModel> passengers = new ArrayList<>(); // jeszcze nie wiem czy przechowywac taka liste czy nie (potrzebne do zabawy z rezerwacjami)???
-
     public CarrierModel() {
     }
 

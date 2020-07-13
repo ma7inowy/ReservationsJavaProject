@@ -92,7 +92,7 @@ public class TravelerController {
         if (carrierRepostiory.availabilityMinusOne(dto.getCarrierId())) {
             carrierOrderRepository.getCarrierOrderList().add(model);
             // dodanie pasażera na listę chętnych do skorzystania z usługi przewozu
-            carrierRepostiory.getCarrierById(dto.getCarrierId()).getPassengers().add(model);
+//            carrierRepostiory.getCarrierById(dto.getCarrierId()).getPassengers().add(model);
             return ResponseEntity.created(uri).build();
         } else {
             return ResponseEntity.status(HttpStatus.ACCEPTED).body("Sorry, No availability!");
@@ -140,6 +140,18 @@ public class TravelerController {
     public List<CarrierOrderModel> getCarrierOrdersByCarrierIdSorted(@PathVariable(value = "carrierID") String carrierID) {
         return carrierOrderRepository.getCarrierOrdersByCarrierIdSorted(carrierID);
     }
+
+    // anulowanie zamowienia oplaconego lub nie
+    @DeleteMapping("/order/delete/email/{email}/carrierId/{carrierID}")
+    public ResponseEntity<?> deleteOrder(@PathVariable(value = "email") String email, @PathVariable(value = "carrierID") String carrierID){
+        if(carrierOrderRepository.deleteOrder(email,carrierID)){
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
 
     // sprawdzenie czy dany przewoz jest odwolany czy zaakceptowany
 }

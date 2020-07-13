@@ -20,6 +20,9 @@ public class CarrierOrderRepository {
     @Autowired
     CarrierRepostiory carrierRepostiory;
 
+    @Autowired
+    BankAccountRepository bankAccountRepository;
+
     public CarrierOrderRepository() {
         this.carrierOrderList = new ArrayList<>();
     }
@@ -116,7 +119,34 @@ public class CarrierOrderRepository {
             }
         }
         for (CarrierOrderModel co1 : coList) {
-            carrierOrderList.remove(co1); // czy dziala?
+            carrierOrderList.remove(co1);
         }
+    }
+
+    public boolean deleteOrder(String email, String carrierID){
+        double carrierCost = 10; // na razie na sztywno wpisuje cene przejazdu
+        if(getCarrierOrderByEmailAndCarrierId(email, carrierID) != null){
+            var coM = getCarrierOrderByEmailAndCarrierId(email, carrierID);
+            BankAccountModel baM = bankAccountRepository.getBankAccountByEmail(coM.getEmail());
+            if(!coM.isPaid()) {
+                carrierOrderList.remove(coM);
+                return true;
+            }
+            else {
+                //jesli zostalo wiecej niz 7 dni do wyjazdu zwroc 90%
+                if(LocalDate.now().isBefore(carrierRepostiory.getCarrierById(coM.getCarrierId()).getDate().minusDays(7))){
+                    baM.depositMoney(carrierCost * 0.9);
+                    carrierOrderList.remove(coM);
+                    return true;
+                } else{
+                    //jesli zostalo mniej niz 7 dni do wyjazdu zwroc 50%
+                    baM.depositMoney(carrierCost * 0.5);
+                    carrierOrderList.remove(coM);
+                    return true;
+                }
+            }
+        }
+        return false;
+
     }
 }

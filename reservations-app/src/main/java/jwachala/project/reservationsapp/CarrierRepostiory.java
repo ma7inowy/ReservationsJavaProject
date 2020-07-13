@@ -16,7 +16,7 @@ public class CarrierRepostiory {
 
     public CarrierRepostiory() {
         this.carrierList = new ArrayList<>();
-        carrierList.add(new CarrierModel("City1", "destCity1", LocalDate.now(), "Company0"));
+        carrierList.add(new CarrierModel("City1", "destCity1", LocalDate.now().plusDays(8), "Company0"));
         carrierList.add(new CarrierModel("City2", "destCity2",LocalDate.now().plusDays(5), "Company1"));
         carrierList.add(new CarrierModel("City2", "destCity4",LocalDate.now().minusDays(3), "Company2"));
         carrierList.add(new CarrierModel("City3", "destCity4",LocalDate.now().minusDays(10), "Company3"));
