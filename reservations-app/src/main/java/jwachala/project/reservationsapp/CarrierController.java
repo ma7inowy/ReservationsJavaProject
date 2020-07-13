@@ -133,7 +133,7 @@ public class CarrierController {
     public void loadDataToOrderList() {
         carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("jankowalski1@wp.pl", LocalDate.now().plusDays(1), carrierRepostiory.getCarrierList().get(0).getId()));
         carrierOrderRepository.getCarrierOrderList().get(0).setPaid(true);
-        carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("jankowalski2@wp.pl", LocalDate.now().plusDays(9), carrierRepostiory.getCarrierList().get(0).getId()));
+        carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("jankowalski2@wp.pl", LocalDate.now().minusDays(2), carrierRepostiory.getCarrierList().get(0).getId()));
         carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("jankowalski3@wp.pl", LocalDate.now().plusDays(7), carrierRepostiory.getCarrierList().get(0).getId()));
         carrierOrderRepository.getCarrierOrderList().get(2).setPaid(true);
         carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("jankowalski4@wp.pl", LocalDate.now().plusDays(5), carrierRepostiory.getCarrierList().get(0).getId()));
@@ -145,7 +145,7 @@ public class CarrierController {
         carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("jankowalski9@wp.pl", LocalDate.now().plusDays(3), carrierRepostiory.getCarrierList().get(2).getId()));
         carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("jankowalski10@wp.pl", LocalDate.now().plusDays(3), carrierRepostiory.getCarrierList().get(3).getId()));
         carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("jankowalski11@wp.pl", LocalDate.now().plusDays(4), carrierRepostiory.getCarrierList().get(3).getId()));
-        carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("jankowalski11@wp.pl", LocalDate.now().plusDays(4), carrierRepostiory.getCarrierList().get(2).getId()));
+        carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("jankowalski11@wp.pl", LocalDate.now().minusDays(14), carrierRepostiory.getCarrierList().get(2).getId()));
     }
 
     //history
@@ -189,5 +189,10 @@ public class CarrierController {
     }
 
     // ODSWIEZA LISTE ZLECEN, NP JESLI NIE OPLACONE 1 TYDZ PRZED WYJAZDEM TO ANULOWANE
+    @GetMapping("orders/refresh")
+    public String refreshOrders(){
+        carrierOrderRepository.refreshCarrierOrders();
+        return "refreshed!";
+    }
     // anulowanie, akceptowanie
 }

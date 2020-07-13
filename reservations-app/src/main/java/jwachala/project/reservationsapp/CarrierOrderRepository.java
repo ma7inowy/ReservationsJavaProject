@@ -105,4 +105,18 @@ public class CarrierOrderRepository {
         }
         return null;
     }
+
+    public void refreshCarrierOrders() {
+        List<CarrierOrderModel> coList = new ArrayList<>();
+
+        for (CarrierOrderModel co : carrierOrderList) {
+            if (!co.isPaid()) {
+                if (co.getOrderDate().isAfter(carrierRepostiory.getCarrierById(co.getCarrierId()).getDate().minusDays(7)))
+                    coList.add(co);
+            }
+        }
+        for (CarrierOrderModel co1 : coList) {
+            carrierOrderList.remove(co1); // czy dziala?
+        }
+    }
 }

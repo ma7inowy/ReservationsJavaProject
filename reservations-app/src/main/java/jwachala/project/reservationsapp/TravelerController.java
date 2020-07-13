@@ -133,9 +133,13 @@ public class TravelerController {
         return dtoList;
 
     }
-    // zwracac ma carrierid
+
+    // ZWRACA LISTE BILETOW/ZLECEN DLA DANEGO PRZEWOZU POSORTOWANE WG isPaid i date
+    //ZEBY PODROZNIK MOGL SPRAWDZIC KTORY JEST NA LISCIE CHETNYCH
+    @GetMapping("/orders/{carrierID}")
+    public List<CarrierOrderModel> getCarrierOrdersByCarrierIdSorted(@PathVariable(value = "carrierID") String carrierID) {
+        return carrierOrderRepository.getCarrierOrdersByCarrierIdSorted(carrierID);
+    }
 
     // sprawdzenie czy dany przewoz jest odwolany czy zaakceptowany
-
-    //ZEBY PODROZNIK MOGL SPRAWDZIC KTORY JEST NA LISCIE CHETNYCH?
 }
