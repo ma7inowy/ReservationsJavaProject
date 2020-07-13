@@ -117,16 +117,16 @@ public class TravelerController {
 
     // get ktory pokaze nieoplacone bilety dla konkretnego uzytkownika
     @GetMapping("orders/notpaid/email/{email}")
-    public List<CarrierOrderDTO> getNotPayedOrders(@PathVariable(value = "email") String email) {
-        List<CarrierOrderDTO> dtoList = new ArrayList<>();
+    public List<CarrierOrderTravelerDTO> getNotPayedOrders(@PathVariable(value = "email") String email) {
+        List<CarrierOrderTravelerDTO> dtoList = new ArrayList<>();
 
         for (CarrierOrderModel coModel : carrierOrderRepository.getCarrierOrderList()) {
             if (!coModel.isPaid() && coModel.getEmail().equals(email)) {
-                CarrierOrderDTO coDTO = new CarrierOrderDTO();
+                CarrierOrderTravelerDTO coDTO = new CarrierOrderTravelerDTO();
                 coDTO.setEmail(coModel.getEmail());
                 coDTO.setOrderDate(coModel.getOrderDate());
                 coDTO.setCarrierId(coModel.getCarrierId());
-                coDTO.setPaid(coModel.isPaid()); // bedzie mozna to ukryc
+//                coDTO.setPaid(coModel.isPaid()); // bedzie mozna to ukryc
                 dtoList.add(coDTO);
             }
         }
@@ -135,10 +135,20 @@ public class TravelerController {
     }
 
     // ZWRACA LISTE BILETOW/ZLECEN DLA DANEGO PRZEWOZU POSORTOWANE WG isPaid i date
-    //ZEBY PODROZNIK MOGL SPRAWDZIC KTORY JEST NA LISCIE CHETNYCH
+    //ZEBY PODROZNIK MOGL SPRAWDZIC KTORY JEST NA LISCIE CHETNYCH, BEZ UJAWNIENIA POLA ISPAID
     @GetMapping("/orders/{carrierID}")
-    public List<CarrierOrderModel> getCarrierOrdersByCarrierIdSorted(@PathVariable(value = "carrierID") String carrierID) {
-        return carrierOrderRepository.getCarrierOrdersByCarrierIdSorted(carrierID);
+    public List<CarrierOrderTravelerDTO> getCarrierOrdersByCarrierIdSorted(@PathVariable(value = "carrierID") String carrierID) {
+        List<CarrierOrderTravelerDTO> dtoList = new ArrayList<>();
+        List<CarrierOrderModel> coMListsorted = carrierOrderRepository.getCarrierOrdersByCarrierIdSorted(carrierID);
+        for (CarrierOrderModel coModel :coMListsorted) {
+            CarrierOrderTravelerDTO coDTO = new CarrierOrderTravelerDTO();
+            coDTO.setCarrierId(coModel.getCarrierId());
+            coDTO.setEmail(coModel.getEmail());
+            coDTO.setOrderDate(coModel.getOrderDate());
+            dtoList.add(coDTO);
+        }
+
+        return dtoList;
     }
 
     // anulowanie zamowienia oplaconego lub nie
