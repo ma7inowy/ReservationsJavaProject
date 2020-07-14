@@ -78,22 +78,22 @@ public class CarrierController {
     }
 
     // USTAWIENIE PRZEWOZU PRZEZ PRZEWOZNIKA JAKO ZREALIZOWANY
-    @GetMapping("/carrier/id/{carrierId}/realized")
-    public CarrierDTO isRealized(@PathVariable(value = "carrierId") String carrierId){
+    @PutMapping("/carrier/id/{carrierId}/realized")
+    public ResponseEntity<?> isRealized(@PathVariable(value = "carrierId") String carrierId){
         CarrierModel cM = carrierRepostiory.getCarrierById(carrierId);
         cM.realizedTrue();
 
 
-        CarrierDTO cDTO = new CarrierDTO();
-        cDTO.setRealized(cM.isRealized());
-        cDTO.setId(cM.getId());
-        cDTO.setAvailability(cM.getAvailability());
-        cDTO.setStartCity(cM.getStartCity());
-        cDTO.setDestinationCity(cM.getDestinationCity());
-        cDTO.setDate(cM.getDate());
-        cDTO.setCompanyName(cM.getCompanyName());
+       CarrierDTO cDTO = new CarrierDTO();
+       cDTO.setRealized(cM.isRealized());
+       cDTO.setId(cM.getId());
+       cDTO.setAvailability(cM.getAvailability());
+       cDTO.setStartCity(cM.getStartCity());
+       cDTO.setDestinationCity(cM.getDestinationCity());
+       cDTO.setDate(cM.getDate());
+       cDTO.setCompanyName(cM.getCompanyName());
 
-        return cDTO;
+        return ResponseEntity.ok(cDTO);
     }
 
     //carrierOrders operations
@@ -189,7 +189,7 @@ public class CarrierController {
     }
 
     // ZWRACA LISTE BILETOW/ZLECEN DLA DANEGO PRZEWOZU POSORTOWANE WG isPaid i date
-    @GetMapping("/orders/{carrierID}")
+    @GetMapping("/carrierid/{carrierID}/orders")
     public List<CarrierOrderModel> getCarrierOrdersByCarrierIdSorted(@PathVariable(value = "carrierID") String carrierID) {
         return carrierOrderRepository.getCarrierOrdersByCarrierIdSorted(carrierID);
     }

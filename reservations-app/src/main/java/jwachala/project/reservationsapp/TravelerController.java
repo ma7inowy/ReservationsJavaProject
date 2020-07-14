@@ -99,7 +99,7 @@ public class TravelerController {
     }
 
     //OPLAC ZAREZERWOWANY BILET
-    @PostMapping("order/email/{email}/pay")
+    @PostMapping("order/payment/email/{email}")
     public ResponseEntity<?> payOrder(@PathVariable(value = "email") String email, @RequestBody String carrierId) {
         var account = bankAccountRepository.getBankAccountByEmail(email);
         var coModel = carrierOrderRepository.getCarrierOrderByEmailAndCarrierId(email, carrierId);
@@ -114,7 +114,7 @@ public class TravelerController {
     }
 
     // get ktory pokaze nieoplacone bilety dla konkretnego uzytkownika
-    @GetMapping("orders/notpaid/email/{email}")
+    @GetMapping("orders/unpaid/email/{email}")
     public List<CarrierOrderTravelerDTO> getNotPayedOrders(@PathVariable(value = "email") String email) {
         List<CarrierOrderTravelerDTO> dtoList = new ArrayList<>();
 
@@ -134,7 +134,7 @@ public class TravelerController {
 
     // ZWRACA LISTE BILETOW/ZLECEN DLA DANEGO PRZEWOZU POSORTOWANE WG isPaid i date
     // ZEBY PODROZNIK MOGL SPRAWDZIC KTORY JEST NA LISCIE CHETNYCH, BEZ UJAWNIENIA POLA ISPAID
-    @GetMapping("/orders/{carrierID}")
+    @GetMapping("/orders/carrierid/{carrierID}")
     public List<CarrierOrderTravelerDTO> getCarrierOrdersByCarrierIdSorted(@PathVariable(value = "carrierID") String carrierID) {
         List<CarrierOrderTravelerDTO> dtoList = new ArrayList<>();
         List<CarrierOrderModel> coMListsorted = carrierOrderRepository.getCarrierOrdersByCarrierIdSorted(carrierID);
@@ -150,7 +150,7 @@ public class TravelerController {
     }
 
     // anulowanie zamowienia oplaconego lub nieoplaconego
-    @DeleteMapping("/order/delete/email/{email}/carrierId/{carrierID}")
+    @DeleteMapping("/order/carrierid/{carrierID}/email/{email}/delete")
     public ResponseEntity<?> deleteOrder(@PathVariable(value = "email") String email, @PathVariable(value = "carrierID") String carrierID) {
         if (carrierOrderRepository.deleteOrder(email, carrierID)) {
             return ResponseEntity.noContent().build();
