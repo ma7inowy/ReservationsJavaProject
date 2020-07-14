@@ -25,7 +25,6 @@ public class TravelerController {
     //PLAN PODROZNY - WSZYSTKIE OFERTY PRZEJAZDOW
     @GetMapping("carriers")
     public List<CarrierDTO> getCarriers() {
-        // wg mnie podroznik powinien widziec id przewozu zeby moc stworzyc zlecenie
         List<CarrierDTO> dtoList = new ArrayList<>();
         for (var cM : carrierRepostiory.getCarrierList()) {
             var cDTO = new CarrierDTO();
@@ -80,7 +79,7 @@ public class TravelerController {
         return dtoList;
     }
 
-    //UTWORZENIE OFERTY PRZEWOZU
+    //UTWORZENIE ZAMOWIENIA PRZEJAZDU ( BILET )
     @PostMapping("order")
     public ResponseEntity<?> createOrder(@RequestBody CarrierOrderDTO dto) {
         var model = new CarrierOrderModel();
@@ -89,10 +88,9 @@ public class TravelerController {
         model.setCarrierId(dto.getCarrierId());
         var uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(model.getId()).toUri();
 
+        // dodanie pasażera na listę chętnych do skorzystania z usługi przewozu jesli sa jeszcze wolne miejsca
         if (carrierRepostiory.availabilityMinusOne(dto.getCarrierId())) {
             carrierOrderRepository.getCarrierOrderList().add(model);
-            // dodanie pasażera na listę chętnych do skorzystania z usługi przewozu
-//            carrierRepostiory.getCarrierById(dto.getCarrierId()).getPassengers().add(model);
             return ResponseEntity.created(uri).build();
         } else {
             return ResponseEntity.status(HttpStatus.ACCEPTED).body("Sorry, No availability!");
@@ -112,7 +110,7 @@ public class TravelerController {
             carrierOrderRepository.makePayment(coModel.getId());
             account.setAccountBalance(account.getAccountBalance() - 10);
             return ResponseEntity.created(uri).build();
-        } else return ResponseEntity.status(HttpStatus.ACCEPTED).body("Sorry, Too less money in your Bank!");
+        } else return ResponseEntity.status(HttpStatus.ACCEPTED).body("Sorry, Too less money on your bank account!");
     }
 
     // get ktory pokaze nieoplacone bilety dla konkretnego uzytkownika
@@ -126,7 +124,7 @@ public class TravelerController {
                 coDTO.setEmail(coModel.getEmail());
                 coDTO.setOrderDate(coModel.getOrderDate());
                 coDTO.setCarrierId(coModel.getCarrierId());
-//                coDTO.setPaid(coModel.isPaid()); // bedzie mozna to ukryc
+//              coDTO.setPaid(coModel.isPaid());
                 dtoList.add(coDTO);
             }
         }
@@ -135,12 +133,12 @@ public class TravelerController {
     }
 
     // ZWRACA LISTE BILETOW/ZLECEN DLA DANEGO PRZEWOZU POSORTOWANE WG isPaid i date
-    //ZEBY PODROZNIK MOGL SPRAWDZIC KTORY JEST NA LISCIE CHETNYCH, BEZ UJAWNIENIA POLA ISPAID
+    // ZEBY PODROZNIK MOGL SPRAWDZIC KTORY JEST NA LISCIE CHETNYCH, BEZ UJAWNIENIA POLA ISPAID
     @GetMapping("/orders/{carrierID}")
     public List<CarrierOrderTravelerDTO> getCarrierOrdersByCarrierIdSorted(@PathVariable(value = "carrierID") String carrierID) {
         List<CarrierOrderTravelerDTO> dtoList = new ArrayList<>();
         List<CarrierOrderModel> coMListsorted = carrierOrderRepository.getCarrierOrdersByCarrierIdSorted(carrierID);
-        for (CarrierOrderModel coModel :coMListsorted) {
+        for (CarrierOrderModel coModel : coMListsorted) {
             CarrierOrderTravelerDTO coDTO = new CarrierOrderTravelerDTO();
             coDTO.setCarrierId(coModel.getCarrierId());
             coDTO.setEmail(coModel.getEmail());
@@ -151,16 +149,15 @@ public class TravelerController {
         return dtoList;
     }
 
-    // anulowanie zamowienia oplaconego lub nie
+    // anulowanie zamowienia oplaconego lub nieoplaconego
     @DeleteMapping("/order/delete/email/{email}/carrierId/{carrierID}")
-    public ResponseEntity<?> deleteOrder(@PathVariable(value = "email") String email, @PathVariable(value = "carrierID") String carrierID){
-        if(carrierOrderRepository.deleteOrder(email,carrierID)){
+    public ResponseEntity<?> deleteOrder(@PathVariable(value = "email") String email, @PathVariable(value = "carrierID") String carrierID) {
+        if (carrierOrderRepository.deleteOrder(email, carrierID)) {
             return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.notFound().build();
         }
     }
-
 
 
     // sprawdzenie czy dany przewoz jest odwolany czy zaakceptowany

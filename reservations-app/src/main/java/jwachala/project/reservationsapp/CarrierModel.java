@@ -31,4 +31,8 @@ public class CarrierModel {
         this.availability = 10 + counterID;
         counterID++;
     }
+
+    public void realizedTrue(){
+        this.realized = true;
+    }
 }

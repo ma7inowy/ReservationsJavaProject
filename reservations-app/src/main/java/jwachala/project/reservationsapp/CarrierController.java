@@ -24,7 +24,7 @@ public class CarrierController {
 
     //carriers operations
 
-    // WSZYSTKIE OFERT PRZEWOZOW
+    // WSZYSTKIE OFERTY PRZEWOZOW
     @GetMapping("carriers")
     public List<CarrierDTO> getCarriers() {
         List<CarrierDTO> dtoList = new ArrayList<>();
@@ -75,6 +75,25 @@ public class CarrierController {
         var uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(model.getId()).toUri();
 
         return ResponseEntity.created(uri).build();
+    }
+
+    // USTAWIENIE PRZEWOZU PRZEZ PRZEWOZNIKA JAKO ZREALIZOWANY
+    @GetMapping("/carrier/id/{carrierId}/realized")
+    public CarrierDTO isRealized(@PathVariable(value = "carrierId") String carrierId){
+        CarrierModel cM = carrierRepostiory.getCarrierById(carrierId);
+        cM.realizedTrue();
+
+
+        CarrierDTO cDTO = new CarrierDTO();
+        cDTO.setRealized(cM.isRealized());
+        cDTO.setId(cM.getId());
+        cDTO.setAvailability(cM.getAvailability());
+        cDTO.setStartCity(cM.getStartCity());
+        cDTO.setDestinationCity(cM.getDestinationCity());
+        cDTO.setDate(cM.getDate());
+        cDTO.setCompanyName(cM.getCompanyName());
+
+        return cDTO;
     }
 
     //carrierOrders operations
@@ -184,13 +203,13 @@ public class CarrierController {
     }
 
     @GetMapping("history")
-    public List<CarrierModel> getCarrierHistory(){
+    public List<CarrierModel> getCarrierHistory() {
         return carrierHistory.getCarrierHistoryList();
     }
 
     // ODSWIEZA LISTE ZLECEN, NP JESLI NIE OPLACONE 1 TYDZ PRZED WYJAZDEM TO ANULOWANE
     @GetMapping("orders/refresh")
-    public String refreshOrders(){
+    public String refreshOrders() {
         carrierOrderRepository.refreshCarrierOrders();
         return "refreshed!";
     }
