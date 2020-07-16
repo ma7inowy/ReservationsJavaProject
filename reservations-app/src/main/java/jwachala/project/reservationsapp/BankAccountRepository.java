@@ -19,6 +19,11 @@ public class BankAccountRepository {
         bankAccountList.add(new BankAccountModel("jankowalski4@wp.pl"));
         bankAccountList.add(new BankAccountModel("jankowalski5@wp.pl"));
         bankAccountList.add(new BankAccountModel("jankowalski6@wp.pl"));
+        bankAccountList.add(new BankAccountModel("jankowalski7@wp.pl"));
+        bankAccountList.add(new BankAccountModel("jankowalski8@wp.pl"));
+        bankAccountList.add(new BankAccountModel("jankowalski9@wp.pl"));
+        bankAccountList.add(new BankAccountModel("jankowalski10@wp.pl"));
+        bankAccountList.add(new BankAccountModel("jankowalski11@wp.pl"));
     }
 
     public BankAccountModel getBankAccountByEmail(String email){

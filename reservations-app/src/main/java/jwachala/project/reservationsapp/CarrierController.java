@@ -213,5 +213,14 @@ public class CarrierController {
         carrierOrderRepository.refreshCarrierOrders();
         return "refreshed!";
     }
-    // anulowanie, akceptowanie
+
+    // anulowanie przewozu - oddanie kasy albo jakiejs czesci
+    @DeleteMapping("carriers/id/{carrierId}/delete")
+    public ResponseEntity<?> deleteCarrier(@PathVariable(value = "carrierId") String carrierId){
+        if(carrierRepostiory.deleteCarrier(carrierId))
+        return ResponseEntity.noContent().build();
+        else return ResponseEntity.notFound().build();
+
+    }
+
 }
