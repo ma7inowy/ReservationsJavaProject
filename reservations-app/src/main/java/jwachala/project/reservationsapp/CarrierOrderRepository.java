@@ -124,7 +124,7 @@ public class CarrierOrderRepository {
     }
 
     public boolean deleteOrder(String email, String carrierID){
-        double carrierCost = 10; // na razie na sztywno wpisuje cene przejazdu
+        double carrierCost = carrierRepostiory.getCarrierById(carrierID).getPrice(); // na razie na sztywno wpisuje cene przejazdu
         if(getCarrierOrderByEmailAndCarrierId(email, carrierID) != null){
             var coM = getCarrierOrderByEmailAndCarrierId(email, carrierID);
             BankAccountModel baM = bankAccountRepository.getBankAccountByEmail(coM.getEmail());

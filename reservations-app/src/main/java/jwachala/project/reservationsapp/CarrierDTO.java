@@ -15,7 +15,7 @@ public class CarrierDTO {
     private String companyName;
     private int availability; // nie pokazywac ile wolnych tylko pokazac
     private boolean realized;
-    // POLE CENA ???
+    private double price;
 
 
 //    private Details details;

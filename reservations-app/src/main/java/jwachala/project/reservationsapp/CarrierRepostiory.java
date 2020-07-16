@@ -25,11 +25,11 @@ public class CarrierRepostiory {
 
     public CarrierRepostiory() {
         this.carrierList = new ArrayList<>();
-        carrierList.add(new CarrierModel("City1", "destCity1", LocalDate.now().plusDays(8), "Company0"));
-        carrierList.add(new CarrierModel("City2", "destCity2", LocalDate.now().plusDays(5), "Company1"));
-        carrierList.add(new CarrierModel("City2", "destCity4", LocalDate.now().minusDays(3), "Company2"));
-        carrierList.add(new CarrierModel("City3", "destCity4", LocalDate.now().minusDays(10), "Company3"));
-        carrierList.add(new CarrierModel("City5", "destCity5", LocalDate.now().plusDays(1), "Company3"));
+        carrierList.add(new CarrierModel("City1", "destCity1", LocalDate.now().plusDays(8), "Company0",10));
+        carrierList.add(new CarrierModel("City2", "destCity2", LocalDate.now().plusDays(5), "Company1",20));
+        carrierList.add(new CarrierModel("City2", "destCity4", LocalDate.now().minusDays(3), "Company2",30));
+        carrierList.add(new CarrierModel("City3", "destCity4", LocalDate.now().minusDays(10), "Company3",40));
+        carrierList.add(new CarrierModel("City5", "destCity5", LocalDate.now().plusDays(1), "Company3",50));
 
     }
 
@@ -82,7 +82,7 @@ public class CarrierRepostiory {
             // jesli oplacone to oddaj gotowke 100%
             if (coModel.isPaid()) {
                 BankAccountModel baModel = bankAccountRepository.getBankAccountByEmail(coModel.getEmail());
-                baModel.depositMoney(10);
+                baModel.depositMoney(getCarrierById(id).getPrice());
             }
         }
         carrierList.remove(getCarrierById(id));

@@ -35,6 +35,7 @@ public class TravelerController {
             cDTO.setAvailability(cM.getAvailability());
             cDTO.setId(cM.getId());
             cDTO.setRealized(cM.isRealized());
+            cDTO.setPrice(cM.getPrice());
             dtoList.add(cDTO);
         }
 
@@ -54,6 +55,7 @@ public class TravelerController {
             cDTO.setAvailability(cM.getAvailability());
             cDTO.setId(cM.getId());
             cDTO.setRealized(cM.isRealized());
+            cDTO.setPrice(cM.getPrice());
             dtoList.add(cDTO);
         }
 
@@ -73,6 +75,7 @@ public class TravelerController {
             cDTO.setAvailability(cM.getAvailability());
             cDTO.setId(cM.getId());
             cDTO.setRealized(cM.isRealized());
+            cDTO.setPrice(cM.getPrice());
             dtoList.add(cDTO);
         }
 
@@ -103,12 +106,13 @@ public class TravelerController {
     public ResponseEntity<?> payOrder(@PathVariable(value = "email") String email, @RequestBody String carrierId) {
         var account = bankAccountRepository.getBankAccountByEmail(email);
         var coModel = carrierOrderRepository.getCarrierOrderByEmailAndCarrierId(email, carrierId);
+        var cModel = carrierRepostiory.getCarrierById(carrierId);
         var uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(coModel.getId()).toUri();
 
         // ZAMIAST 10ZL BEDZIE KONKRETNA KWOTA JAK DODAM POLE W CARRIER O CENIE
-        if (account.getAccountBalance() >= 10) {
+        if (account.getAccountBalance() >= cModel.getPrice()) {
             carrierOrderRepository.makePayment(coModel.getId());
-            account.setAccountBalance(account.getAccountBalance() - 10);
+            account.setAccountBalance(account.getAccountBalance() - cModel.getPrice());
             return ResponseEntity.created(uri).build();
         } else return ResponseEntity.status(HttpStatus.ACCEPTED).body("Sorry, Too less money on your bank account!");
     }

@@ -19,17 +19,19 @@ public class CarrierModel {
     private int availability;
     private static int counterID = 0;
     private boolean realized = false; // FLAGA INFORMUJACA CZY PRZEWOZ ZOSTAL JUZ ZREALIZOWANY
+    private double price;
 
     public CarrierModel() {
     }
 
-    public CarrierModel(String startCity, String destinationCity, LocalDate date, String companyName) {
+    public CarrierModel(String startCity, String destinationCity, LocalDate date, String companyName, double price) {
         this.startCity = startCity;
         this.destinationCity = destinationCity;
         this.companyName = companyName;
         this.date = date;
         this.availability = 10 + counterID;
         counterID++;
+        this.price = price;
     }
 
     public void realizedTrue(){

@@ -25,7 +25,7 @@ public class MoneyController {
 
     //SPRAWDZ SALDO KONTA
     @GetMapping("/account/{email}/accountBalance")
-    public int getAccountBalance(@PathVariable(value = "email") String email) {
+    public double getAccountBalance(@PathVariable(value = "email") String email) {
         return bankAccountRepository.getBankAccountByEmail(email).getAccountBalance();
     }
 

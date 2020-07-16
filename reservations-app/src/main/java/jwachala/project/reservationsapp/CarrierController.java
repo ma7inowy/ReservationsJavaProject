@@ -37,6 +37,7 @@ public class CarrierController {
             cDTO.setAvailability(cM.getAvailability());
             cDTO.setId(cM.getId());
             cDTO.setRealized(cM.isRealized());
+            cDTO.setPrice(cM.getPrice());
             dtoList.add(cDTO);
         }
 
@@ -56,6 +57,7 @@ public class CarrierController {
             cDTO.setAvailability(cM.getAvailability());
             cDTO.setId(cM.getId());
             cDTO.setRealized(cM.isRealized());
+            cDTO.setPrice(cM.getPrice());
             dtoList.add(cDTO);
         }
 
@@ -71,6 +73,7 @@ public class CarrierController {
         model.setDate(dto.getDate());
         model.setCompanyName(dto.getCompanyName());
         model.setAvailability(dto.getAvailability());
+        model.setPrice(dto.getPrice());
         carrierRepostiory.getCarrierList().add(model);
         var uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(model.getId()).toUri();
 
@@ -92,6 +95,7 @@ public class CarrierController {
        cDTO.setDestinationCity(cM.getDestinationCity());
        cDTO.setDate(cM.getDate());
        cDTO.setCompanyName(cM.getCompanyName());
+       cDTO.setPrice(cM.getPrice());
 
         return ResponseEntity.ok(cDTO);
     }
@@ -182,6 +186,7 @@ public class CarrierController {
             cDTO.setAvailability(cM.getAvailability());
             cDTO.setId(cM.getId());
             cDTO.setRealized(cM.isRealized());
+            cDTO.setPrice(cM.getPrice());
             dtoList.add(cDTO);
         }
 
