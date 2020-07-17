@@ -212,7 +212,7 @@ public class CarrierController {
         return carrierHistory.getCarrierHistoryList();
     }
 
-    // ODSWIEZA LISTE ZLECEN, NP JESLI NIE OPLACONE 1 TYDZ PRZED WYJAZDEM TO ANULOWANE
+    // ODSWIEZA LISTE ZLECEN, NP JESLI NIE OPLACONE 5 DNI PRZED WYJAZDEM TO ANULOWANE
     @GetMapping("orders/refresh")
     public String refreshOrders() {
         carrierOrderRepository.refreshCarrierOrders();

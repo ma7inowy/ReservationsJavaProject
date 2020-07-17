@@ -43,6 +43,18 @@ public class CarrierRepostiory {
         return carrierListbyCity;
     }
 
+    public List<CarrierModel> getCarriersbyStartCityAndDestination(String startCity,String finishCity) {
+        List<CarrierModel> carrierListbyCitystartfinish = new ArrayList<>();
+        for (var carrier : carrierList) {
+            if (carrier.getStartCity().toLowerCase().equals(startCity.toLowerCase()) && carrier.getDestinationCity().toLowerCase().equals(finishCity)) {
+                carrierListbyCitystartfinish.add(carrier);
+            }
+        }
+        return carrierListbyCitystartfinish;
+    }
+
+
+
     public List<CarrierModel> getCarriersbyCompanyName(String companyName) {
         List<CarrierModel> carrierListbyCompanyName = new ArrayList<>();
         for (var carrier : carrierList) {

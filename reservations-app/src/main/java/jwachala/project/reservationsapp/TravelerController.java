@@ -62,6 +62,28 @@ public class TravelerController {
         return dtoList;
     }
 
+    //PLAN PODROZNY - WSZYSTKIE OFERTY PRZEJAZDOW Z OKRESLONEGO MIASTA DO OKRESLONEGO MIASTA
+    @GetMapping("/carriers/city/start/{startCity}/destination/{destinationCity}")
+    public List<CarrierDTO> getCarriersbyStartCityAndDestination(@PathVariable(value = "startCity") String startCity, @PathVariable(value = "destinationCity") String destinationCity) {
+        List<CarrierDTO> dtoList = new ArrayList<>();
+        for (var cM : carrierRepostiory.getCarriersbyStartCityAndDestination(startCity, destinationCity)) {
+            var cDTO = new CarrierDTO();
+            cDTO.setCompanyName(cM.getCompanyName());
+            cDTO.setDate(cM.getDate());
+            cDTO.setStartCity(cM.getStartCity());
+            cDTO.setDestinationCity(cM.getDestinationCity());
+            cDTO.setAvailability(cM.getAvailability());
+            cDTO.setId(cM.getId());
+            cDTO.setRealized(cM.isRealized());
+            cDTO.setPrice(cM.getPrice());
+            dtoList.add(cDTO);
+        }
+
+        return dtoList;
+    }
+
+
+
     //PLAN PODROZNY - WSZYSTKIE OFERTY PRZEJAZDOW DANEJ FIRMY
     @GetMapping("/carriers/company/{companyName}")
     public List<CarrierDTO> getCarriersByCompanyName(@PathVariable(value = "companyName") String companyName) {

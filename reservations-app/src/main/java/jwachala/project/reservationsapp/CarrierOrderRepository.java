@@ -114,7 +114,7 @@ public class CarrierOrderRepository {
 
         for (CarrierOrderModel co : carrierOrderList) {
             if (!co.isPaid()) {
-                if (co.getOrderDate().isAfter(carrierRepostiory.getCarrierById(co.getCarrierId()).getDate().minusDays(7)))
+                if (co.getOrderDate().isAfter(carrierRepostiory.getCarrierById(co.getCarrierId()).getDate().minusDays(5)))
                     coList.add(co);
             }
         }
