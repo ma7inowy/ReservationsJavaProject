@@ -11,7 +11,7 @@ import java.util.List;
 // BAZA DANYCH Z WSZYSTKIMI OFERTAMI PRZEWOZOW
 @Component
 @Data
-public class CarrierRepostiory {
+public class CarrierRepositoryImpl implements CarrierRepository {
 
     private List<CarrierModel> carrierList;
 
@@ -21,7 +21,7 @@ public class CarrierRepostiory {
     @Autowired
     BankAccountRepository bankAccountRepository;
 
-    public CarrierRepostiory() {
+    public CarrierRepositoryImpl() {
         this.carrierList = new ArrayList<>();
         carrierList.add(new CarrierModel("City1", "destCity1", LocalDate.now().plusDays(8), "Company0",10));
         carrierList.add(new CarrierModel("City2", "destCity2", LocalDate.now().plusDays(5), "Company1",20));
@@ -31,6 +31,7 @@ public class CarrierRepostiory {
 
     }
 
+    @Override
     public List<CarrierModel> getCarriersbyStartCity(String city) {
         List<CarrierModel> carrierListbyCity = new ArrayList<>();
         for (var carrier : carrierList) {
@@ -41,7 +42,8 @@ public class CarrierRepostiory {
         return carrierListbyCity;
     }
 
-    public List<CarrierModel> getCarriersbyStartCityAndDestination(String startCity,String finishCity) {
+    @Override
+    public List<CarrierModel> getCarriersbyStartCityAndDestination(String startCity, String finishCity) {
         List<CarrierModel> carrierListbyCitystartfinish = new ArrayList<>();
         for (var carrier : carrierList) {
             if (carrier.getStartCity().toLowerCase().equals(startCity.toLowerCase()) && carrier.getDestinationCity().toLowerCase().equals(finishCity)) {
@@ -53,6 +55,7 @@ public class CarrierRepostiory {
 
 
 
+    @Override
     public List<CarrierModel> getCarriersbyCompanyName(String companyName) {
         List<CarrierModel> carrierListbyCompanyName = new ArrayList<>();
         for (var carrier : carrierList) {
@@ -64,6 +67,7 @@ public class CarrierRepostiory {
     }
 
     // dodaj zlecenie do Carrier
+    @Override
     public boolean availabilityMinusOne(String id) {
         for (CarrierModel cM : carrierList) {
             if (cM.getId().equals(id)) {
@@ -76,6 +80,7 @@ public class CarrierRepostiory {
         return false;
     }
 
+    @Override
     public CarrierModel getCarrierById(String id) {
         for (var carrier : carrierList) {
             if (carrier.getId().equals(id))
@@ -84,6 +89,7 @@ public class CarrierRepostiory {
         return null;
     }
 
+    @Override
     public boolean deleteCarrier(String id) {
         List<CarrierOrderModel> coList = carrierOrderService.getCarrierOrdersByCarrierId(id);
         if (coList == null) return false;
@@ -100,5 +106,10 @@ public class CarrierRepostiory {
         carrierOrderService.removeAllOrders(coList);
         return true;
 
+    }
+
+    @Override
+    public List<CarrierModel> getAllCarriers() {
+        return carrierList;
     }
 }

@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +15,7 @@ import java.util.List;
 public class CarrierController {
 
     @Autowired
-    private CarrierRepostiory carrierRepostiory;
+    private CarrierRepositoryImpl carrierRepository;
     @Autowired
     private CarrierOrderService carrierOrderService;
     @Autowired
@@ -28,7 +27,7 @@ public class CarrierController {
     @GetMapping("carriers")
     public List<CarrierDTO> getCarriers() {
         List<CarrierDTO> dtoList = new ArrayList<>();
-        for (CarrierModel cM : carrierRepostiory.getCarrierList()) {
+        for (CarrierModel cM : carrierRepository.getCarrierList()) {
             CarrierDTO cDTO = new CarrierDTO();
             cDTO.setCompanyName(cM.getCompanyName());
             cDTO.setDate(cM.getDate());
@@ -48,7 +47,7 @@ public class CarrierController {
     @GetMapping("/carriers/city/start/{startCity}")
     public List<CarrierDTO> getCarriersByCity(@PathVariable(value = "startCity") String startCity) {
         List<CarrierDTO> dtoList = new ArrayList<>();
-        for (CarrierModel cM : carrierRepostiory.getCarriersbyStartCity(startCity)) {
+        for (CarrierModel cM : carrierRepository.getCarriersbyStartCity(startCity)) {
             CarrierDTO cDTO = new CarrierDTO();
             cDTO.setCompanyName(cM.getCompanyName());
             cDTO.setDate(cM.getDate());
@@ -74,7 +73,7 @@ public class CarrierController {
         model.setCompanyName(dto.getCompanyName());
         model.setAvailability(dto.getAvailability());
         model.setPrice(dto.getPrice());
-        carrierRepostiory.getCarrierList().add(model);
+        carrierRepository.getCarrierList().add(model);
         var uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(model.getId()).toUri();
 
         return ResponseEntity.created(uri).build();
@@ -83,7 +82,7 @@ public class CarrierController {
     // USTAWIENIE PRZEWOZU PRZEZ PRZEWOZNIKA JAKO ZREALIZOWANY
     @PutMapping("/carrier/id/{carrierId}/realized")
     public ResponseEntity<?> isRealized(@PathVariable(value = "carrierId") String carrierId){
-        CarrierModel cM = carrierRepostiory.getCarrierById(carrierId);
+        CarrierModel cM = carrierRepository.getCarrierById(carrierId);
         cM.realizedTrue();
 
 
@@ -222,7 +221,7 @@ public class CarrierController {
     // anulowanie przewozu - oddanie kasy albo jakiejs czesci
     @DeleteMapping("carriers/id/{carrierId}/delete")
     public ResponseEntity<?> deleteCarrier(@PathVariable(value = "carrierId") String carrierId){
-        if(carrierRepostiory.deleteCarrier(carrierId))
+        if(carrierRepository.deleteCarrier(carrierId))
         return ResponseEntity.noContent().build();
         else return ResponseEntity.notFound().build();
 
