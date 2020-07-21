@@ -21,7 +21,7 @@ public class CarrierHistory {
     CarrierRepostiory carrierRepostiory;
 
     @Autowired
-    CarrierOrderRepository carrierOrderRepository;
+    CarrierOrderService carrierOrderService;
 
 
     public List<CarrierModel> getHistoryCarriersbyCompanyName(String companyName) {
@@ -34,36 +34,36 @@ public class CarrierHistory {
         return carrierListbyCompanyName;
     }
 
-    public List<CarrierOrderModel> refreshHistory() {
-        List<CarrierModel> cMList = carrierRepostiory.getCarrierList();
-        List<CarrierModel> carriersforRemoveList = new ArrayList<>();
-
-        // przenoszenie obiektow ofert przewozow z CarrierRepository -> CarrierHistory
-        for (int i = 0; i< cMList.size();i++) {
-            if (cMList.get(i).getDate().compareTo(LocalDate.now()) < 0 || cMList.get(i).isRealized()) {
-                carrierHistoryList.add(cMList.get(i));
-                carriersforRemoveList.add(cMList.get(i));
-            }
-        }
-
-        // usuwanie starych zleceń/biletow
-        List<CarrierOrderModel> CarrierOrderforRemoveList = new ArrayList<>();
-        for(CarrierOrderModel coM : carrierOrderRepository.getCarrierOrderList()){
-            for(CarrierModel cM : carriersforRemoveList){
-                if(coM.getCarrierId().equals(cM.getId()))
-                    CarrierOrderforRemoveList.add(coM);
-            }
-        }
-
-        //usuwanie starych przewozów
-        for(CarrierModel i : carriersforRemoveList)
-            carrierRepostiory.getCarrierList().remove(i);
-
-        // usuwanie starych biletow / zlecen z bazy
-        for(CarrierOrderModel i : CarrierOrderforRemoveList){
-            carrierOrderRepository.getCarrierOrderList().remove(i);
-        }
-
-        return CarrierOrderforRemoveList;
-    }
+//    public List<CarrierOrderModel> refreshHistory() {
+//        List<CarrierModel> cMList = carrierRepostiory.getCarrierList();
+//        List<CarrierModel> carriersforRemoveList = new ArrayList<>();
+//
+//        // przenoszenie obiektow ofert przewozow z CarrierRepository -> CarrierHistory
+//        for (int i = 0; i< cMList.size();i++) {
+//            if (cMList.get(i).getDate().compareTo(LocalDate.now()) < 0 || cMList.get(i).isRealized()) {
+//                carrierHistoryList.add(cMList.get(i));
+//                carriersforRemoveList.add(cMList.get(i));
+//            }
+//        }
+//
+//        // usuwanie starych zleceń/biletow
+//        List<CarrierOrderModel> CarrierOrderforRemoveList = new ArrayList<>();
+//        for(CarrierOrderModel coM : carrierOrderService.getCarrierOrderListIterable()){
+//            for(CarrierModel cM : carriersforRemoveList){
+//                if(coM.getCarrierId().equals(cM.getId()))
+//                    CarrierOrderforRemoveList.add(coM);
+//            }
+//        }
+//
+//        //usuwanie starych przewozów
+//        for(CarrierModel i : carriersforRemoveList)
+//            carrierRepostiory.getCarrierList().remove(i);
+//
+//        // usuwanie starych biletow / zlecen z bazy
+//        for(CarrierOrderModel i : CarrierOrderforRemoveList){
+//            carrierOrderService.getCarrierOrderList().remove(i);
+//        }
+//
+//        return CarrierOrderforRemoveList;
+//    }
 }

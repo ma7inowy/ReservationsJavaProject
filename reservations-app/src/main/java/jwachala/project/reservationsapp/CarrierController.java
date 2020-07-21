@@ -18,7 +18,7 @@ public class CarrierController {
     @Autowired
     private CarrierRepostiory carrierRepostiory;
     @Autowired
-    private CarrierOrderRepository carrierOrderRepository;
+    private CarrierOrderService carrierOrderService;
     @Autowired
     private CarrierHistory carrierHistory;
 
@@ -106,7 +106,7 @@ public class CarrierController {
     @GetMapping("/orders")
     public List<CarrierOrderDTO> getCarrierOrders() {
         List<CarrierOrderDTO> dtoList = new ArrayList<>();
-        for (CarrierOrderModel coM : carrierOrderRepository.getCarrierOrderList()) {
+        for (CarrierOrderModel coM : carrierOrderService.getCarrierOrderListIterable()) {
             CarrierOrderDTO coDTO = new CarrierOrderDTO();
             coDTO.setCarrierId(coM.getCarrierId());
             coDTO.setEmail(coM.getEmail());
@@ -122,7 +122,7 @@ public class CarrierController {
     @GetMapping("/orders/company/{companyName}")
     public List<CarrierOrderDTO> getCarrierOrdersByCompanyName(@PathVariable(value = "companyName") String companyName) {
         var dtoList = new ArrayList<CarrierOrderDTO>();
-        for (var coM : carrierOrderRepository.getCarrierOrdersByCompanyName(companyName)) {
+        for (var coM : carrierOrderService.getCarrierOrdersByCompanyName(companyName)) {
             var coDTO = new CarrierOrderDTO();
             coDTO.setCarrierId(coM.getCarrierId());
             coDTO.setEmail(coM.getEmail());
@@ -139,7 +139,7 @@ public class CarrierController {
     public List<CarrierOrderDTO> getCarrierOrdersByCompanyNameAndCity(@PathVariable(value = "companyName") String companyName,
                                                                       @PathVariable(value = "startCity") String startCity) {
         List<CarrierOrderDTO> dtoList = new ArrayList<>();
-        for (var coM : carrierOrderRepository.getCarrierOrdersByCompanyNameAndCity(companyName, startCity)) {
+        for (var coM : carrierOrderService.getCarrierOrdersByCompanyNameAndCity(companyName, startCity)) {
             var coDTO = new CarrierOrderDTO();
             coDTO.setCarrierId(coM.getCarrierId());
             coDTO.setOrderDate(coM.getOrderDate());
@@ -152,24 +152,24 @@ public class CarrierController {
     }
 
     // DO ZALADOWANIA PRZYKLADOWYCH ZAMOWIEN/BILETOW (korzystam z CarrierRepo wiec musialem w ten sposob bo inaczej error)
-    @GetMapping("/load")
-    public void loadDataToOrderList() {
-        carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("jankowalski1@wp.pl", LocalDate.now().minusDays(11), carrierRepostiory.getCarrierList().get(0).getId()));
-        carrierOrderRepository.getCarrierOrderList().get(0).setPaid(true);
-        carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("jankowalski2@wp.pl", LocalDate.now().minusDays(2), carrierRepostiory.getCarrierList().get(0).getId()));
-        carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("jankowalski3@wp.pl", LocalDate.now().plusDays(7), carrierRepostiory.getCarrierList().get(0).getId()));
-        carrierOrderRepository.getCarrierOrderList().get(2).setPaid(true);
-        carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("jankowalski4@wp.pl", LocalDate.now().plusDays(5), carrierRepostiory.getCarrierList().get(0).getId()));
-        carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("jankowalski5@wp.pl", LocalDate.now().plusDays(3), carrierRepostiory.getCarrierList().get(0).getId()));
-        carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("jankowalski6@wp.pl", LocalDate.now().plusDays(5), carrierRepostiory.getCarrierList().get(0).getId()));
-        carrierOrderRepository.getCarrierOrderList().get(5).setPaid(true);
-        carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("jankowalski7@wp.pl", LocalDate.now().plusDays(4), carrierRepostiory.getCarrierList().get(0).getId()));
-        carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("jankowalski8@wp.pl", LocalDate.now().plusDays(3), carrierRepostiory.getCarrierList().get(1).getId()));
-        carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("jankowalski9@wp.pl", LocalDate.now().plusDays(3), carrierRepostiory.getCarrierList().get(2).getId()));
-        carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("jankowalski10@wp.pl", LocalDate.now().plusDays(3), carrierRepostiory.getCarrierList().get(3).getId()));
-        carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("jankowalski11@wp.pl", LocalDate.now().plusDays(4), carrierRepostiory.getCarrierList().get(3).getId()));
-        carrierOrderRepository.getCarrierOrderList().add(new CarrierOrderModel("jankowalski11@wp.pl", LocalDate.now().minusDays(14), carrierRepostiory.getCarrierList().get(2).getId()));
-    }
+//    @GetMapping("/load")
+//    public void loadDataToOrderList() {
+//        carrierOrderService.getCarrierOrderList().add(new CarrierOrderModel("jankowalski1@wp.pl", LocalDate.now().minusDays(11), carrierRepostiory.getCarrierList().get(0).getId()));
+//        carrierOrderService.getCarrierOrderList().get(0).setPaid(true);
+//        carrierOrderService.getCarrierOrderList().add(new CarrierOrderModel("jankowalski2@wp.pl", LocalDate.now().minusDays(2), carrierRepostiory.getCarrierList().get(0).getId()));
+//        carrierOrderService.getCarrierOrderList().add(new CarrierOrderModel("jankowalski3@wp.pl", LocalDate.now().plusDays(7), carrierRepostiory.getCarrierList().get(0).getId()));
+//        carrierOrderService.getCarrierOrderList().get(2).setPaid(true);
+//        carrierOrderService.getCarrierOrderList().add(new CarrierOrderModel("jankowalski4@wp.pl", LocalDate.now().plusDays(5), carrierRepostiory.getCarrierList().get(0).getId()));
+//        carrierOrderService.getCarrierOrderList().add(new CarrierOrderModel("jankowalski5@wp.pl", LocalDate.now().plusDays(3), carrierRepostiory.getCarrierList().get(0).getId()));
+//        carrierOrderService.getCarrierOrderList().add(new CarrierOrderModel("jankowalski6@wp.pl", LocalDate.now().plusDays(5), carrierRepostiory.getCarrierList().get(0).getId()));
+//        carrierOrderService.getCarrierOrderList().get(5).setPaid(true);
+//        carrierOrderService.getCarrierOrderList().add(new CarrierOrderModel("jankowalski7@wp.pl", LocalDate.now().plusDays(4), carrierRepostiory.getCarrierList().get(0).getId()));
+//        carrierOrderService.getCarrierOrderList().add(new CarrierOrderModel("jankowalski8@wp.pl", LocalDate.now().plusDays(3), carrierRepostiory.getCarrierList().get(1).getId()));
+//        carrierOrderService.getCarrierOrderList().add(new CarrierOrderModel("jankowalski9@wp.pl", LocalDate.now().plusDays(3), carrierRepostiory.getCarrierList().get(2).getId()));
+//        carrierOrderService.getCarrierOrderList().add(new CarrierOrderModel("jankowalski10@wp.pl", LocalDate.now().plusDays(3), carrierRepostiory.getCarrierList().get(3).getId()));
+//        carrierOrderService.getCarrierOrderList().add(new CarrierOrderModel("jankowalski11@wp.pl", LocalDate.now().plusDays(4), carrierRepostiory.getCarrierList().get(3).getId()));
+//        carrierOrderService.getCarrierOrderList().add(new CarrierOrderModel("jankowalski11@wp.pl", LocalDate.now().minusDays(14), carrierRepostiory.getCarrierList().get(2).getId()));
+//    }
 
     //history
 
@@ -196,16 +196,16 @@ public class CarrierController {
     // ZWRACA LISTE BILETOW/ZLECEN DLA DANEGO PRZEWOZU POSORTOWANE WG isPaid i date
     @GetMapping("/carrierid/{carrierID}/orders")
     public List<CarrierOrderModel> getCarrierOrdersByCarrierIdSorted(@PathVariable(value = "carrierID") String carrierID) {
-        return carrierOrderRepository.getCarrierOrdersByCarrierIdSorted(carrierID);
+        return carrierOrderService.getCarrierOrdersByCarrierIdSorted(carrierID);
     }
 
     //history
 
     // ODSWIEZANIE HISTORII (TRAFIAJA TAM TE PRZEWOZY KTORYCH DATA < LocalDate.now() LUB KTORE MAJA POLE realized = true)
-    @GetMapping("history/refresh")
-    public List<CarrierOrderModel> refreshHistory() {
-        return carrierHistory.refreshHistory();
-    }
+//    @GetMapping("history/refresh")
+//    public List<CarrierOrderModel> refreshHistory() {
+//        return carrierHistory.refreshHistory();
+//    }
 
     @GetMapping("history")
     public List<CarrierModel> getCarrierHistory() {
@@ -215,7 +215,7 @@ public class CarrierController {
     // ODSWIEZA LISTE ZLECEN, NP JESLI NIE OPLACONE 5 DNI PRZED WYJAZDEM TO ANULOWANE
     @GetMapping("orders/refresh")
     public String refreshOrders() {
-        carrierOrderRepository.refreshCarrierOrders();
+        carrierOrderService.refreshCarrierOrders();
         return "refreshed!";
     }
 

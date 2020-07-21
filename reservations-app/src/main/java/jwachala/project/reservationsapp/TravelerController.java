@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +17,7 @@ public class TravelerController {
     @Autowired
     private CarrierRepostiory carrierRepostiory;
     @Autowired
-    private CarrierOrderRepository carrierOrderRepository;
+    private CarrierOrderService carrierOrderService;
     @Autowired
     private BankAccountRepository bankAccountRepository;
 
@@ -83,7 +82,6 @@ public class TravelerController {
     }
 
 
-
     //PLAN PODROZNY - WSZYSTKIE OFERTY PRZEJAZDOW DANEJ FIRMY
     @GetMapping("/carriers/company/{companyName}")
     public List<CarrierDTO> getCarriersByCompanyName(@PathVariable(value = "companyName") String companyName) {
@@ -115,7 +113,8 @@ public class TravelerController {
 
         // dodanie pasażera na listę chętnych do skorzystania z usługi przewozu jesli sa jeszcze wolne miejsca
         if (carrierRepostiory.availabilityMinusOne(dto.getCarrierId())) {
-            carrierOrderRepository.getCarrierOrderList().add(model);
+//            carrierOrderService.getCarrierOrderList().add(model);
+            carrierOrderService.addOrder(model);
             return ResponseEntity.created(uri).build();
         } else {
             return ResponseEntity.status(HttpStatus.ACCEPTED).body("Sorry, No availability!");
@@ -127,13 +126,13 @@ public class TravelerController {
     @PostMapping("order/payment/email/{email}")
     public ResponseEntity<?> payOrder(@PathVariable(value = "email") String email, @RequestBody String carrierId) {
         var account = bankAccountRepository.getBankAccountByEmail(email);
-        var coModel = carrierOrderRepository.getCarrierOrderByEmailAndCarrierId(email, carrierId);
+        var coModel = carrierOrderService.getCarrierOrderByEmailAndCarrierId(email, carrierId);
         var cModel = carrierRepostiory.getCarrierById(carrierId);
         var uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(coModel.getId()).toUri();
 
         // ZAMIAST 10ZL BEDZIE KONKRETNA KWOTA JAK DODAM POLE W CARRIER O CENIE
         if (account.getAccountBalance() >= cModel.getPrice()) {
-            carrierOrderRepository.makePayment(coModel.getId());
+            carrierOrderService.makePayment(coModel.getId());
             account.setAccountBalance(account.getAccountBalance() - cModel.getPrice());
             return ResponseEntity.created(uri).build();
         } else return ResponseEntity.status(HttpStatus.ACCEPTED).body("Sorry, Too less money on your bank account!");
@@ -144,15 +143,12 @@ public class TravelerController {
     public List<CarrierOrderTravelerDTO> getNotPayedOrders(@PathVariable(value = "email") String email) {
         List<CarrierOrderTravelerDTO> dtoList = new ArrayList<>();
 
-        for (CarrierOrderModel coModel : carrierOrderRepository.getCarrierOrderList()) {
-            if (!coModel.isPaid() && coModel.getEmail().equals(email)) {
-                CarrierOrderTravelerDTO coDTO = new CarrierOrderTravelerDTO();
-                coDTO.setEmail(coModel.getEmail());
-                coDTO.setOrderDate(coModel.getOrderDate());
-                coDTO.setCarrierId(coModel.getCarrierId());
-//              coDTO.setPaid(coModel.isPaid());
-                dtoList.add(coDTO);
-            }
+        for (CarrierOrderModel coModel : carrierOrderService.unpaidOrders(email)) {
+            CarrierOrderTravelerDTO coDTO = new CarrierOrderTravelerDTO();
+            coDTO.setEmail(coModel.getEmail());
+            coDTO.setOrderDate(coModel.getOrderDate());
+            coDTO.setCarrierId(coModel.getCarrierId());
+            dtoList.add(coDTO);
         }
         return dtoList;
 
@@ -163,7 +159,7 @@ public class TravelerController {
     @GetMapping("/orders/carrierid/{carrierID}")
     public List<CarrierOrderTravelerDTO> getCarrierOrdersByCarrierIdSorted(@PathVariable(value = "carrierID") String carrierID) {
         List<CarrierOrderTravelerDTO> dtoList = new ArrayList<>();
-        List<CarrierOrderModel> coMListsorted = carrierOrderRepository.getCarrierOrdersByCarrierIdSorted(carrierID);
+        List<CarrierOrderModel> coMListsorted = carrierOrderService.getCarrierOrdersByCarrierIdSorted(carrierID);
         for (CarrierOrderModel coModel : coMListsorted) {
             CarrierOrderTravelerDTO coDTO = new CarrierOrderTravelerDTO();
             coDTO.setCarrierId(coModel.getCarrierId());
@@ -178,7 +174,7 @@ public class TravelerController {
     // anulowanie zamowienia oplaconego lub nieoplaconego
     @DeleteMapping("/order/carrierid/{carrierID}/email/{email}/delete")
     public ResponseEntity<?> deleteOrder(@PathVariable(value = "email") String email, @PathVariable(value = "carrierID") String carrierID) {
-        if (carrierOrderRepository.deleteOrder(email, carrierID)) {
+        if (carrierOrderService.deleteOrder(email, carrierID)) {
             return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.notFound().build();

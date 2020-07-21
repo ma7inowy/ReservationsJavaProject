@@ -3,7 +3,9 @@ package jwachala.project.reservationsapp;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,11 +13,10 @@ import java.util.List;
 
 
 // BAZA DANYCH O ZAKUPIONYCH BILETACH/MIEJSCA U PRZEWOŹNIKA
-@Component
-@Data
-public class CarrierOrderRepository {
+@Service
+public class CarrierOrderService {
 
-    List<CarrierOrderModel> carrierOrderList;
+    private List<CarrierOrderModel> carrierOrderList;
 
     @Autowired
     CarrierRepostiory carrierRepostiory;
@@ -23,8 +24,27 @@ public class CarrierOrderRepository {
     @Autowired
     BankAccountRepository bankAccountRepository;
 
-    public CarrierOrderRepository() {
+    public CarrierOrderService() {
         this.carrierOrderList = new ArrayList<>();
+    }
+
+    @PostConstruct
+    public void init(){
+        carrierOrderList.add(new CarrierOrderModel("jankowalski1@wp.pl", LocalDate.now().minusDays(11), carrierRepostiory.getCarrierList().get(0).getId()));
+        carrierOrderList.get(0).setPaid(true);
+        carrierOrderList.add(new CarrierOrderModel("jankowalski2@wp.pl", LocalDate.now().minusDays(2), carrierRepostiory.getCarrierList().get(0).getId()));
+        carrierOrderList.add(new CarrierOrderModel("jankowalski3@wp.pl", LocalDate.now().plusDays(7), carrierRepostiory.getCarrierList().get(0).getId()));
+        carrierOrderList.get(2).setPaid(true);
+        carrierOrderList.add(new CarrierOrderModel("jankowalski4@wp.pl", LocalDate.now().plusDays(5), carrierRepostiory.getCarrierList().get(0).getId()));
+        carrierOrderList.add(new CarrierOrderModel("jankowalski5@wp.pl", LocalDate.now().plusDays(3), carrierRepostiory.getCarrierList().get(0).getId()));
+        carrierOrderList.add(new CarrierOrderModel("jankowalski6@wp.pl", LocalDate.now().plusDays(5), carrierRepostiory.getCarrierList().get(0).getId()));
+        carrierOrderList.get(5).setPaid(true);
+        carrierOrderList.add(new CarrierOrderModel("jankowalski7@wp.pl", LocalDate.now().plusDays(4), carrierRepostiory.getCarrierList().get(0).getId()));
+        carrierOrderList.add(new CarrierOrderModel("jankowalski8@wp.pl", LocalDate.now().plusDays(3), carrierRepostiory.getCarrierList().get(1).getId()));
+        carrierOrderList.add(new CarrierOrderModel("jankowalski9@wp.pl", LocalDate.now().plusDays(3), carrierRepostiory.getCarrierList().get(2).getId()));
+        carrierOrderList.add(new CarrierOrderModel("jankowalski10@wp.pl", LocalDate.now().plusDays(3), carrierRepostiory.getCarrierList().get(3).getId()));
+        carrierOrderList.add(new CarrierOrderModel("jankowalski11@wp.pl", LocalDate.now().plusDays(4), carrierRepostiory.getCarrierList().get(3).getId()));
+        carrierOrderList.add(new CarrierOrderModel("jankowalski11@wp.pl", LocalDate.now().minusDays(14), carrierRepostiory.getCarrierList().get(2).getId()));
     }
 
     public List<CarrierOrderModel> getCarrierOrdersByCarrierId(String carrierId) {
@@ -110,7 +130,7 @@ public class CarrierOrderRepository {
     }
 
     public void refreshCarrierOrders() {
-        List<CarrierOrderModel> coList = new ArrayList<>();
+        var coList = new ArrayList<CarrierOrderModel>();
 
         for (CarrierOrderModel co : carrierOrderList) {
             if (!co.isPaid()) {
@@ -123,22 +143,21 @@ public class CarrierOrderRepository {
         }
     }
 
-    public boolean deleteOrder(String email, String carrierID){
+    public boolean deleteOrder(String email, String carrierID) {
         double carrierCost = carrierRepostiory.getCarrierById(carrierID).getPrice(); // na razie na sztywno wpisuje cene przejazdu
-        if(getCarrierOrderByEmailAndCarrierId(email, carrierID) != null){
+        if (getCarrierOrderByEmailAndCarrierId(email, carrierID) != null) {
             var coM = getCarrierOrderByEmailAndCarrierId(email, carrierID);
             BankAccountModel baM = bankAccountRepository.getBankAccountByEmail(coM.getEmail());
-            if(!coM.isPaid()) {
+            if (!coM.isPaid()) {
                 carrierOrderList.remove(coM);
                 return true;
-            }
-            else {
+            } else {
                 //jesli zostalo wiecej niz 7 dni do wyjazdu zwroc 90%
-                if(LocalDate.now().isBefore(carrierRepostiory.getCarrierById(coM.getCarrierId()).getDate().minusDays(7))){
+                if (LocalDate.now().isBefore(carrierRepostiory.getCarrierById(coM.getCarrierId()).getDate().minusDays(7))) {
                     baM.depositMoney(carrierCost * 0.9);
                     carrierOrderList.remove(coM);
                     return true;
-                } else{
+                } else {
                     //jesli zostalo mniej niz 7 dni do wyjazdu zwroc 50%
                     baM.depositMoney(carrierCost * 0.5);
                     carrierOrderList.remove(coM);
@@ -148,5 +167,28 @@ public class CarrierOrderRepository {
         }
         return false;
 
+    }
+
+    public void removeAllOrders(List<CarrierOrderModel> coList) {
+        carrierOrderList.removeAll(coList);
+    }
+
+    public void addOrder(CarrierOrderModel model) {
+        carrierOrderList.add(model);
+    }
+
+    public Iterable<CarrierOrderModel> unpaidOrders(String email) {
+
+        var result = new ArrayList<CarrierOrderModel>();
+        for (CarrierOrderModel coModel : carrierOrderList){
+            if (!coModel.isPaid() && coModel.getEmail().equals(email)) {
+                result.add(coModel);
+            }
+        }
+        return result;
+    }
+
+    public Iterable<CarrierOrderModel> getCarrierOrderListIterable() {
+        return carrierOrderList;
     }
 }

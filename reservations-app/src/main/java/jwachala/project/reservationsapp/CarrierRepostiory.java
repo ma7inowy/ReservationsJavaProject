@@ -6,9 +6,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 // BAZA DANYCH Z WSZYSTKIMI OFERTAMI PRZEWOZOW
 @Component
@@ -18,7 +16,7 @@ public class CarrierRepostiory {
     private List<CarrierModel> carrierList;
 
     @Autowired
-    private CarrierOrderRepository carrierOrderRepository;
+    private CarrierOrderService carrierOrderService;
 
     @Autowired
     BankAccountRepository bankAccountRepository;
@@ -87,7 +85,7 @@ public class CarrierRepostiory {
     }
 
     public boolean deleteCarrier(String id) {
-        List<CarrierOrderModel> coList = carrierOrderRepository.getCarrierOrdersByCarrierId(id);
+        List<CarrierOrderModel> coList = carrierOrderService.getCarrierOrdersByCarrierId(id);
         if (coList == null) return false;
 
         for(CarrierOrderModel coModel : coList){
@@ -98,7 +96,8 @@ public class CarrierRepostiory {
             }
         }
         carrierList.remove(getCarrierById(id));
-        carrierOrderRepository.getCarrierOrderList().removeAll(coList);
+//        carrierOrderService.getCarrierOrderList().removeAll(coList);
+        carrierOrderService.removeAllOrders(coList);
         return true;
 
     }
