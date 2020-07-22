@@ -22,11 +22,11 @@ public interface CarrierRepository {
 
     BankAccountRepository getBankAccountRepository();
 
-    void setCarrierList(List<CarrierModel> carrierList);
-
-    void setCarrierOrderService(CarrierOrderService carrierOrderService);
-
-    void setBankAccountRepository(BankAccountRepository bankAccountRepository);
+//    void setCarrierList(List<CarrierModel> carrierList);
+//
+//    void setCarrierOrderService(CarrierOrderService carrierOrderService);
+//
+//    void setBankAccountRepository(BankAccountRepository bankAccountRepository);
 
     List<CarrierModel> getAllCarriers();
 }

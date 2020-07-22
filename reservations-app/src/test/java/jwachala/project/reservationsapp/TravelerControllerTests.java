@@ -2,89 +2,132 @@ package jwachala.project.reservationsapp;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TravelerControllerTests {
     @Test
-    public void shouldRetrieveAllCarriersFromProvider(){
-        var carrierProvider = new MyCarrierRepository();
+    public void shouldGetAllCarriers() {
 
-        var sut = new TravelerController(carrierProvider,null,null);
+        var carrierProvider = Mockito.mock(CarrierRepository.class);
+        var given = new ArrayList<CarrierModel>();
+        var model = new CarrierModel();
+        model.setCompanyName("my company name");
+        given.add(model);
+        Mockito.when(carrierProvider.getAllCarriers()).thenReturn(given); // why ok
+
+        var sut = new TravelerController(carrierProvider, null, null);
         var actual = sut.getCarriers();
-        Assertions.assertThat(actual).isNotEmpty();
+
+        var expected = new CarrierDTO();
+        expected.setId(model.getId());
+        expected.setCompanyName("my company name");
+        Assertions.assertThat(actual).containsExactly(expected);
     }
+
+    @Test
+    public void shouldGetAllCarriersByCity(){
+        var carrierProvider = Mockito.mock(CarrierRepository.class);
+        var given = new ArrayList<CarrierModel>();
+        var model = new CarrierModel();
+//        var model2 = new CarrierModel();
+        model.setStartCity("City1");
+        given.add(model);
+//        given.add(model2);
+        Mockito.when(carrierProvider.getCarriersbyStartCity("City1")).thenReturn(given); // ustalam co ma sie stac?
+
+        var sut = new TravelerController(carrierProvider, null, null);
+        var actual = sut.getCarriersByCity("City1");
+        var expected = new CarrierDTO();
+        expected.setId(model.getId());
+        expected.setStartCity("City1");
+        Assertions.assertThat(actual).containsExactly(expected);
+    }
+
+    @Test
+    public void shouldGetAllCarriersByStartAndDestinationCity(){
+        var carrierProvider = Mockito.mock(CarrierRepository.class);
+        var given = new ArrayList<CarrierModel>();
+        var model = new CarrierModel();
+        model.setStartCity("City1");
+        model.setDestinationCity("City2");
+        given.add(model);
+        Mockito.when(carrierProvider.getCarriersbyStartCityAndDestination("City1","City2")).thenReturn(given); // ustalam co ma sie stac?
+
+        var sut = new TravelerController(carrierProvider, null, null);
+        var actual = sut.getCarriersbyStartCityAndDestination("City1","City2");
+        var expected = new CarrierDTO();
+        expected.setId(model.getId());
+        expected.setStartCity("City1");
+        expected.setDestinationCity("City2");
+        Assertions.assertThat(actual).containsExactly(expected);
+    }
+
+    @Test
+    public void shouldGetAllCarriersByCompanyName(){
+        var carrierProvider = Mockito.mock(CarrierRepository.class);
+        var given = new ArrayList<CarrierModel>();
+        var model = new CarrierModel();
+        model.setCompanyName("Company1");
+        given.add(model);
+        Mockito.when(carrierProvider.getCarriersbyCompanyName("Company1")).thenReturn(given); // ustalam co ma sie stac?
+
+        var sut = new TravelerController(carrierProvider, null, null);
+        var actual = sut.getCarriersByCompanyName("Company1");
+        var expected = new CarrierDTO();
+        expected.setId(model.getId());
+        expected.setCompanyName("Company1");
+        Assertions.assertThat(actual).containsExactly(expected);
+    }
+
+    @Test
+    public void shouldCreateOrder(){
+//        var dto = new CarrierOrderDTO();
+//        dto.setCarrierId("123");
+//        dto.setOrderDate(LocalDate.now());
+//        dto.setEmail("jakub@wp.pl");
+//        var model = new CarrierOrderModel();
+//        model.setEmail(dto.getEmail());
+//        model.setOrderDate(dto.getOrderDate());
+//        model.setCarrierId(dto.getCarrierId());
+
+//        var given = true;
+//        var model2 = new CarrierModel();
+//        var carrierProvider = Mockito.mock(CarrierRepository.class);
+//        Mockito.when(carrierProvider.availabilityMinusOne("1")).thenReturn(true); // ustalam co ma sie stac?
+
+
+//        Assertions.assertThat(dto.getEmail()).isEqualTo(model.getEmail());
+        //NAJPIERW IFY USUNAC
+
+    }
+
+    @Test
+    public void shouldPayOrder(){
+
+    }
+
+    @Test
+    public void shouldGetNotPayedOrders(){
+        var carrierProvider = Mockito.mock(CarrierOrderService.class);
+        var given = new ArrayList<CarrierOrderModel>();
+        var model = new CarrierOrderModel();
+        model.setEmail("jakub@wp.pl");
+        given.add(model);
+        Mockito.when(carrierProvider.unpaidOrders("jakub@wp.pl")).thenReturn(given); // ustalam co ma sie stac?
+
+        var sut = new TravelerController(null, carrierProvider, null);
+        var actual = sut.getNotPayedOrders("jakub@wp.pl");
+        var expected = new CarrierOrderTravelerDTO();
+        expected.setEmail(model.getEmail());
+        Assertions.assertThat(actual).containsExactly(expected);
+    }
+
+
 }
 
-class MyCarrierRepository implements CarrierRepository {
 
 
-
-    @Override
-    public List<CarrierModel> getCarriersbyStartCity(String city) {
-        return null;
-    }
-
-    @Override
-    public List<CarrierModel> getCarriersbyStartCityAndDestination(String startCity, String finishCity) {
-        return null;
-    }
-
-    @Override
-    public List<CarrierModel> getCarriersbyCompanyName(String companyName) {
-        return null;
-    }
-
-    @Override
-    public boolean availabilityMinusOne(String id) {
-        return false;
-    }
-
-    @Override
-    public CarrierModel getCarrierById(String id) {
-        return null;
-    }
-
-    @Override
-    public boolean deleteCarrier(String id) {
-        return false;
-    }
-
-    @Override
-    public List<CarrierModel> getCarrierList() {
-        return null;
-    }
-
-    @Override
-    public CarrierOrderService getCarrierOrderService() {
-        return null;
-    }
-
-    @Override
-    public BankAccountRepository getBankAccountRepository() {
-        return null;
-    }
-
-    @Override
-    public void setCarrierList(List<CarrierModel> carrierList) {
-
-    }
-
-    @Override
-    public void setCarrierOrderService(CarrierOrderService carrierOrderService) {
-
-    }
-
-    @Override
-    public void setBankAccountRepository(BankAccountRepository bankAccountRepository) {
-
-    }
-
-    @Override
-    public List<CarrierModel> getAllCarriers() {
-        var result = new ArrayList<CarrierModel>();
-        result.add(new CarrierModel());
-        return result;
-    }
-}

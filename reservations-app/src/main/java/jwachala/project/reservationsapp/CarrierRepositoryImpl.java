@@ -109,6 +109,11 @@ public class CarrierRepositoryImpl implements CarrierRepository {
     }
 
     @Override
+    public CarrierOrderService getCarrierOrderService() {
+        return null;
+    }
+
+    @Override
     public List<CarrierModel> getAllCarriers() {
         return carrierList;
     }
