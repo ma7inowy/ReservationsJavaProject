@@ -14,20 +14,23 @@ import java.util.List;
 @RequestMapping("api/carrier")
 public class CarrierController {
 
+    private final CarrierRepository carrierRepository;
+    private final CarrierOrderService carrierOrderService;
+    private final CarrierHistory carrierHistory;
+
     @Autowired
-    private CarrierRepositoryImpl carrierRepository;
-    @Autowired
-    private CarrierOrderService carrierOrderService;
-    @Autowired
-    private CarrierHistory carrierHistory;
+    public CarrierController(CarrierRepository carrierRepository, CarrierOrderService carrierOrderService, CarrierHistory carrierHistory) {
+        this.carrierRepository = carrierRepository;
+        this.carrierOrderService = carrierOrderService;
+        this.carrierHistory = carrierHistory;
+    }
 
     //carriers operations
-
     // WSZYSTKIE OFERTY PRZEWOZOW
     @GetMapping("carriers")
     public List<CarrierDTO> getCarriers() {
         List<CarrierDTO> dtoList = new ArrayList<>();
-        for (CarrierModel cM : carrierRepository.getCarrierList()) {
+        for (CarrierModel cM : carrierRepository.getAllCarriers()) {
             CarrierDTO cDTO = new CarrierDTO();
             cDTO.setCompanyName(cM.getCompanyName());
             cDTO.setDate(cM.getDate());
@@ -42,7 +45,6 @@ public class CarrierController {
 
         return dtoList;
     }
-
     // WSZYSTKIE OFERT PRZEWOZOW WG MIASTA STARTOWEGO
     @GetMapping("/carriers/city/start/{startCity}")
     public List<CarrierDTO> getCarriersByCity(@PathVariable(value = "startCity") String startCity) {
@@ -84,7 +86,6 @@ public class CarrierController {
     public ResponseEntity<?> isRealized(@PathVariable(value = "carrierId") String carrierId){
         CarrierModel cM = carrierRepository.getCarrierById(carrierId);
         cM.realizedTrue();
-
 
        CarrierDTO cDTO = new CarrierDTO();
        cDTO.setRealized(cM.isRealized());

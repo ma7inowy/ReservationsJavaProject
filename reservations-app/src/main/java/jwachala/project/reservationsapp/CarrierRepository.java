@@ -28,5 +28,5 @@ public interface CarrierRepository {
 //
 //    void setBankAccountRepository(BankAccountRepository bankAccountRepository);
 
-    List<CarrierModel> getAllCarriers();
+    Iterable<CarrierModel> getAllCarriers();
 }

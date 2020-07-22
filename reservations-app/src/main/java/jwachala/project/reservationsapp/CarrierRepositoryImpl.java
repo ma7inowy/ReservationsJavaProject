@@ -114,7 +114,9 @@ public class CarrierRepositoryImpl implements CarrierRepository {
     }
 
     @Override
-    public List<CarrierModel> getAllCarriers() {
+    public Iterable<CarrierModel> getAllCarriers() {
         return carrierList;
     }
+
+
 }

@@ -3,10 +3,9 @@ package jwachala.project.reservationsapp;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.http.ResponseEntity;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
 
 public class TravelerControllerTests {
     @Test
@@ -85,6 +84,8 @@ public class TravelerControllerTests {
 
     @Test
     public void shouldCreateOrder(){
+//        var carrierProvider = Mockito.mock(CarrierRepository.class);
+//
 //        var dto = new CarrierOrderDTO();
 //        dto.setCarrierId("123");
 //        dto.setOrderDate(LocalDate.now());
@@ -93,6 +94,13 @@ public class TravelerControllerTests {
 //        model.setEmail(dto.getEmail());
 //        model.setOrderDate(dto.getOrderDate());
 //        model.setCarrierId(dto.getCarrierId());
+//
+//        Mockito.when(carrierProvider.availabilityMinusOne("1")).thenReturn(true); // ustalam co ma sie stac?
+//        var sut = new TravelerController(carrierProvider, null, null);
+//        var actual = sut.createOrder(dto);
+
+
+
 
 //        var given = true;
 //        var model2 = new CarrierModel();
@@ -124,6 +132,33 @@ public class TravelerControllerTests {
         var expected = new CarrierOrderTravelerDTO();
         expected.setEmail(model.getEmail());
         Assertions.assertThat(actual).containsExactly(expected);
+    }
+
+    @Test
+    public void shouldGetCarrierOrdersByCarrierIdSorted(){
+        // CZY ABY NA PEWNO OK?
+        var carrierProvider = Mockito.mock(CarrierOrderService.class);
+        var given = new ArrayList<CarrierOrderModel>();
+        var model = new CarrierOrderModel();
+        given.add(model);
+        Mockito.when(carrierProvider.getCarrierOrdersByCarrierIdSorted(model.getCarrierId())).thenReturn(given); // ustalam co ma sie stac?
+
+        var sut = new TravelerController(null, carrierProvider, null);
+        var actual = sut.getCarrierOrdersByCarrierIdSorted(model.getCarrierId());
+        var expected = new CarrierOrderTravelerDTO();
+        expected.setCarrierId(model.getCarrierId());
+        Assertions.assertThat(actual).containsExactly(expected);
+    }
+
+    @Test
+    public void shouldDeleteOrder(){
+        // CZY NA PEWNO OK?
+        var carrierProvider = Mockito.mock(CarrierOrderService.class);
+        Mockito.when(carrierProvider.deleteOrder("email","carrierId")).thenReturn(true); // ustalam co ma sie stac?
+        var sut = new TravelerController(null, carrierProvider, null);
+        var actual = sut.deleteOrder("email", "carrierId");
+        var expected = ResponseEntity.noContent().build();
+        Assertions.assertThat(actual).isEqualTo(expected);
     }
 
 
