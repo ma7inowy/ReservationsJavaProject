@@ -16,13 +16,13 @@ public class CarrierController {
 
     private final CarrierRepository carrierRepository;
     private final CarrierOrderService carrierOrderService;
-    private final CarrierHistory carrierHistory;
+    private final CarrierHistoryService carrierHistoryService;
 
     @Autowired
-    public CarrierController(CarrierRepository carrierRepository, CarrierOrderService carrierOrderService, CarrierHistory carrierHistory) {
+    public CarrierController(CarrierRepository carrierRepository, CarrierOrderService carrierOrderService, CarrierHistoryService carrierHistoryService) {
         this.carrierRepository = carrierRepository;
         this.carrierOrderService = carrierOrderService;
-        this.carrierHistory = carrierHistory;
+        this.carrierHistoryService = carrierHistoryService;
     }
 
     //carriers operations
@@ -177,7 +177,7 @@ public class CarrierController {
     @GetMapping("/carriers/company/{companyName}/history")
     public List<CarrierDTO> getHistoryByCompanyName(@PathVariable(value = "companyName") String companyName) {
         List<CarrierDTO> dtoList = new ArrayList<>();
-        for (var cM : carrierHistory.getHistoryCarriersbyCompanyName(companyName)) {
+        for (var cM : carrierHistoryService.getHistoryCarriersbyCompanyName(companyName)) {
             var cDTO = new CarrierDTO();
             cDTO.setCompanyName(cM.getCompanyName());
             cDTO.setDate(cM.getDate());
@@ -201,15 +201,15 @@ public class CarrierController {
 
     //history
 
-    // ODSWIEZANIE HISTORII (TRAFIAJA TAM TE PRZEWOZY KTORYCH DATA < LocalDate.now() LUB KTORE MAJA POLE realized = true)
-//    @GetMapping("history/refresh")
-//    public List<CarrierOrderModel> refreshHistory() {
-//        return carrierHistory.refreshHistory();
-//    }
+   //  ODSWIEZANIE HISTORII (TRAFIAJA TAM TE PRZEWOZY KTORYCH DATA < LocalDate.now() LUB KTORE MAJA POLE realized = true)
+    @GetMapping("history/refresh")
+    public List<CarrierOrderModel> refreshHistory() {
+        return carrierHistoryService.refreshHistory();
+    }
 
     @GetMapping("history")
-    public List<CarrierModel> getCarrierHistory() {
-        return carrierHistory.getCarrierHistoryList();
+    public Iterable<CarrierModel> getCarrierHistoryService() {
+        return carrierHistoryService.getCarrierHistoryList();
     }
 
     // ODSWIEZA LISTE ZLECEN, NP JESLI NIE OPLACONE 5 DNI PRZED WYJAZDEM TO ANULOWANE

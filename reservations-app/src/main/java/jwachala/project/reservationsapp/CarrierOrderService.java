@@ -31,4 +31,6 @@ public interface CarrierOrderService {
     Iterable<CarrierOrderModel> unpaidOrders(String email);
 
     Iterable<CarrierOrderModel> getCarrierOrderListIterable();
+
+    void removeCarrierOrder(CarrierOrderModel i);
 }

@@ -78,4 +78,65 @@ public class CarrierControllerTests {
         Assertions.assertThat(actual).containsExactly(expected);
     }
 
+    //NIE WIEM CZY OK
+    @Test
+    public void shouldGetAllOrdersByCompanyName(){
+        var carrierProvider = Mockito.mock(CarrierOrderService.class);
+        var given = new ArrayList<CarrierOrderModel>();
+        var model = new CarrierOrderModel();
+        model.setEmail("jakub");
+        given.add(model);
+        Mockito.when(carrierProvider.getCarrierOrdersByCompanyName("Company1")).thenReturn(given); // why ok
+
+        var sut = new CarrierController(null, carrierProvider, null);
+        var actual = sut.getCarrierOrdersByCompanyName("Company1");
+
+        var expected = new CarrierOrderDTO();
+        expected.setCarrierId(model.getId());
+        expected.setEmail("jakub");
+        expected.setCarrierId(model.getCarrierId());
+        Assertions.assertThat(actual).containsExactly(expected);
+    }
+
+    //NIE WIEM CZY OK
+    @Test
+    public void shouldGetAllOrdersByCompanyNameAndCity(){
+        var carrierProvider = Mockito.mock(CarrierOrderService.class);
+        var given = new ArrayList<CarrierOrderModel>();
+        var model = new CarrierOrderModel();
+        model.setEmail("jakub");
+        given.add(model);
+        Mockito.when(carrierProvider.getCarrierOrdersByCompanyNameAndCity("Company1","City1")).thenReturn(given); // why ok
+
+        var sut = new CarrierController(null, carrierProvider, null);
+        var actual = sut.getCarrierOrdersByCompanyNameAndCity("Company1","City1");
+
+        var expected = new CarrierOrderDTO();
+        expected.setCarrierId(model.getId());
+        expected.setEmail("jakub");
+        expected.setCarrierId(model.getCarrierId());
+        Assertions.assertThat(actual).containsExactly(expected);
+    }
+
+    // nie wiem czy ok
+    @Test
+    public void shouldGetHistoryByCompanyName(){
+        var carrierProvider = Mockito.mock(CarrierHistoryService.class);
+        var given = new ArrayList<CarrierModel>();
+        var model = new CarrierModel();
+        model.setCompanyName("Company1");
+        given.add(model);
+        Mockito.when(carrierProvider.getHistoryCarriersbyCompanyName("Company1")).thenReturn(given); // why ok
+
+        var sut = new CarrierController(null, null, carrierProvider);
+        var actual = sut.getHistoryByCompanyName("Company1");
+
+        var expected = new CarrierDTO();
+        expected.setId(model.getId());
+        expected.setCompanyName("Company1");
+        Assertions.assertThat(actual).containsExactly(expected);
+    }
+
+
+
 }

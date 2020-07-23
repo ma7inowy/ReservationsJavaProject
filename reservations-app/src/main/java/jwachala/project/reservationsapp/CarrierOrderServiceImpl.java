@@ -21,7 +21,7 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
         this.bankAccountRepository = bankAccountRepository;
     }
 
-    private final List<CarrierOrderModel> carrierOrderList;
+    private List<CarrierOrderModel> carrierOrderList;
 
     private CarrierRepository carrierRepository;
 
@@ -210,5 +210,10 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
     @Override
     public Iterable<CarrierOrderModel> getCarrierOrderListIterable() {
         return carrierOrderList;
+    }
+
+    @Override
+    public void removeCarrierOrder(CarrierOrderModel i) {
+        carrierOrderList.remove(i);
     }
 }
