@@ -86,7 +86,7 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
         List<CarrierOrderModel> carrierOrderListByCnAndCity = new ArrayList<>();
 
         for (var coModel : carrierOrderByCompanyName) {
-            for (var cModel : carrierRepository.getCarrierList()) {
+            for (var cModel : carrierRepository.getAllCarriers()) {
                 if (coModel.getCarrierId().equals(cModel.getId())) {
                     if (cModel.getCompanyName().toLowerCase().equals(companyName.toLowerCase())) {
                         if (cModel.getStartCity().toLowerCase().equals(startCity.toLowerCase())) {
