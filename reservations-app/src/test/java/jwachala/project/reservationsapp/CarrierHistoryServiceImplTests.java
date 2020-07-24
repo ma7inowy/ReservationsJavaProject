@@ -55,7 +55,6 @@ public class CarrierHistoryServiceImplTests {
         var actual = sut.refreshHistory();
         var expected = model;
         Assertions.assertThat(actual).containsExactly(expected);
-
     }
 
 }
