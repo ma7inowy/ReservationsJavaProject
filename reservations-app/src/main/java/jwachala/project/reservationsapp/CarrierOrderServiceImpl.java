@@ -68,7 +68,7 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
     public List<CarrierOrderModel> getCarrierOrdersByCompanyName(String companyName) {
         List<CarrierOrderModel> carrierOrderNewList = new ArrayList<>();
         for (var coModel : carrierOrderList) {
-            for (var cModel : carrierRepository.getCarrierList()) {
+            for (var cModel : carrierRepository.getAllCarriers()) {
                 if (coModel.getCarrierId().equals(cModel.getId())) {
                     if (cModel.getCompanyName().toLowerCase().equals(companyName.toLowerCase())) {
                         carrierOrderNewList.add(coModel);

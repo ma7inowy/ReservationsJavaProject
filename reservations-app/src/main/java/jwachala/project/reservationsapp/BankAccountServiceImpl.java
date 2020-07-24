@@ -34,4 +34,9 @@ public class BankAccountServiceImpl implements BankAccountService {
         }
         return null;
     }
+
+    @Override
+    public void addBankAccount(BankAccountModel bankAccountModel) {
+        bankAccountList.add(bankAccountModel);
+    }
 }

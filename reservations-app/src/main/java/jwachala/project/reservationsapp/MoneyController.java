@@ -19,7 +19,7 @@ public class MoneyController {
     }
 
     @GetMapping("/accounts")
-    public List<BankAccountModel> getAllAccounts() {
+    public Iterable<BankAccountModel> getAllAccounts() {
         return bankAccountService.getBankAccountList();
     }
 
@@ -50,7 +50,7 @@ public class MoneyController {
     //ZALOZ KONTO
     @PostMapping("/account")
     public ResponseEntity<?> createAccount(@RequestBody String email){
-        bankAccountService.getBankAccountList().add(new BankAccountModel(email));
+        bankAccountService.addBankAccount(new BankAccountModel(email));
 
         var uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{email}").buildAndExpand(email).toUri();
 
