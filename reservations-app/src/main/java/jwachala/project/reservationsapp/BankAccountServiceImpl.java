@@ -8,11 +8,11 @@ import java.util.List;
 
 @Data
 @Component
-public class BankAccountRepository {
+public class BankAccountServiceImpl implements BankAccountService {
 
     private List<BankAccountModel> bankAccountList = new ArrayList<>();
 
-    public BankAccountRepository() {
+    public BankAccountServiceImpl() {
         bankAccountList.add(new BankAccountModel("jankowalski1@wp.pl"));
         bankAccountList.add(new BankAccountModel("jankowalski2@wp.pl"));
         bankAccountList.add(new BankAccountModel("jankowalski3@wp.pl"));
@@ -26,6 +26,7 @@ public class BankAccountRepository {
         bankAccountList.add(new BankAccountModel("jankowalski11@wp.pl"));
     }
 
+    @Override
     public BankAccountModel getBankAccountByEmail(String email){
         for(BankAccountModel bA : bankAccountList){
             if(bA.getEmail().equals(email))

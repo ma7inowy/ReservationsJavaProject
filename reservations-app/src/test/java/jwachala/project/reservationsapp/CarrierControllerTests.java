@@ -137,6 +137,32 @@ public class CarrierControllerTests {
         Assertions.assertThat(actual).containsExactly(expected);
     }
 
+    // nie wiem czy ok?
+    @Test
+    public void shouldDeleteOrder(){
+        var carrierProvider = Mockito.mock(CarrierRepository.class);
+//        var given = new ArrayList<CarrierModel>();
+        var model = new CarrierModel();
+//        given.add(model);
+        Mockito.when(carrierProvider.deleteCarrier(model.getId())).thenReturn(true); // why ok
 
+        var sut = new CarrierController(carrierProvider, null, null);
+        var actual = sut.deleteCarrier(model.getId());
+
+        var expected = ResponseEntity.noContent().build();
+        Assertions.assertThat(actual).isEqualTo(expected);
+    }
+
+    // nie wiem czy okej
+    @Test
+    public void shouldNotDeleteOrder(){
+        var carrierProvider = Mockito.mock(CarrierRepository.class);
+        var model = new CarrierModel();
+        Mockito.when(carrierProvider.deleteCarrier(model.getId())).thenReturn(false); // why ok
+        var sut = new CarrierController(carrierProvider, null, null);
+        var actual = sut.deleteCarrier(model.getId());
+        var expected = ResponseEntity.notFound().build();
+        Assertions.assertThat(actual).isEqualTo(expected);
+    }
 
 }

@@ -19,7 +19,7 @@ public class CarrierRepositoryImpl implements CarrierRepository {
     private CarrierOrderService carrierOrderService;
 
     @Autowired
-    BankAccountRepository bankAccountRepository;
+    BankAccountService bankAccountService;
 
     public CarrierRepositoryImpl() {
         this.carrierList = new ArrayList<>();
@@ -97,7 +97,7 @@ public class CarrierRepositoryImpl implements CarrierRepository {
         for(CarrierOrderModel coModel : coList){
             // jesli oplacone to oddaj gotowke 100%
             if (coModel.isPaid()) {
-                BankAccountModel baModel = bankAccountRepository.getBankAccountByEmail(coModel.getEmail());
+                BankAccountModel baModel = bankAccountService.getBankAccountByEmail(coModel.getEmail());
                 baModel.depositMoney(getCarrierById(id).getPrice());
             }
         }
@@ -116,6 +116,11 @@ public class CarrierRepositoryImpl implements CarrierRepository {
     @Override
     public Iterable<CarrierModel> getAllCarriers() {
         return carrierList;
+    }
+
+    @Override
+    public void addCarrier(CarrierModel carrierModel) {
+        carrierList.add(carrierModel);
     }
 
 

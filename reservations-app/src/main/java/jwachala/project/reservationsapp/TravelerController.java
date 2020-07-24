@@ -17,13 +17,13 @@ public class TravelerController {
 
     private final CarrierRepository carrierRepository;
     private final CarrierOrderService carrierOrderService;
-    private final BankAccountRepository bankAccountRepository;
+    private final BankAccountService bankAccountService;
 
     @Autowired
-    public TravelerController(CarrierRepository carrierRepository, CarrierOrderService carrierOrderService, BankAccountRepository bankAccountRepository) {
+    public TravelerController(CarrierRepository carrierRepository, CarrierOrderService carrierOrderService, BankAccountService bankAccountService) {
         this.carrierRepository = carrierRepository;
         this.carrierOrderService = carrierOrderService;
-        this.bankAccountRepository = bankAccountRepository;
+        this.bankAccountService = bankAccountService;
     }
 
     //PLAN PODROZNY - WSZYSTKIE OFERTY PRZEJAZDOW
@@ -130,7 +130,7 @@ public class TravelerController {
     //OPLAC ZAREZERWOWANY BILET
     @PostMapping("order/payment/email/{email}")
     public ResponseEntity<?> payOrder(@PathVariable(value = "email") String email, @RequestBody String carrierId) {
-        var account = bankAccountRepository.getBankAccountByEmail(email);
+        var account = bankAccountService.getBankAccountByEmail(email);
         var coModel = carrierOrderService.getCarrierOrderByEmailAndCarrierId(email, carrierId);
         var cModel = carrierRepository.getCarrierById(carrierId);
         var uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(coModel.getId()).toUri();

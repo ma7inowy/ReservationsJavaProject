@@ -75,7 +75,7 @@ public class CarrierController {
         model.setCompanyName(dto.getCompanyName());
         model.setAvailability(dto.getAvailability());
         model.setPrice(dto.getPrice());
-        carrierRepository.getCarrierList().add(model);
+        carrierRepository.addCarrier(model);
         var uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(model.getId()).toUri();
 
         return ResponseEntity.created(uri).build();
@@ -203,7 +203,7 @@ public class CarrierController {
 
    //  ODSWIEZANIE HISTORII (TRAFIAJA TAM TE PRZEWOZY KTORYCH DATA < LocalDate.now() LUB KTORE MAJA POLE realized = true)
     @GetMapping("history/refresh")
-    public List<CarrierOrderModel> refreshHistory() {
+    public List<CarrierModel> refreshHistory() {
         return carrierHistoryService.refreshHistory();
     }
 

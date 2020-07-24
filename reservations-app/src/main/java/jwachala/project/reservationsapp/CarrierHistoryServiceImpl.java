@@ -44,7 +44,7 @@ public class CarrierHistoryServiceImpl implements CarrierHistoryService {
     }
 
     @Override
-    public List<CarrierOrderModel> refreshHistory() {
+    public List<CarrierModel> refreshHistory() {
         List<CarrierModel> cMList = carrierRepository.getCarrierList();
         List<CarrierModel> carriersforRemoveList = new ArrayList<>();
 
@@ -74,7 +74,7 @@ public class CarrierHistoryServiceImpl implements CarrierHistoryService {
             carrierOrderService.removeCarrierOrder(i);
         }
 
-        return CarrierOrderforRemoveList;
+        return carriersforRemoveList;
     }
 
     @Override

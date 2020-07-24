@@ -20,7 +20,7 @@ public interface CarrierRepository {
 
     CarrierOrderService getCarrierOrderService();
 
-    BankAccountRepository getBankAccountRepository();
+//    BankAccountService getBankAccountServiceImpl();
 
 //    void setCarrierList(List<CarrierModel> carrierList);
 //
@@ -29,4 +29,6 @@ public interface CarrierRepository {
 //    void setBankAccountRepository(BankAccountRepository bankAccountRepository);
 
     Iterable<CarrierModel> getAllCarriers();
+
+    void addCarrier(CarrierModel carrierModel);
 }

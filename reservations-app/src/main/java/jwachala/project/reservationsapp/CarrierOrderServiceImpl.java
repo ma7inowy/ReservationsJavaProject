@@ -15,22 +15,22 @@ import java.util.List;
 public class CarrierOrderServiceImpl implements CarrierOrderService {
 
     //testy
-    public CarrierOrderServiceImpl(List<CarrierOrderModel> carrierOrderList, CarrierRepository carrierRepository, BankAccountRepository bankAccountRepository) {
+    public CarrierOrderServiceImpl(List<CarrierOrderModel> carrierOrderList, CarrierRepository carrierRepository, BankAccountService bankAccountService) {
         this.carrierOrderList = carrierOrderList;
         this.carrierRepository = carrierRepository;
-        this.bankAccountRepository = bankAccountRepository;
+        this.bankAccountService = bankAccountService;
     }
 
     private List<CarrierOrderModel> carrierOrderList;
 
     private CarrierRepository carrierRepository;
 
-    private BankAccountRepository bankAccountRepository;
+    private BankAccountService bankAccountService;
 
     //spring
     @Autowired
-    public CarrierOrderServiceImpl(CarrierRepository carrierRepository, BankAccountRepository bankAccountRepository) {
-        this(new ArrayList<>(),carrierRepository,bankAccountRepository);
+    public CarrierOrderServiceImpl(CarrierRepository carrierRepository, BankAccountService bankAccountService) {
+        this(new ArrayList<>(),carrierRepository, bankAccountService);
 
     }
 
@@ -163,7 +163,7 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
         double carrierCost = carrierRepository.getCarrierById(carrierID).getPrice(); // na razie na sztywno wpisuje cene przejazdu
         if (getCarrierOrderByEmailAndCarrierId(email, carrierID) != null) {
             var coM = getCarrierOrderByEmailAndCarrierId(email, carrierID);
-            BankAccountModel baM = bankAccountRepository.getBankAccountByEmail(coM.getEmail());
+            BankAccountModel baM = bankAccountService.getBankAccountByEmail(coM.getEmail());
             if (!coM.isPaid()) {
                 carrierOrderList.remove(coM);
                 return true;
