@@ -2,10 +2,14 @@ package jwachala.project.reservationsapp;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.springframework.http.ResponseEntity;
 
+import java.net.URI;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class CarrierControllerTests {
 
@@ -18,7 +22,7 @@ public class CarrierControllerTests {
         given.add(model);
         Mockito.when(carrierProvider.getAllCarriers()).thenReturn(given); // why ok
 
-        var sut = new CarrierController(carrierProvider, null, null);
+        var sut = new CarrierController(carrierProvider, null, null,null);
         var actual = sut.getCarriers();
 
         var expected = new CarrierDTO();
@@ -36,7 +40,7 @@ public class CarrierControllerTests {
         given.add(model);
         Mockito.when(carrierProvider.getCarriersbyStartCity("City1")).thenReturn(given); // ustalam co ma sie stac?
 
-        var sut = new CarrierController(carrierProvider, null, null);
+        var sut = new CarrierController(carrierProvider, null, null,null);
         var actual = sut.getCarriersByCity("City1");
         var expected = new CarrierDTO();
         expected.setId(model.getId());
@@ -48,7 +52,7 @@ public class CarrierControllerTests {
     public void shouldBeRealized(){
         //CZY NA PEWNO OKEJ?
         var carrierProvider = Mockito.mock(CarrierRepository.class);
-        var sut = new CarrierController(carrierProvider, null, null);
+        var sut = new CarrierController(carrierProvider, null, null,null);
         var model = new CarrierModel();
         Mockito.when(carrierProvider.getCarrierById(model.getId())).thenReturn(model); // ustalam co ma sie stac?
 
@@ -68,7 +72,7 @@ public class CarrierControllerTests {
         given.add(model);
         Mockito.when(carrierProvider.getCarrierOrderListIterable()).thenReturn(given); // why ok
 
-        var sut = new CarrierController(null, carrierProvider, null);
+        var sut = new CarrierController(null, carrierProvider, null, null);
         var actual = sut.getCarrierOrders();
 
         var expected = new CarrierOrderDTO();
@@ -88,7 +92,7 @@ public class CarrierControllerTests {
         given.add(model);
         Mockito.when(carrierProvider.getCarrierOrdersByCompanyName("Company1")).thenReturn(given); // why ok
 
-        var sut = new CarrierController(null, carrierProvider, null);
+        var sut = new CarrierController(null, carrierProvider, null,null);
         var actual = sut.getCarrierOrdersByCompanyName("Company1");
 
         var expected = new CarrierOrderDTO();
@@ -108,7 +112,7 @@ public class CarrierControllerTests {
         given.add(model);
         Mockito.when(carrierProvider.getCarrierOrdersByCompanyNameAndCity("Company1","City1")).thenReturn(given); // why ok
 
-        var sut = new CarrierController(null, carrierProvider, null);
+        var sut = new CarrierController(null, carrierProvider, null,null);
         var actual = sut.getCarrierOrdersByCompanyNameAndCity("Company1","City1");
 
         var expected = new CarrierOrderDTO();
@@ -128,7 +132,7 @@ public class CarrierControllerTests {
         given.add(model);
         Mockito.when(carrierProvider.getHistoryCarriersbyCompanyName("Company1")).thenReturn(given); // why ok
 
-        var sut = new CarrierController(null, null, carrierProvider);
+        var sut = new CarrierController(null, null, carrierProvider,null);
         var actual = sut.getHistoryByCompanyName("Company1");
 
         var expected = new CarrierDTO();
@@ -146,7 +150,7 @@ public class CarrierControllerTests {
 //        given.add(model);
         Mockito.when(carrierProvider.deleteCarrier(model.getId())).thenReturn(true); // why ok
 
-        var sut = new CarrierController(carrierProvider, null, null);
+        var sut = new CarrierController(carrierProvider, null, null,null);
         var actual = sut.deleteCarrier(model.getId());
 
         var expected = ResponseEntity.noContent().build();
@@ -159,10 +163,50 @@ public class CarrierControllerTests {
         var carrierProvider = Mockito.mock(CarrierRepository.class);
         var model = new CarrierModel();
         Mockito.when(carrierProvider.deleteCarrier(model.getId())).thenReturn(false); // why ok
-        var sut = new CarrierController(carrierProvider, null, null);
+        var sut = new CarrierController(carrierProvider, null, null,null);
         var actual = sut.deleteCarrier(model.getId());
         var expected = ResponseEntity.notFound().build();
         Assertions.assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    public void shouldCreateCarrier(){
+        var carrierProvider = Mockito.mock(CarrierRepository.class);
+        var resourceProvider = Mockito.mock(ResourceLocationBuilder.class);
+        var sut = new CarrierController(carrierProvider, null, null, resourceProvider);
+        var given = new CarrierDTO();
+        given.setStartCity("City1");
+        given.setDestinationCity("Destination1");
+        given.setCompanyName("Company1");
+        given.setDate(LocalDate.now());
+        sut.createCarrier(given);
+
+        var expected = new CarrierModel();
+        expected.setStartCity("City1");
+        expected.setDestinationCity("Destination1");
+        expected.setCompanyName("Company1");
+        expected.setDate(given.getDate());
+        var argument = ArgumentCaptor.forClass(CarrierModel.class);
+        Mockito.verify(carrierProvider).addCarrier(argument.capture());
+
+        expected.setId(argument.getValue().getId());
+        Assertions.assertThat(argument.getValue()).isEqualTo(expected);
+
+    }
+
+    @Test
+    public void shouldReturnLocationOfCreatedCarrier(){
+        var carrierProvider = Mockito.mock(CarrierRepository.class);
+        var uri = new AtomicReference<URI>();
+        ResourceLocationBuilder resourceProvider = id -> {
+            uri.set(URI.create(id));
+            return uri.get();
+        };
+        var sut = new CarrierController(carrierProvider, null, null, resourceProvider);
+
+        var given = new CarrierDTO();
+        var actual = sut.createCarrier(given);
+        Assertions.assertThat(actual).isEqualTo(ResponseEntity.created(uri.get()).build());
     }
 
 }

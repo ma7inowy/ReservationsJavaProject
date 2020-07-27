@@ -17,12 +17,14 @@ public class CarrierController {
     private final CarrierRepository carrierRepository;
     private final CarrierOrderService carrierOrderService;
     private final CarrierHistoryService carrierHistoryService;
+    private final ResourceLocationBuilder resourceLocationBuilder;
 
     @Autowired
-    public CarrierController(CarrierRepository carrierRepository, CarrierOrderService carrierOrderService, CarrierHistoryService carrierHistoryService) {
+    public CarrierController(CarrierRepository carrierRepository, CarrierOrderService carrierOrderService, CarrierHistoryService carrierHistoryService, ResourceLocationBuilder resourceLocationBuilder) {
         this.carrierRepository = carrierRepository;
         this.carrierOrderService = carrierOrderService;
         this.carrierHistoryService = carrierHistoryService;
+        this.resourceLocationBuilder = resourceLocationBuilder;
     }
 
     //carriers operations
@@ -76,7 +78,7 @@ public class CarrierController {
         model.setAvailability(dto.getAvailability());
         model.setPrice(dto.getPrice());
         carrierRepository.addCarrier(model);
-        var uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(model.getId()).toUri();
+        var uri = resourceLocationBuilder.build(model.getId());
 
         return ResponseEntity.created(uri).build();
     }

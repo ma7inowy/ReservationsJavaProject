@@ -152,7 +152,6 @@ public class TravelerControllerTests {
 
     @Test
     public void shouldDeleteOrder(){
-        // CZY NA PEWNO OK?
         var carrierProvider = Mockito.mock(CarrierOrderService.class);
         Mockito.when(carrierProvider.deleteOrder("email","carrierId")).thenReturn(true); // ustalam co ma sie stac?
         var sut = new TravelerController(null, carrierProvider, null);

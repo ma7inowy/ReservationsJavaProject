@@ -30,12 +30,12 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
     //spring
     @Autowired
     public CarrierOrderServiceImpl(CarrierRepository carrierRepository, BankAccountService bankAccountService) {
-        this(new ArrayList<>(),carrierRepository, bankAccountService);
+        this(new ArrayList<>(), carrierRepository, bankAccountService);
 
     }
 
     @PostConstruct
-    public void init(){
+    public void init() {
         carrierOrderList.add(new CarrierOrderModel("jankowalski1@wp.pl", LocalDate.now().minusDays(11), carrierRepository.getCarrierList().get(0).getId()));
         carrierOrderList.get(0).setPaid(true);
         carrierOrderList.add(new CarrierOrderModel("jankowalski2@wp.pl", LocalDate.now().minusDays(2), carrierRepository.getCarrierList().get(0).getId()));
@@ -149,12 +149,15 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
 
         for (CarrierOrderModel co : carrierOrderList) {
             if (!co.isPaid()) {
-                if (co.getOrderDate().isAfter(carrierRepository.getCarrierById(co.getCarrierId()).getDate().minusDays(5)))
+                // if order is still not paid and time remaining to carrier start is shorter than 5 days it needs to be removed
+                if (LocalDate.now().isAfter(carrierRepository.getCarrierById(co.getCarrierId()).getDate().minusDays(5)))
                     coList.add(co);
             }
         }
-        for (CarrierOrderModel co1 : coList) {
-            carrierOrderList.remove(co1);
+        if (!coList.isEmpty()) {
+            for (CarrierOrderModel co1 : coList) {
+                carrierOrderList.remove(co1);
+            }
         }
     }
 
@@ -199,7 +202,7 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
     public Iterable<CarrierOrderModel> unpaidOrders(String email) {
 
         var result = new ArrayList<CarrierOrderModel>();
-        for (CarrierOrderModel coModel : carrierOrderList){
+        for (CarrierOrderModel coModel : carrierOrderList) {
             if (!coModel.isPaid() && coModel.getEmail().equals(email)) {
                 result.add(coModel);
             }
