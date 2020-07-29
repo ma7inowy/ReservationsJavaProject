@@ -1,5 +1,6 @@
 package jwachala.project.reservationsapp;
 
+import net.bytebuddy.implementation.auxiliary.MethodCallProxy;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -11,7 +12,7 @@ public class CarrierOrderServiceImplTests {
 
 
     @Test
-    public void shouldGetCarrierOrdersByCarrierId(){
+    public void shouldGetCarrierOrdersByCarrierId() {
         var given = new ArrayList<CarrierOrderModel>();
         var model = new CarrierOrderModel();
         var model2 = new CarrierOrderModel();
@@ -30,7 +31,7 @@ public class CarrierOrderServiceImplTests {
     }
 
     @Test
-    public void shouldGetCarrierOrdersByCompanyName(){
+    public void shouldGetCarrierOrdersByCompanyName() {
         var carrierProvider = Mockito.mock(CarrierRepository.class);
         var given = new ArrayList<CarrierOrderModel>();
         var coM = new CarrierOrderModel();
@@ -56,7 +57,7 @@ public class CarrierOrderServiceImplTests {
     }
 
     @Test
-    public void shouldGetCarrierOrdersByCompanyNameAndCity(){
+    public void shouldGetCarrierOrdersByCompanyNameAndCity() {
         var carrierProvider = Mockito.mock(CarrierRepository.class);
         var given = new ArrayList<CarrierOrderModel>();
         var coM = new CarrierOrderModel();
@@ -74,7 +75,7 @@ public class CarrierOrderServiceImplTests {
         Mockito.when(carrierProvider.getAllCarriers()).thenReturn(cMList);
 
         var sut = new CarrierOrderServiceImpl(given, carrierProvider, null);
-        var actual = sut.getCarrierOrdersByCompanyNameAndCity("Company1","City1");
+        var actual = sut.getCarrierOrdersByCompanyNameAndCity("Company1", "City1");
 
         var expected = new CarrierOrderModel();
         expected.setCarrierId(coM.getCarrierId());
@@ -83,7 +84,7 @@ public class CarrierOrderServiceImplTests {
     }
 
     @Test
-    public void shouldGetCarrierOrdersByCarrierIdSorted(){
+    public void shouldGetCarrierOrdersByCarrierIdSorted() {
         var given = new ArrayList<CarrierOrderModel>();
         var model = new CarrierOrderModel();
         var model2 = new CarrierOrderModel();
@@ -124,7 +125,7 @@ public class CarrierOrderServiceImplTests {
 
     // nie wiem czy tak moze byc
     @Test
-    public void shouldMakePayment(){
+    public void shouldMakePayment() {
         var given = new ArrayList<CarrierOrderModel>();
         var coM = new CarrierOrderModel();
 
@@ -138,7 +139,7 @@ public class CarrierOrderServiceImplTests {
     }
 
     @Test
-    public void shouldGetCarrierOrderById(){
+    public void shouldGetCarrierOrderById() {
         var given = new ArrayList<CarrierOrderModel>();
         var coM = new CarrierOrderModel();
         coM.setId("123");
@@ -151,7 +152,7 @@ public class CarrierOrderServiceImplTests {
     }
 
     @Test
-    public void shouldNotGetCarrierOrderById(){
+    public void shouldNotGetCarrierOrderById() {
         var given = new ArrayList<CarrierOrderModel>();
         var coM = new CarrierOrderModel();
         coM.setId("123");
@@ -163,35 +164,35 @@ public class CarrierOrderServiceImplTests {
     }
 
     @Test
-    public void shouldGetCarrierOrderByEmailAndCarrierId(){
+    public void shouldGetCarrierOrderByEmailAndCarrierId() {
         var given = new ArrayList<CarrierOrderModel>();
         var coM = new CarrierOrderModel();
         coM.setEmail("email1");
         coM.setCarrierId("1234");
         given.add(coM);
         var sut = new CarrierOrderServiceImpl(given, null, null);
-        var actual = sut.getCarrierOrderByEmailAndCarrierId("email1","1234");
+        var actual = sut.getCarrierOrderByEmailAndCarrierId("email1", "1234");
         var expected = coM;
 
         Assertions.assertThat(actual).isEqualTo(expected);
     }
 
     @Test
-    public void shouldNotGetCarrierOrderByEmailAndCarrierId(){
+    public void shouldNotGetCarrierOrderByEmailAndCarrierId() {
         var given = new ArrayList<CarrierOrderModel>();
         var coM = new CarrierOrderModel();
         coM.setEmail("email1");
         coM.setCarrierId("1234");
         given.add(coM);
         var sut = new CarrierOrderServiceImpl(given, null, null);
-        var actual = sut.getCarrierOrderByEmailAndCarrierId("email1","12345");
+        var actual = sut.getCarrierOrderByEmailAndCarrierId("email1", "12345");
 
         Assertions.assertThat(actual).isEqualTo(null);
     }
 
 
     @Test
-    public void shouldRefreshCarrierOrders(){
+    public void shouldRefreshCarrierOrders() {
         var carrierProvider = Mockito.mock(CarrierRepository.class);
         var given = new ArrayList<CarrierOrderModel>();
         var cM = new CarrierModel();
@@ -209,9 +210,144 @@ public class CarrierOrderServiceImplTests {
         Assertions.assertThat(given.isEmpty());
     }
 
+    @Test
+    public void shouldDeleteUnpaidOrder() {
+        var carrierProvider = Mockito.mock(CarrierRepository.class);
+        var bankProvider = Mockito.mock(BankAccountService.class);
+        var cM = new CarrierModel(); // przewoz konkretny
+        cM.setId("123");
+
+        var coM = new CarrierOrderModel(); // zamowienie
+        coM.setEmail("email1");
+        coM.setCarrierId("123");
+        var given = new ArrayList<CarrierOrderModel>();
+        given.add(coM);
+
+        var baM = new BankAccountModel("email1");
+
+        Mockito.when(carrierProvider.getCarrierById(cM.getId())).thenReturn(cM);
+        Mockito.when(bankProvider.getBankAccountByEmail(coM.getEmail())).thenReturn(baM);
+
+        // jesli nieoplacone
+        var sut = new CarrierOrderServiceImpl(given, carrierProvider, bankProvider);
+        var actual = sut.deleteOrder("email1", "123");
+        Assertions.assertThat(actual).isEqualTo(true);
+        Assertions.assertThat(given).isEmpty();
+    }
+
+    @Test
+    public void shouldDeletePaidOrderIfMoreThan7DaysLast() {
+        var carrierProvider = Mockito.mock(CarrierRepository.class);
+        var bankProvider = Mockito.mock(BankAccountService.class);
+        var cM = new CarrierModel(); // przewoz konkretny
+        cM.setId("123");
+        cM.setDate(LocalDate.now().plusDays(8));
+        cM.setPrice(10);
+
+        var coM = new CarrierOrderModel(); // zamowienie
+        coM.setPaid(true);
+        coM.setEmail("email1");
+        coM.setCarrierId("123");
+        var given = new ArrayList<CarrierOrderModel>();
+        given.add(coM);
+
+        var baM = new BankAccountModel("email1");
+
+        Mockito.when(carrierProvider.getCarrierById(cM.getId())).thenReturn(cM);
+        Mockito.when(bankProvider.getBankAccountByEmail(coM.getEmail())).thenReturn(baM);
 
 
+        //jesli zostalo wiecej niz 7 dni do wyjazdu zwroc 90%
+        var sut = new CarrierOrderServiceImpl(given, carrierProvider, bankProvider);
+        var actual = sut.deleteOrder("email1", "123");
+        Assertions.assertThat(actual).isEqualTo(true);
+        Assertions.assertThat(given).isEmpty();
+        Assertions.assertThat(baM.getAccountBalance()).isEqualTo(9);
+    }
 
+    @Test
+    public void shouldDeletePaidOrderIfLessThan7DaysLast() {
+        var carrierProvider = Mockito.mock(CarrierRepository.class);
+        var bankProvider = Mockito.mock(BankAccountService.class);
+        var cM = new CarrierModel(); // przewoz konkretny
+        cM.setId("123");
+        cM.setDate(LocalDate.now().plusDays(5));
+        cM.setPrice(10);
+
+        var coM = new CarrierOrderModel(); // zamowienie
+        coM.setPaid(true);
+        coM.setEmail("email1");
+        coM.setCarrierId("123");
+        var given = new ArrayList<CarrierOrderModel>();
+        given.add(coM);
+
+        var baM = new BankAccountModel("email1");
+
+        Mockito.when(carrierProvider.getCarrierById(cM.getId())).thenReturn(cM);
+        Mockito.when(bankProvider.getBankAccountByEmail(coM.getEmail())).thenReturn(baM);
+
+
+        //jesli zostalo mniej niz 7 dni do wyjazdu zwroc 50%
+        var sut = new CarrierOrderServiceImpl(given, carrierProvider, bankProvider);
+        var actual = sut.deleteOrder("email1", "123");
+        Assertions.assertThat(actual).isEqualTo(true);
+        Assertions.assertThat(given).isEmpty();
+        Assertions.assertThat(baM.getAccountBalance()).isEqualTo(5);
+    }
+
+    @Test
+    public void shouldNotDeleteOrder() {
+        var carrierProvider = Mockito.mock(CarrierRepository.class);
+        var bankProvider = Mockito.mock(BankAccountService.class);
+        var cM = new CarrierModel(); // przewoz konkretny
+        cM.setId("123");
+        cM.setDate(LocalDate.now().plusDays(5));
+        cM.setPrice(10);
+
+        var coM = new CarrierOrderModel(); // zamowienie
+        coM.setPaid(true);
+        coM.setEmail("email12");
+        coM.setCarrierId("1234");
+        var given = new ArrayList<CarrierOrderModel>();
+        given.add(coM);
+
+        var baM = new BankAccountModel("email1");
+
+        Mockito.when(carrierProvider.getCarrierById(cM.getId())).thenReturn(cM);
+        Mockito.when(bankProvider.getBankAccountByEmail(coM.getEmail())).thenReturn(baM);
+
+        // false
+        var sut = new CarrierOrderServiceImpl(given, carrierProvider, bankProvider);
+        var actual = sut.deleteOrder("email1", "123");
+        Assertions.assertThat(actual).isEqualTo(false);
+    }
+
+    @Test
+    public void shouldRemoveAllOrders(){
+        var coM = new CarrierOrderModel(); // zamowienie
+        coM.setPaid(true);
+        coM.setEmail("email12");
+        coM.setCarrierId("1234");
+        var given = new ArrayList<CarrierOrderModel>();
+        given.add(coM);
+
+        var sut = new CarrierOrderServiceImpl(given, null, null);
+        sut.removeAllOrders(given);
+        Assertions.assertThat(given).isEmpty();
+    }
+
+    @Test
+    public void shouldAddOrder(){
+        var coM = new CarrierOrderModel(); // zamowienie
+        coM.setPaid(true);
+        coM.setEmail("email12");
+        coM.setCarrierId("1234");
+        var given = new ArrayList<CarrierOrderModel>();
+
+        var sut = new CarrierOrderServiceImpl(given, null, null);
+        sut.addOrder(coM);
+        Assertions.assertThat(given).containsExactly(coM);
+    }
 
 
 }
