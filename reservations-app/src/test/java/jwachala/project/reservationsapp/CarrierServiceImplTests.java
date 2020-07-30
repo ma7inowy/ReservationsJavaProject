@@ -76,6 +76,50 @@ public class CarrierServiceImplTests {
         Assertions.assertThat(cM.getAvailability()).isEqualTo(0);
     }
 
+    @Test
+    public void shouldGetCarrierById() {
+        var given = new ArrayList<CarrierModel>();
+        var cM = new CarrierModel();
+        cM.setId("123");
+        given.add(cM);
+        var sut = new CarrierServiceImpl(given, null, null);
+        var actual = sut.getCarrierById("123");
+        var expected = cM;
+        Assertions.assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    public void shouldNotGetCarrierById() {
+        var given = new ArrayList<CarrierModel>();
+        var cM = new CarrierModel();
+        cM.setId("123");
+        given.add(cM);
+        var sut = new CarrierServiceImpl(given, null, null);
+        var actual = sut.getCarrierById("1234");
+        Assertions.assertThat(actual).isEqualTo(null);
+    }
+
+    @Test
+    public void shouldDeleteCarrier() {
+        var carrierOrderServiceProvider = Mockito.mock(CarrierOrderService.class);
+        var bankServiceProvider = Mockito.mock(BankAccountService.class);
+
+        var given = new ArrayList<CarrierModel>();
+        var cM = new CarrierModel();
+        cM.setId("123");
+        given.add(cM);
+        var sut = new CarrierServiceImpl(given, carrierOrderServiceProvider, bankServiceProvider);
+        var actual = sut.getCarrierById("1234");
+        Assertions.assertThat(actual).isEqualTo(null);
+    }
+
+
+
+
+
+
+
+
 
 
 
