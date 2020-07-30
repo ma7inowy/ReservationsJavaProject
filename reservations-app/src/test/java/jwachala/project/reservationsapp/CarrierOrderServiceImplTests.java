@@ -349,6 +349,48 @@ public class CarrierOrderServiceImplTests {
         Assertions.assertThat(given).containsExactly(coM);
     }
 
+    @Test
+    public void shouldGetUnpaidOrders(){
+        var coM = new CarrierOrderModel(); // zamowienie
+        coM.setEmail("email1");
+        coM.setCarrierId("123");
+        var given = new ArrayList<CarrierOrderModel>();
+        given.add(coM);
+
+        var sut = new CarrierOrderServiceImpl(given, null, null);
+        var actual = sut.unpaidOrders("email1");
+        var expected = coM;
+        Assertions.assertThat(actual).containsExactly(expected);
+    }
+
+    @Test
+    public void shouldGetCarrierOrderListIterable(){
+        var coM = new CarrierOrderModel(); // zamowienie
+        coM.setEmail("email1");
+        coM.setCarrierId("123");
+        var given = new ArrayList<CarrierOrderModel>();
+        given.add(coM);
+
+        var sut = new CarrierOrderServiceImpl(given, null, null);
+        var actual = sut.getCarrierOrderListIterable();
+        var expected = coM;
+        Assertions.assertThat(actual).containsExactly(expected);
+    }
+
+    @Test
+    public void shouldRemoveCarrierOrder(){
+        var coM = new CarrierOrderModel(); // zamowienie
+        coM.setEmail("email1");
+        coM.setCarrierId("123");
+        var given = new ArrayList<CarrierOrderModel>();
+        given.add(coM);
+
+        var sut = new CarrierOrderServiceImpl(given, null, null);
+        sut.removeCarrierOrder(coM);
+        Assertions.assertThat(given).isEmpty();
+    }
+
+
 
 }
 
