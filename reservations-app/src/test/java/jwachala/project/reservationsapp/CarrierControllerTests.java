@@ -15,7 +15,7 @@ public class CarrierControllerTests {
 
     @Test
     public void shouldGetAllCarriers(){
-        var carrierProvider = Mockito.mock(CarrierRepository.class);
+        var carrierProvider = Mockito.mock(CarrierService.class);
         var given = new ArrayList<CarrierModel>();
         var model = new CarrierModel();
         model.setCompanyName("my company name");
@@ -33,7 +33,7 @@ public class CarrierControllerTests {
 
     @Test
     public void shouldGetAllCarriersByCity(){
-        var carrierProvider = Mockito.mock(CarrierRepository.class);
+        var carrierProvider = Mockito.mock(CarrierService.class);
         var given = new ArrayList<CarrierModel>();
         var model = new CarrierModel();
         model.setStartCity("City1");
@@ -51,7 +51,7 @@ public class CarrierControllerTests {
     @Test
     public void shouldBeRealized(){
         //CZY NA PEWNO OKEJ?
-        var carrierProvider = Mockito.mock(CarrierRepository.class);
+        var carrierProvider = Mockito.mock(CarrierService.class);
         var sut = new CarrierController(carrierProvider, null, null,null);
         var model = new CarrierModel();
         Mockito.when(carrierProvider.getCarrierById(model.getId())).thenReturn(model); // ustalam co ma sie stac?
@@ -144,7 +144,7 @@ public class CarrierControllerTests {
     // nie wiem czy ok?
     @Test
     public void shouldDeleteOrder(){
-        var carrierProvider = Mockito.mock(CarrierRepository.class);
+        var carrierProvider = Mockito.mock(CarrierService.class);
 //        var given = new ArrayList<CarrierModel>();
         var model = new CarrierModel();
 //        given.add(model);
@@ -160,7 +160,7 @@ public class CarrierControllerTests {
     // nie wiem czy okej
     @Test
     public void shouldNotDeleteOrder(){
-        var carrierProvider = Mockito.mock(CarrierRepository.class);
+        var carrierProvider = Mockito.mock(CarrierService.class);
         var model = new CarrierModel();
         Mockito.when(carrierProvider.deleteCarrier(model.getId())).thenReturn(false); // why ok
         var sut = new CarrierController(carrierProvider, null, null,null);
@@ -171,7 +171,7 @@ public class CarrierControllerTests {
 
     @Test
     public void shouldCreateCarrier(){
-        var carrierProvider = Mockito.mock(CarrierRepository.class);
+        var carrierProvider = Mockito.mock(CarrierService.class);
         var resourceProvider = Mockito.mock(ResourceLocationBuilder.class);
         var sut = new CarrierController(carrierProvider, null, null, resourceProvider);
         var given = new CarrierDTO();
@@ -196,7 +196,7 @@ public class CarrierControllerTests {
 
     @Test
     public void shouldReturnLocationOfCreatedCarrier(){
-        var carrierProvider = Mockito.mock(CarrierRepository.class);
+        var carrierProvider = Mockito.mock(CarrierService.class);
         var uri = new AtomicReference<URI>();
         ResourceLocationBuilder resourceProvider = id -> {
             uri.set(URI.create(id));

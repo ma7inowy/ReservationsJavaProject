@@ -15,45 +15,45 @@ import java.util.List;
 public class CarrierOrderServiceImpl implements CarrierOrderService {
 
     //testy
-    public CarrierOrderServiceImpl(List<CarrierOrderModel> carrierOrderList, CarrierRepository carrierRepository, BankAccountService bankAccountService) {
+    public CarrierOrderServiceImpl(List<CarrierOrderModel> carrierOrderList, CarrierService carrierService, BankAccountService bankAccountService) {
         this.carrierOrderList = carrierOrderList;
-        this.carrierRepository = carrierRepository;
+        this.carrierService = carrierService;
         this.bankAccountService = bankAccountService;
     }
 
     private List<CarrierOrderModel> carrierOrderList;
 
-    private CarrierRepository carrierRepository;
+    private CarrierService carrierService;
 
     private BankAccountService bankAccountService;
 
     //spring
     @Autowired
-    public CarrierOrderServiceImpl(CarrierRepository carrierRepository, BankAccountService bankAccountService) {
+    public CarrierOrderServiceImpl(CarrierService carrierService, BankAccountService bankAccountService) {
 //        this(new ArrayList<>(), carrierRepository, bankAccountService);
         this.carrierOrderList = new ArrayList<>();
-        this.carrierRepository = carrierRepository;
+        this.carrierService = carrierService;
         this.bankAccountService = bankAccountService;
 
     }
 
     @PostConstruct
     public void init() {
-        carrierOrderList.add(new CarrierOrderModel("jankowalski1@wp.pl", LocalDate.now().minusDays(11), carrierRepository.getCarrierList().get(0).getId()));
+        carrierOrderList.add(new CarrierOrderModel("jankowalski1@wp.pl", LocalDate.now().minusDays(11), carrierService.getCarrierList().get(0).getId()));
         carrierOrderList.get(0).setPaid(true);
-        carrierOrderList.add(new CarrierOrderModel("jankowalski2@wp.pl", LocalDate.now().minusDays(2), carrierRepository.getCarrierList().get(0).getId()));
-        carrierOrderList.add(new CarrierOrderModel("jankowalski3@wp.pl", LocalDate.now().plusDays(7), carrierRepository.getCarrierList().get(0).getId()));
+        carrierOrderList.add(new CarrierOrderModel("jankowalski2@wp.pl", LocalDate.now().minusDays(2), carrierService.getCarrierList().get(0).getId()));
+        carrierOrderList.add(new CarrierOrderModel("jankowalski3@wp.pl", LocalDate.now().plusDays(7), carrierService.getCarrierList().get(0).getId()));
         carrierOrderList.get(2).setPaid(true);
-        carrierOrderList.add(new CarrierOrderModel("jankowalski4@wp.pl", LocalDate.now().plusDays(5), carrierRepository.getCarrierList().get(0).getId()));
-        carrierOrderList.add(new CarrierOrderModel("jankowalski5@wp.pl", LocalDate.now().plusDays(3), carrierRepository.getCarrierList().get(0).getId()));
-        carrierOrderList.add(new CarrierOrderModel("jankowalski6@wp.pl", LocalDate.now().plusDays(5), carrierRepository.getCarrierList().get(0).getId()));
+        carrierOrderList.add(new CarrierOrderModel("jankowalski4@wp.pl", LocalDate.now().plusDays(5), carrierService.getCarrierList().get(0).getId()));
+        carrierOrderList.add(new CarrierOrderModel("jankowalski5@wp.pl", LocalDate.now().plusDays(3), carrierService.getCarrierList().get(0).getId()));
+        carrierOrderList.add(new CarrierOrderModel("jankowalski6@wp.pl", LocalDate.now().plusDays(5), carrierService.getCarrierList().get(0).getId()));
         carrierOrderList.get(5).setPaid(true);
-        carrierOrderList.add(new CarrierOrderModel("jankowalski7@wp.pl", LocalDate.now().plusDays(4), carrierRepository.getCarrierList().get(0).getId()));
-        carrierOrderList.add(new CarrierOrderModel("jankowalski8@wp.pl", LocalDate.now().plusDays(3), carrierRepository.getCarrierList().get(1).getId()));
-        carrierOrderList.add(new CarrierOrderModel("jankowalski9@wp.pl", LocalDate.now().plusDays(3), carrierRepository.getCarrierList().get(2).getId()));
-        carrierOrderList.add(new CarrierOrderModel("jankowalski10@wp.pl", LocalDate.now().plusDays(3), carrierRepository.getCarrierList().get(3).getId()));
-        carrierOrderList.add(new CarrierOrderModel("jankowalski11@wp.pl", LocalDate.now().plusDays(4), carrierRepository.getCarrierList().get(3).getId()));
-        carrierOrderList.add(new CarrierOrderModel("jankowalski11@wp.pl", LocalDate.now().minusDays(14), carrierRepository.getCarrierList().get(2).getId()));
+        carrierOrderList.add(new CarrierOrderModel("jankowalski7@wp.pl", LocalDate.now().plusDays(4), carrierService.getCarrierList().get(0).getId()));
+        carrierOrderList.add(new CarrierOrderModel("jankowalski8@wp.pl", LocalDate.now().plusDays(3), carrierService.getCarrierList().get(1).getId()));
+        carrierOrderList.add(new CarrierOrderModel("jankowalski9@wp.pl", LocalDate.now().plusDays(3), carrierService.getCarrierList().get(2).getId()));
+        carrierOrderList.add(new CarrierOrderModel("jankowalski10@wp.pl", LocalDate.now().plusDays(3), carrierService.getCarrierList().get(3).getId()));
+        carrierOrderList.add(new CarrierOrderModel("jankowalski11@wp.pl", LocalDate.now().plusDays(4), carrierService.getCarrierList().get(3).getId()));
+        carrierOrderList.add(new CarrierOrderModel("jankowalski11@wp.pl", LocalDate.now().minusDays(14), carrierService.getCarrierList().get(2).getId()));
     }
 
     @Override
@@ -71,7 +71,7 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
     public List<CarrierOrderModel> getCarrierOrdersByCompanyName(String companyName) {
         List<CarrierOrderModel> carrierOrderNewList = new ArrayList<>();
         for (var coModel : carrierOrderList) {
-            for (var cModel : carrierRepository.getAllCarriers()) {
+            for (var cModel : carrierService.getAllCarriers()) {
                 if (coModel.getCarrierId().equals(cModel.getId())) {
                     if (cModel.getCompanyName().toLowerCase().equals(companyName.toLowerCase())) {
                         carrierOrderNewList.add(coModel);
@@ -89,7 +89,7 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
         List<CarrierOrderModel> carrierOrderListByCnAndCity = new ArrayList<>();
 
         for (var coModel : carrierOrderByCompanyName) {
-            for (var cModel : carrierRepository.getAllCarriers()) {
+            for (var cModel : carrierService.getAllCarriers()) {
                 if (coModel.getCarrierId().equals(cModel.getId())) {
                     if (cModel.getCompanyName().toLowerCase().equals(companyName.toLowerCase())) {
                         if (cModel.getStartCity().toLowerCase().equals(startCity.toLowerCase())) {
@@ -153,7 +153,7 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
         for (CarrierOrderModel co : carrierOrderList) {
             if (!co.isPaid()) {
                 // if order is still not paid and time remaining to carrier start is shorter than 5 days it needs to be removed
-                if (LocalDate.now().isAfter(carrierRepository.getCarrierById(co.getCarrierId()).getDate().minusDays(5)))
+                if (LocalDate.now().isAfter(carrierService.getCarrierById(co.getCarrierId()).getDate().minusDays(5)))
                     coList.add(co);
             }
         }
@@ -166,7 +166,7 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
 
     @Override
     public boolean deleteOrder(String email, String carrierID) {
-        double carrierCost = carrierRepository.getCarrierById(carrierID).getPrice(); // na razie na sztywno wpisuje cene przejazdu
+        double carrierCost = carrierService.getCarrierById(carrierID).getPrice(); // na razie na sztywno wpisuje cene przejazdu
         if (getCarrierOrderByEmailAndCarrierId(email, carrierID) != null) {
             var coM = getCarrierOrderByEmailAndCarrierId(email, carrierID);
             BankAccountModel baM = bankAccountService.getBankAccountByEmail(coM.getEmail());
@@ -175,7 +175,7 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
                 return true;
             } else {
                 //jesli zostalo wiecej niz 7 dni do wyjazdu zwroc 90%
-                if (LocalDate.now().isBefore(carrierRepository.getCarrierById(coM.getCarrierId()).getDate().minusDays(7))) {
+                if (LocalDate.now().isBefore(carrierService.getCarrierById(coM.getCarrierId()).getDate().minusDays(7))) {
                     baM.depositMoney(carrierCost * 0.9);
                     carrierOrderList.remove(coM);
                     return true;

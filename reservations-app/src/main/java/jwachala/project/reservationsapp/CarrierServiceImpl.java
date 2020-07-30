@@ -11,7 +11,7 @@ import java.util.List;
 // BAZA DANYCH Z WSZYSTKIMI OFERTAMI PRZEWOZOW
 @Component
 @Data
-public class CarrierRepositoryImpl implements CarrierRepository {
+public class CarrierServiceImpl implements CarrierService {
 
     private List<CarrierModel> carrierList;
 
@@ -21,13 +21,13 @@ public class CarrierRepositoryImpl implements CarrierRepository {
     @Autowired
     BankAccountService bankAccountService;
 
-    public CarrierRepositoryImpl(List<CarrierModel> carrierList, CarrierOrderService carrierOrderService, BankAccountService bankAccountService) {
+    public CarrierServiceImpl(List<CarrierModel> carrierList, CarrierOrderService carrierOrderService, BankAccountService bankAccountService) {
         this.carrierList = carrierList;
         this.carrierOrderService = carrierOrderService;
         this.bankAccountService = bankAccountService;
     }
 
-    public CarrierRepositoryImpl() {
+    public CarrierServiceImpl() {
         this.carrierList = new ArrayList<>();
         carrierList.add(new CarrierModel("City1", "destCity1", LocalDate.now().plusDays(8), "Company0",10));
         carrierList.add(new CarrierModel("City2", "destCity2", LocalDate.now().plusDays(5), "Company1",20));

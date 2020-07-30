@@ -1,9 +1,7 @@
 package jwachala.project.reservationsapp;
 
-import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -18,18 +16,18 @@ import java.util.List;
 public class CarrierHistoryServiceImpl implements CarrierHistoryService {
 
     private List<CarrierModel> carrierHistoryList;
-    private CarrierRepository carrierRepository;
+    private CarrierService carrierService;
     private CarrierOrderService carrierOrderService;
 
-    public CarrierHistoryServiceImpl(List<CarrierModel> carrierHistoryList, CarrierRepository carrierRepository, CarrierOrderService carrierOrderService) {
+    public CarrierHistoryServiceImpl(List<CarrierModel> carrierHistoryList, CarrierService carrierService, CarrierOrderService carrierOrderService) {
         this.carrierHistoryList = carrierHistoryList;
-        this.carrierRepository = carrierRepository;
+        this.carrierService = carrierService;
         this.carrierOrderService = carrierOrderService;
     }
 
     @Autowired
-    public CarrierHistoryServiceImpl(CarrierRepository carrierRepository, CarrierOrderService carrierOrderService) {
-        this(new ArrayList<>(), carrierRepository,carrierOrderService);
+    public CarrierHistoryServiceImpl(CarrierService carrierService, CarrierOrderService carrierOrderService) {
+        this(new ArrayList<>(), carrierService,carrierOrderService);
     }
 
     @Override
@@ -45,7 +43,7 @@ public class CarrierHistoryServiceImpl implements CarrierHistoryService {
 
     @Override
     public List<CarrierModel> refreshHistory() {
-        List<CarrierModel> cMList = carrierRepository.getCarrierList();
+        List<CarrierModel> cMList = carrierService.getCarrierList();
         List<CarrierModel> carriersforRemoveList = new ArrayList<>();
 
         // przenoszenie obiektow ofert przewozow z CarrierRepository -> CarrierHistory
@@ -67,7 +65,7 @@ public class CarrierHistoryServiceImpl implements CarrierHistoryService {
 
         //usuwanie starych przewozów
         for(CarrierModel i : carriersforRemoveList)
-            carrierRepository.getCarrierList().remove(i);
+            carrierService.getCarrierList().remove(i);
 
         // usuwanie starych biletow / zlecen z bazy
         for(CarrierOrderModel i : CarrierOrderforRemoveList){

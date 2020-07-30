@@ -2,7 +2,7 @@ package jwachala.project.reservationsapp;
 
 import java.util.List;
 
-public interface CarrierRepository {
+public interface CarrierService {
     List<CarrierModel> getCarriersbyStartCity(String city);
 
     List<CarrierModel> getCarriersbyStartCityAndDestination(String startCity, String finishCity);

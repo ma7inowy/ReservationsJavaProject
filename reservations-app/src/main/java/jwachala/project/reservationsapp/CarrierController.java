@@ -4,7 +4,6 @@ package jwachala.project.reservationsapp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,14 +13,14 @@ import java.util.List;
 @RequestMapping("api/carrier")
 public class CarrierController {
 
-    private final CarrierRepository carrierRepository;
+    private final CarrierService carrierService;
     private final CarrierOrderService carrierOrderService;
     private final CarrierHistoryService carrierHistoryService;
     private final ResourceLocationBuilder resourceLocationBuilder;
 
     @Autowired
-    public CarrierController(CarrierRepository carrierRepository, CarrierOrderService carrierOrderService, CarrierHistoryService carrierHistoryService, ResourceLocationBuilder resourceLocationBuilder) {
-        this.carrierRepository = carrierRepository;
+    public CarrierController(CarrierService carrierService, CarrierOrderService carrierOrderService, CarrierHistoryService carrierHistoryService, ResourceLocationBuilder resourceLocationBuilder) {
+        this.carrierService = carrierService;
         this.carrierOrderService = carrierOrderService;
         this.carrierHistoryService = carrierHistoryService;
         this.resourceLocationBuilder = resourceLocationBuilder;
@@ -32,7 +31,7 @@ public class CarrierController {
     @GetMapping("carriers")
     public List<CarrierDTO> getCarriers() {
         List<CarrierDTO> dtoList = new ArrayList<>();
-        for (CarrierModel cM : carrierRepository.getAllCarriers()) {
+        for (CarrierModel cM : carrierService.getAllCarriers()) {
             CarrierDTO cDTO = new CarrierDTO();
             cDTO.setCompanyName(cM.getCompanyName());
             cDTO.setDate(cM.getDate());
@@ -51,7 +50,7 @@ public class CarrierController {
     @GetMapping("/carriers/city/start/{startCity}")
     public List<CarrierDTO> getCarriersByCity(@PathVariable(value = "startCity") String startCity) {
         List<CarrierDTO> dtoList = new ArrayList<>();
-        for (CarrierModel cM : carrierRepository.getCarriersbyStartCity(startCity)) {
+        for (CarrierModel cM : carrierService.getCarriersbyStartCity(startCity)) {
             CarrierDTO cDTO = new CarrierDTO();
             cDTO.setCompanyName(cM.getCompanyName());
             cDTO.setDate(cM.getDate());
@@ -77,7 +76,7 @@ public class CarrierController {
         model.setCompanyName(dto.getCompanyName());
         model.setAvailability(dto.getAvailability());
         model.setPrice(dto.getPrice());
-        carrierRepository.addCarrier(model);
+        carrierService.addCarrier(model);
         var uri = resourceLocationBuilder.build(model.getId());
 
         return ResponseEntity.created(uri).build();
@@ -86,7 +85,7 @@ public class CarrierController {
     // USTAWIENIE PRZEWOZU PRZEZ PRZEWOZNIKA JAKO ZREALIZOWANY
     @PutMapping("/carrier/id/{carrierId}/realized")
     public ResponseEntity<?> isRealized(@PathVariable(value = "carrierId") String carrierId){
-        CarrierModel cM = carrierRepository.getCarrierById(carrierId);
+        CarrierModel cM = carrierService.getCarrierById(carrierId);
         cM.realizedTrue();
 
        CarrierDTO cDTO = new CarrierDTO();
@@ -224,7 +223,7 @@ public class CarrierController {
     // anulowanie przewozu - oddanie kasy albo jakiejs czesci
     @DeleteMapping("carriers/id/{carrierId}/delete")
     public ResponseEntity<?> deleteCarrier(@PathVariable(value = "carrierId") String carrierId){
-        if(carrierRepository.deleteCarrier(carrierId))
+        if(carrierService.deleteCarrier(carrierId))
         return ResponseEntity.noContent().build();
         else return ResponseEntity.notFound().build();
 

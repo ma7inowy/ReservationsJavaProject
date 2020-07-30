@@ -11,7 +11,7 @@ public class TravelerControllerTests {
     @Test
     public void shouldGetAllCarriers() {
 
-        var carrierProvider = Mockito.mock(CarrierRepository.class);
+        var carrierProvider = Mockito.mock(CarrierService.class);
         var given = new ArrayList<CarrierModel>();
         var model = new CarrierModel();
         model.setCompanyName("my company name");
@@ -29,7 +29,7 @@ public class TravelerControllerTests {
 
     @Test
     public void shouldGetAllCarriersByCity(){
-        var carrierProvider = Mockito.mock(CarrierRepository.class);
+        var carrierProvider = Mockito.mock(CarrierService.class);
         var given = new ArrayList<CarrierModel>();
         var model = new CarrierModel();
 //        var model2 = new CarrierModel();
@@ -48,7 +48,7 @@ public class TravelerControllerTests {
 
     @Test
     public void shouldGetAllCarriersByStartAndDestinationCity(){
-        var carrierProvider = Mockito.mock(CarrierRepository.class);
+        var carrierProvider = Mockito.mock(CarrierService.class);
         var given = new ArrayList<CarrierModel>();
         var model = new CarrierModel();
         model.setStartCity("City1");
@@ -67,7 +67,7 @@ public class TravelerControllerTests {
 
     @Test
     public void shouldGetAllCarriersByCompanyName(){
-        var carrierProvider = Mockito.mock(CarrierRepository.class);
+        var carrierProvider = Mockito.mock(CarrierService.class);
         var given = new ArrayList<CarrierModel>();
         var model = new CarrierModel();
         model.setCompanyName("Company1");

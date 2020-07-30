@@ -1,6 +1,5 @@
 package jwachala.project.reservationsapp;
 
-import net.bytebuddy.implementation.auxiliary.MethodCallProxy;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -32,7 +31,7 @@ public class CarrierOrderServiceImplTests {
 
     @Test
     public void shouldGetCarrierOrdersByCompanyName() {
-        var carrierProvider = Mockito.mock(CarrierRepository.class);
+        var carrierProvider = Mockito.mock(CarrierService.class);
         var given = new ArrayList<CarrierOrderModel>();
         var coM = new CarrierOrderModel();
         var coM2 = new CarrierOrderModel();
@@ -58,7 +57,7 @@ public class CarrierOrderServiceImplTests {
 
     @Test
     public void shouldGetCarrierOrdersByCompanyNameAndCity() {
-        var carrierProvider = Mockito.mock(CarrierRepository.class);
+        var carrierProvider = Mockito.mock(CarrierService.class);
         var given = new ArrayList<CarrierOrderModel>();
         var coM = new CarrierOrderModel();
         var coM2 = new CarrierOrderModel();
@@ -193,7 +192,7 @@ public class CarrierOrderServiceImplTests {
 
     @Test
     public void shouldRefreshCarrierOrders() {
-        var carrierProvider = Mockito.mock(CarrierRepository.class);
+        var carrierProvider = Mockito.mock(CarrierService.class);
         var given = new ArrayList<CarrierOrderModel>();
         var cM = new CarrierModel();
         cM.setDate(LocalDate.now().plusDays(4));
@@ -212,7 +211,7 @@ public class CarrierOrderServiceImplTests {
 
     @Test
     public void shouldDeleteUnpaidOrder() {
-        var carrierProvider = Mockito.mock(CarrierRepository.class);
+        var carrierProvider = Mockito.mock(CarrierService.class);
         var bankProvider = Mockito.mock(BankAccountService.class);
         var cM = new CarrierModel(); // przewoz konkretny
         cM.setId("123");
@@ -237,7 +236,7 @@ public class CarrierOrderServiceImplTests {
 
     @Test
     public void shouldDeletePaidOrderIfMoreThan7DaysLast() {
-        var carrierProvider = Mockito.mock(CarrierRepository.class);
+        var carrierProvider = Mockito.mock(CarrierService.class);
         var bankProvider = Mockito.mock(BankAccountService.class);
         var cM = new CarrierModel(); // przewoz konkretny
         cM.setId("123");
@@ -267,7 +266,7 @@ public class CarrierOrderServiceImplTests {
 
     @Test
     public void shouldDeletePaidOrderIfLessThan7DaysLast() {
-        var carrierProvider = Mockito.mock(CarrierRepository.class);
+        var carrierProvider = Mockito.mock(CarrierService.class);
         var bankProvider = Mockito.mock(BankAccountService.class);
         var cM = new CarrierModel(); // przewoz konkretny
         cM.setId("123");
@@ -297,7 +296,7 @@ public class CarrierOrderServiceImplTests {
 
     @Test
     public void shouldNotDeleteOrder() {
-        var carrierProvider = Mockito.mock(CarrierRepository.class);
+        var carrierProvider = Mockito.mock(CarrierService.class);
         var bankProvider = Mockito.mock(BankAccountService.class);
         var cM = new CarrierModel(); // przewoz konkretny
         cM.setId("123");

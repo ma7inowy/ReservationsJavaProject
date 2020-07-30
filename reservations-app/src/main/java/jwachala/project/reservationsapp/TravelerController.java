@@ -15,13 +15,13 @@ import java.util.List;
 @RequestMapping("api/traveler")
 public class TravelerController {
 
-    private final CarrierRepository carrierRepository;
+    private final CarrierService carrierService;
     private final CarrierOrderService carrierOrderService;
     private final BankAccountService bankAccountService;
 
     @Autowired
-    public TravelerController(CarrierRepository carrierRepository, CarrierOrderService carrierOrderService, BankAccountService bankAccountService) {
-        this.carrierRepository = carrierRepository;
+    public TravelerController(CarrierService carrierService, CarrierOrderService carrierOrderService, BankAccountService bankAccountService) {
+        this.carrierService = carrierService;
         this.carrierOrderService = carrierOrderService;
         this.bankAccountService = bankAccountService;
     }
@@ -30,7 +30,7 @@ public class TravelerController {
     @GetMapping("carriers")
     public List<CarrierDTO> getCarriers() {
         List<CarrierDTO> dtoList = new ArrayList<>();
-        for (var cM : carrierRepository.getAllCarriers()) {
+        for (var cM : carrierService.getAllCarriers()) {
             var cDTO = new CarrierDTO();
             cDTO.setCompanyName(cM.getCompanyName());
             cDTO.setDate(cM.getDate());
@@ -50,7 +50,7 @@ public class TravelerController {
     @GetMapping("/carriers/city/start/{startCity}")
     public List<CarrierDTO> getCarriersByCity(@PathVariable(value = "startCity") String startCity) {
         List<CarrierDTO> dtoList = new ArrayList<>();
-        for (var cM : carrierRepository.getCarriersbyStartCity(startCity)) {
+        for (var cM : carrierService.getCarriersbyStartCity(startCity)) {
             var cDTO = new CarrierDTO();
             cDTO.setCompanyName(cM.getCompanyName());
             cDTO.setDate(cM.getDate());
@@ -70,7 +70,7 @@ public class TravelerController {
     @GetMapping("/carriers/city/start/{startCity}/destination/{destinationCity}")
     public List<CarrierDTO> getCarriersbyStartCityAndDestination(@PathVariable(value = "startCity") String startCity, @PathVariable(value = "destinationCity") String destinationCity) {
         List<CarrierDTO> dtoList = new ArrayList<>();
-        for (var cM : carrierRepository.getCarriersbyStartCityAndDestination(startCity, destinationCity)) {
+        for (var cM : carrierService.getCarriersbyStartCityAndDestination(startCity, destinationCity)) {
             var cDTO = new CarrierDTO();
             cDTO.setCompanyName(cM.getCompanyName());
             cDTO.setDate(cM.getDate());
@@ -91,7 +91,7 @@ public class TravelerController {
     @GetMapping("/carriers/company/{companyName}")
     public List<CarrierDTO> getCarriersByCompanyName(@PathVariable(value = "companyName") String companyName) {
         List<CarrierDTO> dtoList = new ArrayList<>();
-        for (var cM : carrierRepository.getCarriersbyCompanyName(companyName)) {
+        for (var cM : carrierService.getCarriersbyCompanyName(companyName)) {
             var cDTO = new CarrierDTO();
             cDTO.setCompanyName(cM.getCompanyName());
             cDTO.setDate(cM.getDate());
@@ -117,7 +117,7 @@ public class TravelerController {
         var uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(model.getId()).toUri();
 
         // dodanie pasażera na listę chętnych do skorzystania z usługi przewozu jesli sa jeszcze wolne miejsca
-        if (carrierRepository.availabilityMinusOne(dto.getCarrierId())) {
+        if (carrierService.availabilityMinusOne(dto.getCarrierId())) {
 //            carrierOrderService.getCarrierOrderList().add(model);
             carrierOrderService.addOrder(model);
             return ResponseEntity.created(uri).build();
@@ -132,7 +132,7 @@ public class TravelerController {
     public ResponseEntity<?> payOrder(@PathVariable(value = "email") String email, @RequestBody String carrierId) {
         var account = bankAccountService.getBankAccountByEmail(email);
         var coModel = carrierOrderService.getCarrierOrderByEmailAndCarrierId(email, carrierId);
-        var cModel = carrierRepository.getCarrierById(carrierId);
+        var cModel = carrierService.getCarrierById(carrierId);
         var uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(coModel.getId()).toUri();
 
         // ZAMIAST 10ZL BEDZIE KONKRETNA KWOTA JAK DODAM POLE W CARRIER O CENIE
