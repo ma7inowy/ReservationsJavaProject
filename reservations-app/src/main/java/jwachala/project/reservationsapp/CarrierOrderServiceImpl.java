@@ -30,7 +30,10 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
     //spring
     @Autowired
     public CarrierOrderServiceImpl(CarrierRepository carrierRepository, BankAccountService bankAccountService) {
-        this(new ArrayList<>(), carrierRepository, bankAccountService);
+//        this(new ArrayList<>(), carrierRepository, bankAccountService);
+        this.carrierOrderList = new ArrayList<>();
+        this.carrierRepository = carrierRepository;
+        this.bankAccountService = bankAccountService;
 
     }
 

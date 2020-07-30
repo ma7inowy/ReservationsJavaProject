@@ -186,6 +186,11 @@ public class TravelerController {
         }
     }
 
+//    @GetMapping("orders")
+//    public Iterable<CarrierOrderModel> allOrders(){
+//        return carrierOrderService.getCarrierOrderListIterable();
+//    }
+
 
     // sprawdzenie czy dany przewoz jest odwolany czy zaakceptowany
 }

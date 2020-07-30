@@ -21,6 +21,12 @@ public class CarrierRepositoryImpl implements CarrierRepository {
     @Autowired
     BankAccountService bankAccountService;
 
+    public CarrierRepositoryImpl(List<CarrierModel> carrierList, CarrierOrderService carrierOrderService, BankAccountService bankAccountService) {
+        this.carrierList = carrierList;
+        this.carrierOrderService = carrierOrderService;
+        this.bankAccountService = bankAccountService;
+    }
+
     public CarrierRepositoryImpl() {
         this.carrierList = new ArrayList<>();
         carrierList.add(new CarrierModel("City1", "destCity1", LocalDate.now().plusDays(8), "Company0",10));
