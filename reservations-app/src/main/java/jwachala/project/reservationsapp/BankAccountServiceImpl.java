@@ -45,6 +45,7 @@ public class BankAccountServiceImpl implements BankAccountService {
         BankAccountModel ba = getBankAccountByEmail(email);
         var actualState = ba.getAccountBalance();
         ba.depositMoney(money);
+//        ba.setAccountBalance(ba.getAccountBalance()+money);
         return ba.getAccountBalance() == (actualState + money);
     }
 

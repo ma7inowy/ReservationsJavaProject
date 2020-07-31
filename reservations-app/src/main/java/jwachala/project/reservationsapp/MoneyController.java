@@ -14,10 +14,12 @@ import java.util.List;
 public class MoneyController {
 
     private BankAccountService bankAccountService;
+    private ResourceLocationBuilder resourceLocationBuilder;
 
     @Autowired
-    public MoneyController(BankAccountService bankAccountService) {
+    public MoneyController(BankAccountService bankAccountService, ResourceLocationBuilder resourceLocationBuilder) {
         this.bankAccountService = bankAccountService;
+        this.resourceLocationBuilder = resourceLocationBuilder;
     }
 
     @GetMapping("/accounts")
@@ -52,12 +54,12 @@ public class MoneyController {
     @PostMapping("/account/{email}/accountBalance/deposit")
     public ResponseEntity<?> addMoneyToAccount(@PathVariable(value = "email") String email,
                                                @RequestBody int money) {
-        var uri = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
-
+//        var uri = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
+        var  uri = resourceLocationBuilder.build(email);
         if (bankAccountService.addMoneyToAccount(email, money)) {
             return ResponseEntity.created(uri).build();
         }
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Sorry, operation rejected");
+        else return ResponseEntity.status(HttpStatus.ACCEPTED).body("Sorry, operation rejected");
     }
 
 
@@ -65,9 +67,7 @@ public class MoneyController {
     @PostMapping("/account")
     public ResponseEntity<?> createAccount(@RequestBody String email) {
         bankAccountService.addBankAccount(new BankAccountModel(email));
-
-        var uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{email}").buildAndExpand(email).toUri();
-
+        var uri = resourceLocationBuilder.build(email);
         return ResponseEntity.created(uri).build();
     }
 }
