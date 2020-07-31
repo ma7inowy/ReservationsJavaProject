@@ -116,7 +116,7 @@ public class CarrierServiceImpl implements CarrierService {
 
     @Override
     public CarrierOrderService getCarrierOrderService() {
-        return null;
+        return carrierOrderService;
     }
 
     @Override

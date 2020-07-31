@@ -100,7 +100,7 @@ public class CarrierServiceImplTests {
     }
 
     @Test
-    public void shouldDeleteCarrier() {
+    public void shouldNotDeleteCarrier() {
         var carrierOrderServiceProvider = Mockito.mock(CarrierOrderService.class);
         var bankServiceProvider = Mockito.mock(BankAccountService.class);
 
@@ -108,10 +108,73 @@ public class CarrierServiceImplTests {
         var cM = new CarrierModel();
         cM.setId("123");
         given.add(cM);
+
+        var coList = new ArrayList<CarrierOrderModel>();
+        var coM = new CarrierOrderModel();
+        coM.setCarrierId("123");
+        coList.add(coM);
+        Mockito.when(carrierOrderServiceProvider.getCarrierOrdersByCarrierId("123")).thenReturn(null);
         var sut = new CarrierServiceImpl(given, carrierOrderServiceProvider, bankServiceProvider);
-        var actual = sut.getCarrierById("1234");
-        Assertions.assertThat(actual).isEqualTo(null);
+        var actual = sut.deleteCarrier("123");
+        Assertions.assertThat(actual).isEqualTo(false);
     }
+
+    @Test
+    public void shouldDeleteCarrierWhenIsPaid() {
+        var carrierOrderServiceProvider = Mockito.mock(CarrierOrderService.class);
+        var bankServiceProvider = Mockito.mock(BankAccountService.class);
+        // carrier
+        var given = new ArrayList<CarrierModel>();
+        var cM = new CarrierModel();
+        cM.setId("123");
+        cM.setPrice(10);
+        given.add(cM);
+        //carrierorder
+        var coList = new ArrayList<CarrierOrderModel>();
+        var coM = new CarrierOrderModel();
+        coM.setCarrierId("123");
+        coM.setEmail("email");
+        coM.setPaid(true);
+        coList.add(coM);
+        //bank
+        var baM = new BankAccountModel("email");
+
+        Mockito.when(bankServiceProvider.getBankAccountByEmail("email")).thenReturn(baM);
+        Mockito.when(carrierOrderServiceProvider.getCarrierOrdersByCarrierId("123")).thenReturn(coList);
+        var sut = new CarrierServiceImpl(given, carrierOrderServiceProvider, bankServiceProvider);
+        var actual = sut.deleteCarrier("123");
+        Assertions.assertThat(given).isEmpty();
+        Assertions.assertThat(actual).isEqualTo(true);
+    }
+
+    @Test
+    public void shouldGetAllCarriersIterable(){
+        var given = new ArrayList<CarrierModel>();
+        var cM = new CarrierModel();
+        cM.setId("123");
+        cM.setPrice(10);
+        given.add(cM);
+        var sut = new CarrierServiceImpl(given, null, null);
+        var actual = sut.getAllCarriers();
+        var expected = cM;
+        Assertions.assertThat(actual).containsExactly(expected);
+    }
+
+    @Test
+    public void shouldAddCarrier(){
+        var given = new ArrayList<CarrierModel>();
+        var cM = new CarrierModel();
+        cM.setId("123");
+        cM.setPrice(10);
+        var sut = new CarrierServiceImpl(given, null, null);
+        sut.addCarrier(cM);
+        var expected = cM;
+        Assertions.assertThat(given).containsExactly(expected);
+    }
+
+
+
+
 
 
 
