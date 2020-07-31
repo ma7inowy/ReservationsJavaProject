@@ -39,4 +39,16 @@ public class BankAccountServiceImpl implements BankAccountService {
     public void addBankAccount(BankAccountModel bankAccountModel) {
         bankAccountList.add(bankAccountModel);
     }
+
+    @Override
+    public boolean addMoneyToAccount(String email, double money) {
+        BankAccountModel ba = getBankAccountByEmail(email);
+        var actualState = ba.getAccountBalance();
+        ba.depositMoney(money);
+        return ba.getAccountBalance() == (actualState + money);
+    }
+
+
 }
+
+

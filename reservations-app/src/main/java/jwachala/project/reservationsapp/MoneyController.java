@@ -1,10 +1,12 @@
 package jwachala.project.reservationsapp;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -19,13 +21,25 @@ public class MoneyController {
     }
 
     @GetMapping("/accounts")
-    public Iterable<BankAccountModel> getAllAccounts() {
-        return bankAccountService.getBankAccountList();
+    public Iterable<BankAccountDTO> getAllAccounts() {
+        var dtoList = new ArrayList<BankAccountDTO>();
+        for (var baM : bankAccountService.getBankAccountList()) {
+            var baDTO = new BankAccountDTO();
+            baDTO.setAccountBalance(baM.getAccountBalance());
+            baDTO.setEmail(baM.getEmail());
+            dtoList.add(baDTO);
+        }
+        return dtoList;
     }
 
     @GetMapping("/account/{email}")
-    public BankAccountModel getAccountByEmail(@PathVariable(value = "email") String email){
-        return bankAccountService.getBankAccountByEmail(email);
+    public BankAccountDTO getAccountByEmail(@PathVariable(value = "email") String email) {
+        var baM = bankAccountService.getBankAccountByEmail(email);
+        var baDTO = new BankAccountDTO();
+        baDTO.setAccountBalance(baM.getAccountBalance());
+        baDTO.setEmail(baM.getEmail());
+
+        return baDTO;
     }
 
     //SPRAWDZ SALDO KONTA
@@ -38,18 +52,18 @@ public class MoneyController {
     @PostMapping("/account/{email}/accountBalance/deposit")
     public ResponseEntity<?> addMoneyToAccount(@PathVariable(value = "email") String email,
                                                @RequestBody int money) {
-        BankAccountModel ba = bankAccountService.getBankAccountByEmail(email);
-        ba.depositMoney(money);
-
-        // uri do poprawy
         var uri = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
-        return ResponseEntity.created(uri).build();
+
+        if (bankAccountService.addMoneyToAccount(email, money)) {
+            return ResponseEntity.created(uri).build();
+        }
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Sorry, operation rejected");
     }
 
 
     //ZALOZ KONTO
     @PostMapping("/account")
-    public ResponseEntity<?> createAccount(@RequestBody String email){
+    public ResponseEntity<?> createAccount(@RequestBody String email) {
         bankAccountService.addBankAccount(new BankAccountModel(email));
 
         var uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{email}").buildAndExpand(email).toUri();
