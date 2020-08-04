@@ -104,7 +104,8 @@ public class CarrierServiceImpl implements CarrierService {
             // jesli oplacone to oddaj gotowke 100%
             if (coModel.isPaid()) {
                 BankAccountModel baModel = bankAccountService.getBankAccountByEmail(coModel.getEmail());
-                baModel.depositMoney(getCarrierById(id).getPrice());
+//                baModel.depositMoney(getCarrierById(id).getPrice());
+                bankAccountService.addMoneyToAccount(baModel.getEmail(),getCarrierById(id).getPrice());
             }
         }
         carrierList.remove(getCarrierById(id));

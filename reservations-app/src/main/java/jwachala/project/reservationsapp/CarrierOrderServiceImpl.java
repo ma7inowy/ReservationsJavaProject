@@ -176,14 +176,16 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
             } else {
                 //jesli zostalo wiecej niz 7 dni do wyjazdu zwroc 90%
                 if (LocalDate.now().isBefore(carrierService.getCarrierById(coM.getCarrierId()).getDate().minusDays(7))) {
-                    baM.depositMoney(carrierCost * 0.9);
-                    carrierOrderList.remove(coM);
-                    return true;
+                    if (bankAccountService.addMoneyToAccount(baM.getEmail(), carrierCost * 0.9)) {
+                        carrierOrderList.remove(coM);
+                        return true;
+                    }
                 } else {
                     //jesli zostalo mniej niz 7 dni do wyjazdu zwroc 50%
-                    baM.depositMoney(carrierCost * 0.5);
-                    carrierOrderList.remove(coM);
-                    return true;
+                    if (bankAccountService.addMoneyToAccount(baM.getEmail(), carrierCost * 0.5)) {
+                        carrierOrderList.remove(coM);
+                        return true;
+                    }
                 }
             }
         }

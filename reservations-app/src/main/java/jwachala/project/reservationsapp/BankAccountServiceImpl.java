@@ -10,9 +10,16 @@ import java.util.List;
 @Component
 public class BankAccountServiceImpl implements BankAccountService {
 
-    private List<BankAccountModel> bankAccountList = new ArrayList<>();
+    private List<BankAccountModel> bankAccountList;
+
+    //testy
+    public BankAccountServiceImpl(List<BankAccountModel> bankAccountList) {
+        this.bankAccountList = bankAccountList;
+    }
+
 
     public BankAccountServiceImpl() {
+        bankAccountList = new ArrayList<>();
         bankAccountList.add(new BankAccountModel("jankowalski1@wp.pl"));
         bankAccountList.add(new BankAccountModel("jankowalski2@wp.pl"));
         bankAccountList.add(new BankAccountModel("jankowalski3@wp.pl"));
@@ -26,10 +33,11 @@ public class BankAccountServiceImpl implements BankAccountService {
         bankAccountList.add(new BankAccountModel("jankowalski11@wp.pl"));
     }
 
+
     @Override
-    public BankAccountModel getBankAccountByEmail(String email){
-        for(BankAccountModel bA : bankAccountList){
-            if(bA.getEmail().equals(email))
+    public BankAccountModel getBankAccountByEmail(String email) {
+        for (BankAccountModel bA : bankAccountList) {
+            if (bA.getEmail().equals(email))
                 return bA;
         }
         return null;
@@ -44,8 +52,7 @@ public class BankAccountServiceImpl implements BankAccountService {
     public boolean addMoneyToAccount(String email, double money) {
         BankAccountModel ba = getBankAccountByEmail(email);
         var actualState = ba.getAccountBalance();
-        ba.depositMoney(money);
-//        ba.setAccountBalance(ba.getAccountBalance()+money);
+        ba.setAccountBalance(ba.getAccountBalance() + money);
         return ba.getAccountBalance() == (actualState + money);
     }
 
