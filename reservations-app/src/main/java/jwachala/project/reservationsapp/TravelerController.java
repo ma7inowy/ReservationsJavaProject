@@ -18,12 +18,14 @@ public class TravelerController {
     private final CarrierService carrierService;
     private final CarrierOrderService carrierOrderService;
     private final BankAccountService bankAccountService;
+    private final ResourceLocationBuilder resourceLocationBuilder;
 
     @Autowired
-    public TravelerController(CarrierService carrierService, CarrierOrderService carrierOrderService, BankAccountService bankAccountService) {
+    public TravelerController(CarrierService carrierService, CarrierOrderService carrierOrderService, BankAccountService bankAccountService, ResourceLocationBuilder resourceLocationBuilder) {
         this.carrierService = carrierService;
         this.carrierOrderService = carrierOrderService;
         this.bankAccountService = bankAccountService;
+        this.resourceLocationBuilder = resourceLocationBuilder;
     }
 
     //PLAN PODROZNY - WSZYSTKIE OFERTY PRZEJAZDOW
@@ -108,18 +110,17 @@ public class TravelerController {
     }
 
     //UTWORZENIE ZAMOWIENIA PRZEJAZDU ( BILET )
+    // NIETESTOWALNE !!! BO NIE DOSTANE SIE DO MODEL ID
     @PostMapping("order")
     public ResponseEntity<?> createOrder(@RequestBody CarrierOrderDTO dto) {
         var model = new CarrierOrderModel();
         model.setEmail(dto.getEmail());
         model.setOrderDate(dto.getOrderDate());
         model.setCarrierId(dto.getCarrierId());
-        var uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(model.getId()).toUri();
+        var uri = resourceLocationBuilder.build(model.getId());
 
         // dodanie pasażera na listę chętnych do skorzystania z usługi przewozu jesli sa jeszcze wolne miejsca
-        if (carrierService.availabilityMinusOne(dto.getCarrierId())) {
-//            carrierOrderService.getCarrierOrderList().add(model);
-            carrierOrderService.addOrder(model);
+        if (carrierOrderService.addOrder(model)) {
             return ResponseEntity.created(uri).build();
         } else {
             return ResponseEntity.status(HttpStatus.ACCEPTED).body("Sorry, No availability!");
@@ -130,15 +131,11 @@ public class TravelerController {
     //OPLAC ZAREZERWOWANY BILET
     @PostMapping("order/payment/email/{email}")
     public ResponseEntity<?> payOrder(@PathVariable(value = "email") String email, @RequestBody String carrierId) {
-        var account = bankAccountService.getBankAccountByEmail(email);
         var coModel = carrierOrderService.getCarrierOrderByEmailAndCarrierId(email, carrierId);
-        var cModel = carrierService.getCarrierById(carrierId);
-        var uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(coModel.getId()).toUri();
-
+//        var uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(coModel.getId()).toUri();
+        var uri = resourceLocationBuilder.build(coModel.getId());
         // ZAMIAST 10ZL BEDZIE KONKRETNA KWOTA JAK DODAM POLE W CARRIER O CENIE
-        if (account.getAccountBalance() >= cModel.getPrice()) {
-            carrierOrderService.makePayment(coModel.getId());
-            account.setAccountBalance(account.getAccountBalance() - cModel.getPrice());
+        if (carrierOrderService.payForOrder(email,carrierId)) {
             return ResponseEntity.created(uri).build();
         } else return ResponseEntity.status(HttpStatus.ACCEPTED).body("Sorry, Too less money on your bank account!");
     }

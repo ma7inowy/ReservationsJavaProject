@@ -18,16 +18,6 @@ public interface CarrierService {
 
     List<CarrierModel> getCarrierList();
 
-    CarrierOrderService getCarrierOrderService();
-
-//    BankAccountService getBankAccountServiceImpl();
-
-//    void setCarrierList(List<CarrierModel> carrierList);
-//
-//    void setCarrierOrderService(CarrierOrderService carrierOrderService);
-//
-//    void setBankAccountRepository(BankAccountRepository bankAccountRepository);
-
     Iterable<CarrierModel> getAllCarriers();
 
     void addCarrier(CarrierModel carrierModel);

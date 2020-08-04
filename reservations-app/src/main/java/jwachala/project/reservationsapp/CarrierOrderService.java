@@ -26,11 +26,13 @@ public interface CarrierOrderService {
 
     void removeAllOrders(List<CarrierOrderModel> coList);
 
-    void addOrder(CarrierOrderModel model);
+    boolean addOrder(CarrierOrderModel model);
 
     Iterable<CarrierOrderModel> unpaidOrders(String email);
 
     Iterable<CarrierOrderModel> getCarrierOrderListIterable();
 
     void removeCarrierOrder(CarrierOrderModel i);
+
+    boolean payForOrder(String email,String carrierId);
 }

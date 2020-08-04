@@ -3,9 +3,13 @@ package jwachala.project.reservationsapp;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.net.URI;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class TravelerControllerTests {
     @Test
@@ -18,7 +22,7 @@ public class TravelerControllerTests {
         given.add(model);
         Mockito.when(carrierProvider.getAllCarriers()).thenReturn(given); // why ok
 
-        var sut = new TravelerController(carrierProvider, null, null);
+        var sut = new TravelerController(carrierProvider, null, null, null);
         var actual = sut.getCarriers();
 
         var expected = new CarrierDTO();
@@ -28,7 +32,7 @@ public class TravelerControllerTests {
     }
 
     @Test
-    public void shouldGetAllCarriersByCity(){
+    public void shouldGetAllCarriersByCity() {
         var carrierProvider = Mockito.mock(CarrierService.class);
         var given = new ArrayList<CarrierModel>();
         var model = new CarrierModel();
@@ -38,7 +42,7 @@ public class TravelerControllerTests {
 //        given.add(model2);
         Mockito.when(carrierProvider.getCarriersbyStartCity("City1")).thenReturn(given); // ustalam co ma sie stac?
 
-        var sut = new TravelerController(carrierProvider, null, null);
+        var sut = new TravelerController(carrierProvider, null, null, null);
         var actual = sut.getCarriersByCity("City1");
         var expected = new CarrierDTO();
         expected.setId(model.getId());
@@ -47,17 +51,17 @@ public class TravelerControllerTests {
     }
 
     @Test
-    public void shouldGetAllCarriersByStartAndDestinationCity(){
+    public void shouldGetAllCarriersByStartAndDestinationCity() {
         var carrierProvider = Mockito.mock(CarrierService.class);
         var given = new ArrayList<CarrierModel>();
         var model = new CarrierModel();
         model.setStartCity("City1");
         model.setDestinationCity("City2");
         given.add(model);
-        Mockito.when(carrierProvider.getCarriersbyStartCityAndDestination("City1","City2")).thenReturn(given); // ustalam co ma sie stac?
+        Mockito.when(carrierProvider.getCarriersbyStartCityAndDestination("City1", "City2")).thenReturn(given); // ustalam co ma sie stac?
 
-        var sut = new TravelerController(carrierProvider, null, null);
-        var actual = sut.getCarriersbyStartCityAndDestination("City1","City2");
+        var sut = new TravelerController(carrierProvider, null, null, null);
+        var actual = sut.getCarriersbyStartCityAndDestination("City1", "City2");
         var expected = new CarrierDTO();
         expected.setId(model.getId());
         expected.setStartCity("City1");
@@ -66,7 +70,7 @@ public class TravelerControllerTests {
     }
 
     @Test
-    public void shouldGetAllCarriersByCompanyName(){
+    public void shouldGetAllCarriersByCompanyName() {
         var carrierProvider = Mockito.mock(CarrierService.class);
         var given = new ArrayList<CarrierModel>();
         var model = new CarrierModel();
@@ -74,7 +78,7 @@ public class TravelerControllerTests {
         given.add(model);
         Mockito.when(carrierProvider.getCarriersbyCompanyName("Company1")).thenReturn(given); // ustalam co ma sie stac?
 
-        var sut = new TravelerController(carrierProvider, null, null);
+        var sut = new TravelerController(carrierProvider, null, null, null);
         var actual = sut.getCarriersByCompanyName("Company1");
         var expected = new CarrierDTO();
         expected.setId(model.getId());
@@ -82,9 +86,11 @@ public class TravelerControllerTests {
         Assertions.assertThat(actual).containsExactly(expected);
     }
 
-    @Test
-    public void shouldCreateOrder(){
-//        var carrierProvider = Mockito.mock(CarrierRepository.class);
+    // NIETESTOWALNE createOrder() bo nie sprawdze id modelu w metodzie createOrder
+//    @Test
+//    public void shouldCreateOrder(){
+//        var carrierProvider = Mockito.mock(CarrierService.class);
+//        var carrierOrderProvider = Mockito.mock(CarrierOrderService.class);
 //
 //        var dto = new CarrierOrderDTO();
 //        dto.setCarrierId("123");
@@ -94,32 +100,73 @@ public class TravelerControllerTests {
 //        model.setEmail(dto.getEmail());
 //        model.setOrderDate(dto.getOrderDate());
 //        model.setCarrierId(dto.getCarrierId());
+//        model.setId("");
 //
-//        Mockito.when(carrierProvider.availabilityMinusOne("1")).thenReturn(true); // ustalam co ma sie stac?
-//        var sut = new TravelerController(carrierProvider, null, null);
+//        var uri = new AtomicReference<URI>();
+//        ResourceLocationBuilder resourceProvider = id -> {
+//            uri.set(URI.create(id));
+//            return uri.get();
+//        };
+//
+//        Mockito.when(carrierOrderProvider.addOrder(model)).thenReturn(true);
+//        var sut = new TravelerController(carrierProvider, carrierOrderProvider, null,resourceProvider);
 //        var actual = sut.createOrder(dto);
+//        var expected = ResponseEntity.created(uri.get()).build();
+//        Assertions.assertThat(actual).isEqualTo(expected);
+//    }
 
+    @Test
+    public void shouldPayOrder() {
+        var carrierOrderProvider = Mockito.mock(CarrierOrderService.class);
+        //CarrierOrderModel
+        CarrierOrderModel coM = new CarrierOrderModel();
+        coM.setId("123");
+        coM.setEmail("email");
+        coM.setCarrierId("1234");
+        coM.setOrderDate(LocalDate.now());
+        //resourceLocationBuilder
+        var uri = new AtomicReference<URI>();
+        ResourceLocationBuilder resourceProvider = id -> {
+            uri.set(URI.create(id));
+            return uri.get();
+        };
 
-
-
-//        var given = true;
-//        var model2 = new CarrierModel();
-//        var carrierProvider = Mockito.mock(CarrierRepository.class);
-//        Mockito.when(carrierProvider.availabilityMinusOne("1")).thenReturn(true); // ustalam co ma sie stac?
-
-
-//        Assertions.assertThat(dto.getEmail()).isEqualTo(model.getEmail());
-        //NAJPIERW IFY USUNAC
+        Mockito.when(carrierOrderProvider.getCarrierOrderByEmailAndCarrierId("email", "1234")).thenReturn(coM);
+        Mockito.when(carrierOrderProvider.payForOrder("email","1234")).thenReturn(true);
+        var sut = new TravelerController(null, carrierOrderProvider, null,resourceProvider);
+        var actual = sut.payOrder("email","1234");
+        var expected = ResponseEntity.created(uri.get()).build();
+        Assertions.assertThat(actual).isEqualTo(expected);
 
     }
 
     @Test
-    public void shouldPayOrder(){
+    public void shouldNotPayOrder() {
+        var carrierOrderProvider = Mockito.mock(CarrierOrderService.class);
+        //CarrierOrderModel
+        CarrierOrderModel coM = new CarrierOrderModel();
+        coM.setId("123");
+        coM.setEmail("email");
+        coM.setCarrierId("1234");
+        coM.setOrderDate(LocalDate.now());
+        //resourceLocationBuilder
+        var uri = new AtomicReference<URI>();
+        ResourceLocationBuilder resourceProvider = id -> {
+            uri.set(URI.create(id));
+            return uri.get();
+        };
+
+        Mockito.when(carrierOrderProvider.getCarrierOrderByEmailAndCarrierId("email", "1234")).thenReturn(coM);
+        Mockito.when(carrierOrderProvider.payForOrder("email","1234")).thenReturn(false);
+        var sut = new TravelerController(null, carrierOrderProvider, null,resourceProvider);
+        var actual = sut.payOrder("email","1234");
+        var expected = ResponseEntity.status(HttpStatus.ACCEPTED).body("Sorry, Too less money on your bank account!");
+        Assertions.assertThat(actual).isEqualTo(expected);
 
     }
 
     @Test
-    public void shouldGetNotPayedOrders(){
+    public void shouldGetNotPayedOrders() {
         var carrierProvider = Mockito.mock(CarrierOrderService.class);
         var given = new ArrayList<CarrierOrderModel>();
         var model = new CarrierOrderModel();
@@ -127,7 +174,7 @@ public class TravelerControllerTests {
         given.add(model);
         Mockito.when(carrierProvider.unpaidOrders("jakub@wp.pl")).thenReturn(given); // ustalam co ma sie stac?
 
-        var sut = new TravelerController(null, carrierProvider, null);
+        var sut = new TravelerController(null, carrierProvider, null, null);
         var actual = sut.getNotPayedOrders("jakub@wp.pl");
         var expected = new CarrierOrderTravelerDTO();
         expected.setEmail(model.getEmail());
@@ -135,7 +182,7 @@ public class TravelerControllerTests {
     }
 
     @Test
-    public void shouldGetCarrierOrdersByCarrierIdSorted(){
+    public void shouldGetCarrierOrdersByCarrierIdSorted() {
         // CZY ABY NA PEWNO OK?
         var carrierProvider = Mockito.mock(CarrierOrderService.class);
         var given = new ArrayList<CarrierOrderModel>();
@@ -143,7 +190,7 @@ public class TravelerControllerTests {
         given.add(model);
         Mockito.when(carrierProvider.getCarrierOrdersByCarrierIdSorted(model.getCarrierId())).thenReturn(given); // ustalam co ma sie stac?
 
-        var sut = new TravelerController(null, carrierProvider, null);
+        var sut = new TravelerController(null, carrierProvider, null, null);
         var actual = sut.getCarrierOrdersByCarrierIdSorted(model.getCarrierId());
         var expected = new CarrierOrderTravelerDTO();
         expected.setCarrierId(model.getCarrierId());
@@ -151,10 +198,10 @@ public class TravelerControllerTests {
     }
 
     @Test
-    public void shouldDeleteOrder(){
+    public void shouldDeleteOrder() {
         var carrierProvider = Mockito.mock(CarrierOrderService.class);
-        Mockito.when(carrierProvider.deleteOrder("email","carrierId")).thenReturn(true); // ustalam co ma sie stac?
-        var sut = new TravelerController(null, carrierProvider, null);
+        Mockito.when(carrierProvider.deleteOrder("email", "carrierId")).thenReturn(true); // ustalam co ma sie stac?
+        var sut = new TravelerController(null, carrierProvider, null, null);
         var actual = sut.deleteOrder("email", "carrierId");
         var expected = ResponseEntity.noContent().build();
         Assertions.assertThat(actual).isEqualTo(expected);

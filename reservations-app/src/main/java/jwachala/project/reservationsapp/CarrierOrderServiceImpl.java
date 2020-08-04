@@ -199,8 +199,12 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
     }
 
     @Override
-    public void addOrder(CarrierOrderModel model) {
-        carrierOrderList.add(model);
+    public boolean addOrder(CarrierOrderModel model) {
+        if (carrierService.availabilityMinusOne(model.getCarrierId())) {
+            carrierOrderList.add(model);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -224,4 +228,19 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
     public void removeCarrierOrder(CarrierOrderModel i) {
         carrierOrderList.remove(i);
     }
+
+    @Override
+    public boolean payForOrder(String email, String carrierId) {
+        var account = bankAccountService.getBankAccountByEmail(email);
+        var coModel = getCarrierOrderByEmailAndCarrierId(email, carrierId);
+        var cModel = carrierService.getCarrierById(carrierId);
+
+        if (account.getAccountBalance() >= cModel.getPrice()) {
+            makePayment(coModel.getId());
+            account.setAccountBalance(account.getAccountBalance() - cModel.getPrice());
+            return true;
+        } else return false;
+    }
+
+
 }
