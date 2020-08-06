@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class BankAccountServiceImplTests {
     @Test
-    public void shouldGetBankAccountByEmail(){
+    public void shouldGetBankAccountByEmail() {
         var given = new ArrayList<BankAccountModel>();
         var bAM = new BankAccountModel("email");
         given.add(bAM);
@@ -19,7 +19,7 @@ public class BankAccountServiceImplTests {
     }
 
     @Test
-    public void shouldNotGetBankAccountByEmail(){
+    public void shouldNotGetBankAccountByEmail() {
         var given = new ArrayList<BankAccountModel>();
         var bAM = new BankAccountModel("email");
         given.add(bAM);
@@ -29,7 +29,7 @@ public class BankAccountServiceImplTests {
     }
 
     @Test
-    public void shouldAddBankAccount(){
+    public void shouldAddBankAccount() {
         var given = new ArrayList<BankAccountModel>();
         var bAM = new BankAccountModel("email");
         var sut = new BankAccountServiceImpl(given);
@@ -38,20 +38,15 @@ public class BankAccountServiceImplTests {
     }
 
     @Test
-    public void shouldAddMoneyToBankAccount(){
+    public void shouldAddMoneyToBankAccount() {
         var given = new ArrayList<BankAccountModel>();
         var bAM = new BankAccountModel("email");
         given.add(bAM);
         var sut = new BankAccountServiceImpl(given);
-        var actual = sut.addMoneyToAccount("email",10);
+        var actual = sut.addMoneyToAccount("email", 10);
         var expected = true;
         Assertions.assertThat(bAM.getAccountBalance()).isEqualTo(10);
         Assertions.assertThat(actual).isEqualTo(expected);
     }
-
-
-
-
-
 
 }

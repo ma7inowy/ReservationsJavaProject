@@ -62,8 +62,8 @@ public class MoneyControllerTests {
             uri.set(URI.create(id));
             return uri.get();
         };
-        Mockito.when(bankService.addMoneyToAccount("email",10)).thenReturn(true);
-        var sut = new MoneyController(bankService,resourceProvider);
+        Mockito.when(bankService.addMoneyToAccount("email", 10)).thenReturn(true);
+        var sut = new MoneyController(bankService, resourceProvider);
         var actual = sut.addMoneyToAccount("email", 10);
         var expected = ResponseEntity.created(uri.get()).build();
         Assertions.assertThat(actual).isEqualTo(expected);
@@ -79,22 +79,22 @@ public class MoneyControllerTests {
             uri.set(URI.create(id));
             return uri.get();
         };
-        Mockito.when(bankService.addMoneyToAccount("email1",10)).thenReturn(false);
-        var sut = new MoneyController(bankService,resourceProvider);
+        Mockito.when(bankService.addMoneyToAccount("email1", 10)).thenReturn(false);
+        var sut = new MoneyController(bankService, resourceProvider);
         var actual = sut.addMoneyToAccount("email1", 10);
         var expected = ResponseEntity.status(HttpStatus.ACCEPTED).body("Sorry, operation rejected");
         Assertions.assertThat(actual).isEqualTo(expected);
     }
 
     @Test
-    public void shouldCreateAccount(){
+    public void shouldCreateAccount() {
         var bankService = Mockito.mock(BankAccountService.class);
         var uri = new AtomicReference<URI>();
         ResourceLocationBuilder resourceProvider = id -> {
             uri.set(URI.create(id));
             return uri.get();
         };
-        var sut = new MoneyController(bankService,resourceProvider);
+        var sut = new MoneyController(bankService, resourceProvider);
         var actual = sut.createAccount("email");
         var expected = ResponseEntity.created(uri.get()).build();
         Assertions.assertThat(actual).isEqualTo(expected);

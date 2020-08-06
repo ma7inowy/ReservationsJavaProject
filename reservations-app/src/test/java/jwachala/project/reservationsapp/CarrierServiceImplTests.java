@@ -1,10 +1,13 @@
 package jwachala.project.reservationsapp;
+
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+
 import org.junit.jupiter.api.Test;
 
 public class CarrierServiceImplTests {
@@ -29,7 +32,7 @@ public class CarrierServiceImplTests {
         cM.setDestinationCity("destinationcity1");
         given.add(cM);
         var sut = new CarrierServiceImpl(given, null, null);
-        var actual = sut.getCarriersbyStartCityAndDestination("startcity1","destinationcity1");
+        var actual = sut.getCarriersbyStartCityAndDestination("startcity1", "destinationcity1");
         var expected = cM;
 
         Assertions.assertThat(actual).containsExactly(expected);
@@ -119,6 +122,7 @@ public class CarrierServiceImplTests {
         Assertions.assertThat(actual).isEqualTo(false);
     }
 
+//    @DisplayName("Cokolwiek")
     @Test
     public void shouldDeleteCarrierWhenIsPaid() {
         var carrierOrderServiceProvider = Mockito.mock(CarrierOrderService.class);
@@ -141,6 +145,7 @@ public class CarrierServiceImplTests {
 
         Mockito.when(bankServiceProvider.getBankAccountByEmail("email")).thenReturn(baM);
         Mockito.when(carrierOrderServiceProvider.getCarrierOrdersByCarrierId("123")).thenReturn(coList);
+        Mockito.when(bankServiceProvider.addMoneyToAccount("email",10)).thenReturn(true);
         var sut = new CarrierServiceImpl(given, carrierOrderServiceProvider, bankServiceProvider);
         var actual = sut.deleteCarrier("123");
         Assertions.assertThat(given).isEmpty();
@@ -148,7 +153,7 @@ public class CarrierServiceImplTests {
     }
 
     @Test
-    public void shouldGetAllCarriersIterable(){
+    public void shouldGetAllCarriersIterable() {
         var given = new ArrayList<CarrierModel>();
         var cM = new CarrierModel();
         cM.setId("123");
@@ -161,7 +166,7 @@ public class CarrierServiceImplTests {
     }
 
     @Test
-    public void shouldAddCarrier(){
+    public void shouldAddCarrier() {
         var given = new ArrayList<CarrierModel>();
         var cM = new CarrierModel();
         cM.setId("123");
@@ -171,19 +176,4 @@ public class CarrierServiceImplTests {
         var expected = cM;
         Assertions.assertThat(given).containsExactly(expected);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

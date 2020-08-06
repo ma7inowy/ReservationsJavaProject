@@ -20,7 +20,7 @@ public class TravelerControllerTests {
         var model = new CarrierModel();
         model.setCompanyName("my company name");
         given.add(model);
-        Mockito.when(carrierProvider.getAllCarriers()).thenReturn(given); // why ok
+        Mockito.when(carrierProvider.getAllCarriers()).thenReturn(given);
 
         var sut = new TravelerController(carrierProvider, null, null, null);
         var actual = sut.getCarriers();
@@ -36,11 +36,9 @@ public class TravelerControllerTests {
         var carrierProvider = Mockito.mock(CarrierService.class);
         var given = new ArrayList<CarrierModel>();
         var model = new CarrierModel();
-//        var model2 = new CarrierModel();
         model.setStartCity("City1");
         given.add(model);
-//        given.add(model2);
-        Mockito.when(carrierProvider.getCarriersbyStartCity("City1")).thenReturn(given); // ustalam co ma sie stac?
+        Mockito.when(carrierProvider.getCarriersbyStartCity("City1")).thenReturn(given);
 
         var sut = new TravelerController(carrierProvider, null, null, null);
         var actual = sut.getCarriersByCity("City1");
@@ -58,7 +56,7 @@ public class TravelerControllerTests {
         model.setStartCity("City1");
         model.setDestinationCity("City2");
         given.add(model);
-        Mockito.when(carrierProvider.getCarriersbyStartCityAndDestination("City1", "City2")).thenReturn(given); // ustalam co ma sie stac?
+        Mockito.when(carrierProvider.getCarriersbyStartCityAndDestination("City1", "City2")).thenReturn(given);
 
         var sut = new TravelerController(carrierProvider, null, null, null);
         var actual = sut.getCarriersbyStartCityAndDestination("City1", "City2");
@@ -76,7 +74,7 @@ public class TravelerControllerTests {
         var model = new CarrierModel();
         model.setCompanyName("Company1");
         given.add(model);
-        Mockito.when(carrierProvider.getCarriersbyCompanyName("Company1")).thenReturn(given); // ustalam co ma sie stac?
+        Mockito.when(carrierProvider.getCarriersbyCompanyName("Company1")).thenReturn(given);
 
         var sut = new TravelerController(carrierProvider, null, null, null);
         var actual = sut.getCarriersByCompanyName("Company1");
@@ -132,9 +130,9 @@ public class TravelerControllerTests {
         };
 
         Mockito.when(carrierOrderProvider.getCarrierOrderByEmailAndCarrierId("email", "1234")).thenReturn(coM);
-        Mockito.when(carrierOrderProvider.payForOrder("email","1234")).thenReturn(true);
-        var sut = new TravelerController(null, carrierOrderProvider, null,resourceProvider);
-        var actual = sut.payOrder("email","1234");
+        Mockito.when(carrierOrderProvider.payForOrder("email", "1234")).thenReturn(true);
+        var sut = new TravelerController(null, carrierOrderProvider, null, resourceProvider);
+        var actual = sut.payOrder("email", "1234");
         var expected = ResponseEntity.created(uri.get()).build();
         Assertions.assertThat(actual).isEqualTo(expected);
 
@@ -157,9 +155,9 @@ public class TravelerControllerTests {
         };
 
         Mockito.when(carrierOrderProvider.getCarrierOrderByEmailAndCarrierId("email", "1234")).thenReturn(coM);
-        Mockito.when(carrierOrderProvider.payForOrder("email","1234")).thenReturn(false);
-        var sut = new TravelerController(null, carrierOrderProvider, null,resourceProvider);
-        var actual = sut.payOrder("email","1234");
+        Mockito.when(carrierOrderProvider.payForOrder("email", "1234")).thenReturn(false);
+        var sut = new TravelerController(null, carrierOrderProvider, null, resourceProvider);
+        var actual = sut.payOrder("email", "1234");
         var expected = ResponseEntity.status(HttpStatus.ACCEPTED).body("Sorry, Too less money on your bank account!");
         Assertions.assertThat(actual).isEqualTo(expected);
 
@@ -172,7 +170,7 @@ public class TravelerControllerTests {
         var model = new CarrierOrderModel();
         model.setEmail("jakub@wp.pl");
         given.add(model);
-        Mockito.when(carrierProvider.unpaidOrders("jakub@wp.pl")).thenReturn(given); // ustalam co ma sie stac?
+        Mockito.when(carrierProvider.unpaidOrders("jakub@wp.pl")).thenReturn(given);
 
         var sut = new TravelerController(null, carrierProvider, null, null);
         var actual = sut.getNotPayedOrders("jakub@wp.pl");
@@ -183,12 +181,11 @@ public class TravelerControllerTests {
 
     @Test
     public void shouldGetCarrierOrdersByCarrierIdSorted() {
-        // CZY ABY NA PEWNO OK?
         var carrierProvider = Mockito.mock(CarrierOrderService.class);
         var given = new ArrayList<CarrierOrderModel>();
         var model = new CarrierOrderModel();
         given.add(model);
-        Mockito.when(carrierProvider.getCarrierOrdersByCarrierIdSorted(model.getCarrierId())).thenReturn(given); // ustalam co ma sie stac?
+        Mockito.when(carrierProvider.getCarrierOrdersByCarrierIdSorted(model.getCarrierId())).thenReturn(given);
 
         var sut = new TravelerController(null, carrierProvider, null, null);
         var actual = sut.getCarrierOrdersByCarrierIdSorted(model.getCarrierId());
@@ -200,14 +197,12 @@ public class TravelerControllerTests {
     @Test
     public void shouldDeleteOrder() {
         var carrierProvider = Mockito.mock(CarrierOrderService.class);
-        Mockito.when(carrierProvider.deleteOrder("email", "carrierId")).thenReturn(true); // ustalam co ma sie stac?
+        Mockito.when(carrierProvider.deleteOrder("email", "carrierId")).thenReturn(true);
         var sut = new TravelerController(null, carrierProvider, null, null);
         var actual = sut.deleteOrder("email", "carrierId");
         var expected = ResponseEntity.noContent().build();
         Assertions.assertThat(actual).isEqualTo(expected);
     }
-
-
 }
 
 
