@@ -30,7 +30,7 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
     //spring
     @Autowired
     public CarrierOrderServiceImpl(CarrierService carrierService, BankAccountService bankAccountService) {
-//        this(new ArrayList<>(), carrierRepository, bankAccountService);
+//        this(new ArrayList<>(), carrierRepository, bankAccountService); // pisalo ze tak sie zapętla!
         this.carrierOrderList = new ArrayList<>();
         this.carrierService = carrierService;
         this.bankAccountService = bankAccountService;
@@ -166,7 +166,7 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
 
     @Override
     public boolean deleteOrder(String email, String carrierID) {
-        double carrierCost = carrierService.getCarrierById(carrierID).getPrice(); // na razie na sztywno wpisuje cene przejazdu
+        double carrierCost = carrierService.getCarrierById(carrierID).getPrice();
         if (getCarrierOrderByEmailAndCarrierId(email, carrierID) != null) {
             var coM = getCarrierOrderByEmailAndCarrierId(email, carrierID);
             BankAccountModel baM = bankAccountService.getBankAccountByEmail(coM.getEmail());

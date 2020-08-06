@@ -27,7 +27,7 @@ public class CarrierHistoryServiceImpl implements CarrierHistoryService {
 
     @Autowired
     public CarrierHistoryServiceImpl(CarrierService carrierService, CarrierOrderService carrierOrderService) {
-        this(new ArrayList<>(), carrierService,carrierOrderService);
+        this(new ArrayList<>(), carrierService,carrierOrderService); // kiedy chcialem zrobic w ten sposob w innych Serwisach to blad ze sie zapetla
     }
 
     @Override

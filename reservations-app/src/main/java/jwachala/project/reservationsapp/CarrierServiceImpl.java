@@ -21,6 +21,7 @@ public class CarrierServiceImpl implements CarrierService {
     @Autowired
     BankAccountService bankAccountService;
 
+    //testy
     public CarrierServiceImpl(List<CarrierModel> carrierList, CarrierOrderService carrierOrderService, BankAccountService bankAccountService) {
         this.carrierList = carrierList;
         this.carrierOrderService = carrierOrderService;
@@ -71,7 +72,6 @@ public class CarrierServiceImpl implements CarrierService {
         return carrierListbyCompanyName;
     }
 
-    // dodaj zlecenie do Carrier
     @Override
     public boolean availabilityMinusOne(String id) {
         for (CarrierModel cM : carrierList) {
@@ -121,6 +121,5 @@ public class CarrierServiceImpl implements CarrierService {
     public void addCarrier(CarrierModel carrierModel) {
         carrierList.add(carrierModel);
     }
-
 
 }

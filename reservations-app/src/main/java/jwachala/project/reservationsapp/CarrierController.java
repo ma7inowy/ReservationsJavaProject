@@ -46,6 +46,7 @@ public class CarrierController {
 
         return dtoList;
     }
+
     // WSZYSTKIE OFERT PRZEWOZOW WG MIASTA STARTOWEGO
     @GetMapping("/carriers/city/start/{startCity}")
     public List<CarrierDTO> getCarriersByCity(@PathVariable(value = "startCity") String startCity) {
@@ -76,7 +77,7 @@ public class CarrierController {
         model.setCompanyName(dto.getCompanyName());
         model.setAvailability(dto.getAvailability());
         model.setPrice(dto.getPrice());
-        carrierService.addCarrier(model);
+        carrierService.addCarrier(model); // czy taka logika tutaj jest ok
         var uri = resourceLocationBuilder.build(model.getId());
 
         return ResponseEntity.created(uri).build();
@@ -84,19 +85,19 @@ public class CarrierController {
 
     // USTAWIENIE PRZEWOZU PRZEZ PRZEWOZNIKA JAKO ZREALIZOWANY
     @PutMapping("/carrier/id/{carrierId}/realized")
-    public ResponseEntity<?> isRealized(@PathVariable(value = "carrierId") String carrierId){
+    public ResponseEntity<?> isRealized(@PathVariable(value = "carrierId") String carrierId) {
         CarrierModel cM = carrierService.getCarrierById(carrierId);
-        cM.realizedTrue();
+        cM.setRealized(true);
 
-       CarrierDTO cDTO = new CarrierDTO();
-       cDTO.setRealized(cM.isRealized());
-       cDTO.setId(cM.getId());
-       cDTO.setAvailability(cM.getAvailability());
-       cDTO.setStartCity(cM.getStartCity());
-       cDTO.setDestinationCity(cM.getDestinationCity());
-       cDTO.setDate(cM.getDate());
-       cDTO.setCompanyName(cM.getCompanyName());
-       cDTO.setPrice(cM.getPrice());
+        CarrierDTO cDTO = new CarrierDTO();
+        cDTO.setRealized(cM.isRealized());
+        cDTO.setId(cM.getId());
+        cDTO.setAvailability(cM.getAvailability());
+        cDTO.setStartCity(cM.getStartCity());
+        cDTO.setDestinationCity(cM.getDestinationCity());
+        cDTO.setDate(cM.getDate());
+        cDTO.setCompanyName(cM.getCompanyName());
+        cDTO.setPrice(cM.getPrice());
 
         return ResponseEntity.ok(cDTO);
     }
@@ -152,26 +153,6 @@ public class CarrierController {
         return dtoList;
     }
 
-    // DO ZALADOWANIA PRZYKLADOWYCH ZAMOWIEN/BILETOW (korzystam z CarrierRepo wiec musialem w ten sposob bo inaczej error)
-//    @GetMapping("/load")
-//    public void loadDataToOrderList() {
-//        carrierOrderService.getCarrierOrderList().add(new CarrierOrderModel("jankowalski1@wp.pl", LocalDate.now().minusDays(11), carrierRepostiory.getCarrierList().get(0).getId()));
-//        carrierOrderService.getCarrierOrderList().get(0).setPaid(true);
-//        carrierOrderService.getCarrierOrderList().add(new CarrierOrderModel("jankowalski2@wp.pl", LocalDate.now().minusDays(2), carrierRepostiory.getCarrierList().get(0).getId()));
-//        carrierOrderService.getCarrierOrderList().add(new CarrierOrderModel("jankowalski3@wp.pl", LocalDate.now().plusDays(7), carrierRepostiory.getCarrierList().get(0).getId()));
-//        carrierOrderService.getCarrierOrderList().get(2).setPaid(true);
-//        carrierOrderService.getCarrierOrderList().add(new CarrierOrderModel("jankowalski4@wp.pl", LocalDate.now().plusDays(5), carrierRepostiory.getCarrierList().get(0).getId()));
-//        carrierOrderService.getCarrierOrderList().add(new CarrierOrderModel("jankowalski5@wp.pl", LocalDate.now().plusDays(3), carrierRepostiory.getCarrierList().get(0).getId()));
-//        carrierOrderService.getCarrierOrderList().add(new CarrierOrderModel("jankowalski6@wp.pl", LocalDate.now().plusDays(5), carrierRepostiory.getCarrierList().get(0).getId()));
-//        carrierOrderService.getCarrierOrderList().get(5).setPaid(true);
-//        carrierOrderService.getCarrierOrderList().add(new CarrierOrderModel("jankowalski7@wp.pl", LocalDate.now().plusDays(4), carrierRepostiory.getCarrierList().get(0).getId()));
-//        carrierOrderService.getCarrierOrderList().add(new CarrierOrderModel("jankowalski8@wp.pl", LocalDate.now().plusDays(3), carrierRepostiory.getCarrierList().get(1).getId()));
-//        carrierOrderService.getCarrierOrderList().add(new CarrierOrderModel("jankowalski9@wp.pl", LocalDate.now().plusDays(3), carrierRepostiory.getCarrierList().get(2).getId()));
-//        carrierOrderService.getCarrierOrderList().add(new CarrierOrderModel("jankowalski10@wp.pl", LocalDate.now().plusDays(3), carrierRepostiory.getCarrierList().get(3).getId()));
-//        carrierOrderService.getCarrierOrderList().add(new CarrierOrderModel("jankowalski11@wp.pl", LocalDate.now().plusDays(4), carrierRepostiory.getCarrierList().get(3).getId()));
-//        carrierOrderService.getCarrierOrderList().add(new CarrierOrderModel("jankowalski11@wp.pl", LocalDate.now().minusDays(14), carrierRepostiory.getCarrierList().get(2).getId()));
-//    }
-
     //history
 
     //HISTORIA WSZYSTKICH PRZEWOZOW DLA DANEJ FIRMY (TRAFIAJA TAM TE PRZEWOZY KTORYCH DATA < LocalDate.now() LUB KTORE MAJA POLE realized = true)
@@ -200,9 +181,7 @@ public class CarrierController {
         return carrierOrderService.getCarrierOrdersByCarrierIdSorted(carrierID);
     }
 
-    //history
-
-   //  ODSWIEZANIE HISTORII (TRAFIAJA TAM TE PRZEWOZY KTORYCH DATA < LocalDate.now() LUB KTORE MAJA POLE realized = true)
+    //  ODSWIEZANIE HISTORII (TRAFIAJA TAM TE PRZEWOZY KTORYCH DATA < LocalDate.now() LUB KTORE MAJA POLE realized = true)
     @GetMapping("history/refresh")
     public List<CarrierModel> refreshHistory() {
         return carrierHistoryService.refreshHistory();
@@ -222,9 +201,9 @@ public class CarrierController {
 
     // anulowanie przewozu - oddanie kasy albo jakiejs czesci
     @DeleteMapping("carriers/id/{carrierId}/delete")
-    public ResponseEntity<?> deleteCarrier(@PathVariable(value = "carrierId") String carrierId){
-        if(carrierService.deleteCarrier(carrierId))
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> deleteCarrier(@PathVariable(value = "carrierId") String carrierId) {
+        if (carrierService.deleteCarrier(carrierId))
+            return ResponseEntity.noContent().build();
         else return ResponseEntity.notFound().build();
 
     }

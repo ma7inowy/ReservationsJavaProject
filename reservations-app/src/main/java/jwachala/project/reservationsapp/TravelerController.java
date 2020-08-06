@@ -132,10 +132,9 @@ public class TravelerController {
     @PostMapping("order/payment/email/{email}")
     public ResponseEntity<?> payOrder(@PathVariable(value = "email") String email, @RequestBody String carrierId) {
         var coModel = carrierOrderService.getCarrierOrderByEmailAndCarrierId(email, carrierId);
-//        var uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(coModel.getId()).toUri();
         var uri = resourceLocationBuilder.build(coModel.getId());
         // ZAMIAST 10ZL BEDZIE KONKRETNA KWOTA JAK DODAM POLE W CARRIER O CENIE
-        if (carrierOrderService.payForOrder(email,carrierId)) {
+        if (carrierOrderService.payForOrder(email, carrierId)) {
             return ResponseEntity.created(uri).build();
         } else return ResponseEntity.status(HttpStatus.ACCEPTED).body("Sorry, Too less money on your bank account!");
     }
@@ -182,12 +181,4 @@ public class TravelerController {
             return ResponseEntity.notFound().build();
         }
     }
-
-//    @GetMapping("orders")
-//    public Iterable<CarrierOrderModel> allOrders(){
-//        return carrierOrderService.getCarrierOrderListIterable();
-//    }
-
-
-    // sprawdzenie czy dany przewoz jest odwolany czy zaakceptowany
 }

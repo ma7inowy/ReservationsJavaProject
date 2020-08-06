@@ -412,6 +412,70 @@ public class CarrierOrderServiceImplTests {
         Assertions.assertThat(given).isEmpty();
     }
 
+    @Test
+    public void shouldPayForOrder(){
+        // getCarrierOrderByEmailAndCarrierId czy na pewno powinno korzystać z innej metody skoro ona moze sie wysypac
+        // wiec tak jakby testujemy i payForOrder i getCarrierOrderByEmailAndCarrierId
+        var carrierProvider = Mockito.mock(CarrierService.class);
+        var bankProvider = Mockito.mock(BankAccountService.class);
+
+        var baM = new BankAccountModel("email1");
+        baM.setAccountBalance(100);
+
+        var cM = new CarrierModel();
+        cM.setId("123");
+        cM.setPrice(10);
+
+        Mockito.when(bankProvider.getBankAccountByEmail("email1")).thenReturn(baM);
+        Mockito.when(carrierProvider.getCarrierById("123")).thenReturn(cM);
+
+
+        var coM = new CarrierOrderModel(); // zamowienie
+        coM.setEmail("email1");
+        coM.setCarrierId("123");
+        var given = new ArrayList<CarrierOrderModel>();
+        given.add(coM);
+
+        var sut = new CarrierOrderServiceImpl(given, carrierProvider, bankProvider);
+        var actual = sut.payForOrder("email1","123");
+        var expected = true;
+        Assertions.assertThat(actual).isEqualTo(expected);
+
+
+    }
+
+    @Test
+    public void shouldNotPayForOrder(){
+        // czy na pewno powinno korzystać z innej metody skoro ona moze sie wysypac
+        // wiec tak jakby testujemy i payForOrder i getCarrierOrderByEmailAndCarrierId i makePayment
+        var carrierProvider = Mockito.mock(CarrierService.class);
+        var bankProvider = Mockito.mock(BankAccountService.class);
+
+        var baM = new BankAccountModel("email1");
+        baM.setAccountBalance(1);
+
+        var cM = new CarrierModel();
+        cM.setId("123");
+        cM.setPrice(10);
+
+        Mockito.when(bankProvider.getBankAccountByEmail("email1")).thenReturn(baM);
+        Mockito.when(carrierProvider.getCarrierById("123")).thenReturn(cM);
+
+
+        var coM = new CarrierOrderModel(); // zamowienie
+        coM.setEmail("email1");
+        coM.setCarrierId("123");
+        var given = new ArrayList<CarrierOrderModel>();
+        given.add(coM);
+
+        var sut = new CarrierOrderServiceImpl(given, carrierProvider, bankProvider);
+        var actual = sut.payForOrder("email1","123");
+        var expected = false;
+        Assertions.assertThat(actual).isEqualTo(expected);
+
+
+    }
+
 
 }
 

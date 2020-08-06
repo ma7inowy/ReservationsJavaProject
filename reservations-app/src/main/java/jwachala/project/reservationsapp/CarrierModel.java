@@ -33,8 +33,4 @@ public class CarrierModel {
         counterID++;
         this.price = price;
     }
-
-    public void realizedTrue(){
-        this.realized = true;
-    }
 }

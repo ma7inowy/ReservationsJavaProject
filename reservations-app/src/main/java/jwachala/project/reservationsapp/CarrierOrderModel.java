@@ -19,7 +19,6 @@ public class CarrierOrderModel {
     private boolean paid = false;
 
 
-
     public CarrierOrderModel(String email, LocalDate date, String carrierID) {
         this.email = email;
         this.orderDate = date;

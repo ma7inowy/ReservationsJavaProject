@@ -54,12 +54,10 @@ public class MoneyController {
     @PostMapping("/account/{email}/accountBalance/deposit")
     public ResponseEntity<?> addMoneyToAccount(@PathVariable(value = "email") String email,
                                                @RequestBody int money) {
-//        var uri = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
-        var  uri = resourceLocationBuilder.build(email);
+        var uri = resourceLocationBuilder.build(email);
         if (bankAccountService.addMoneyToAccount(email, money)) {
             return ResponseEntity.created(uri).build();
-        }
-        else return ResponseEntity.status(HttpStatus.ACCEPTED).body("Sorry, operation rejected");
+        } else return ResponseEntity.status(HttpStatus.ACCEPTED).body("Sorry, operation rejected");
     }
 
 
