@@ -21,4 +21,6 @@ public interface CarrierService {
     Iterable<CarrierModel> getAllCarriers();
 
     void addCarrier(CarrierModel carrierModel);
+
+    CarrierRepository getCarrierRepository();
 }

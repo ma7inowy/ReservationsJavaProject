@@ -27,7 +27,8 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
 
     private BankAccountService bankAccountService;
 
-
+    @Autowired
+    private CarrierOrderRepository carrierOrderRepository;
 
     //spring
     @Autowired
@@ -56,17 +57,21 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
         carrierOrderList.add(new CarrierOrderModel("jankowalski10@wp.pl", LocalDate.now().plusDays(3), carrierService.getCarrierList().get(3).getId()));
         carrierOrderList.add(new CarrierOrderModel("jankowalski11@wp.pl", LocalDate.now().plusDays(4), carrierService.getCarrierList().get(3).getId()));
         carrierOrderList.add(new CarrierOrderModel("jankowalski11@wp.pl", LocalDate.now().minusDays(14), carrierService.getCarrierList().get(2).getId()));
+        //
     }
 
     @Override
     public List<CarrierOrderModel> getCarrierOrdersByCarrierId(String carrierId) {
-        List<CarrierOrderModel> carrierOrdersByCarrierId = new ArrayList<>();
-        for (var carrierOrder : carrierOrderList) {
-            if (carrierOrder.getCarrierId().equals(carrierId)) {
-                carrierOrdersByCarrierId.add(carrierOrder);
-            }
-        }
-        return carrierOrdersByCarrierId;
+//        List<CarrierOrderModel> carrierOrdersByCarrierId = new ArrayList<>();
+////        for (var carrierOrder : carrierOrderList) {
+////            if (carrierOrder.getCarrierId().equals(carrierId)) {
+////                carrierOrdersByCarrierId.add(carrierOrder);
+////            }
+////        }
+////        return carrierOrdersByCarrierId;
+//        var carrierOrdersByCarrierId = carrierOrderRepository.findByCarrierId(carrierId);
+        return carrierOrderRepository.findByCarrierId(carrierId); // dziala
+
     }
 
     @Override
@@ -242,6 +247,11 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
             account.setAccountBalance(account.getAccountBalance() - cModel.getPrice());
             return true;
         } else return false;
+    }
+
+    @Override
+    public CarrierOrderRepository getCarrierOrderRepository(){
+        return carrierOrderRepository;
     }
 
 

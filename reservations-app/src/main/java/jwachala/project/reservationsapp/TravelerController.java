@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -180,5 +181,13 @@ public class TravelerController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    // dla testowania
+    @GetMapping("add/orders")
+    public void addOrders() {
+        carrierOrderService.getCarrierOrderRepository().save(new CarrierOrderModel("jankowalski1@wp.pl", LocalDate.now().minusDays(14), carrierService.getCarrierRepository().findAll().get(0).getId()));
+        carrierOrderService.getCarrierOrderRepository().save(new CarrierOrderModel("jankowalski2@wp.pl", LocalDate.now().minusDays(10), carrierService.getCarrierRepository().findAll().get(0).getId()));
+        carrierOrderService.getCarrierOrderRepository().save(new CarrierOrderModel("jankowalski3@wp.pl", LocalDate.now().minusDays(5), carrierService.getCarrierRepository().findAll().get(1).getId()));
     }
 }

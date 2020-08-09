@@ -48,7 +48,6 @@ public class CarrierServiceImpl implements CarrierService {
         carrierRepository.save(new CarrierModel("City2", "destCity4", LocalDate.now().minusDays(3), "Company2", 30));
         carrierRepository.save(new CarrierModel("City3", "destCity4", LocalDate.now().minusDays(10), "Company3", 40));
         carrierRepository.save(new CarrierModel("City5", "destCity5", LocalDate.now().plusDays(1), "Company3", 50));
-
     }
 
     @Override
@@ -134,6 +133,20 @@ public class CarrierServiceImpl implements CarrierService {
 
     @Override
     public boolean deleteCarrier(String id) {
+//        List<CarrierOrderModel> coList = carrierOrderService.getCarrierOrdersByCarrierId(id);
+////        if (coList == null) return false;
+////
+////        for (CarrierOrderModel coModel : coList) {
+////            // jesli oplacone to oddaj gotowke 100%
+////            if (coModel.isPaid()) {
+////                BankAccountModel baModel = bankAccountService.getBankAccountByEmail(coModel.getEmail());
+////                bankAccountService.addMoneyToAccount(baModel.getEmail(), getCarrierById(id).getPrice());
+////            }
+////        }
+////        carrierList.remove(getCarrierById(id));
+////        carrierOrderService.removeAllOrders(coList);
+////        return true;
+
         List<CarrierOrderModel> coList = carrierOrderService.getCarrierOrdersByCarrierId(id);
         if (coList == null) return false;
 
@@ -160,6 +173,11 @@ public class CarrierServiceImpl implements CarrierService {
     public void addCarrier(CarrierModel carrierModel) {
 //        carrierList.add(carrierModel);
         carrierRepository.save(carrierModel);
+    }
+
+    @Override
+    public CarrierRepository getCarrierRepository(){
+        return carrierRepository;
     }
 
 }
