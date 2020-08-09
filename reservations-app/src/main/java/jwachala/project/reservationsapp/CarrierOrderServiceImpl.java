@@ -27,6 +27,8 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
 
     private BankAccountService bankAccountService;
 
+
+
     //spring
     @Autowired
     public CarrierOrderServiceImpl(CarrierService carrierService, BankAccountService bankAccountService) {
