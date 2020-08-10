@@ -74,52 +74,64 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
 
     }
 
+
     @Override
     public List<CarrierOrderModel> getCarrierOrdersByCompanyName(String companyName) {
-        List<CarrierOrderModel> carrierOrderNewList = new ArrayList<>();
-        for (var coModel : carrierOrderList) {
-            for (var cModel : carrierService.getAllCarriers()) {
-                if (coModel.getCarrierId().equals(cModel.getId())) {
-                    if (cModel.getCompanyName().toLowerCase().equals(companyName.toLowerCase())) {
-                        carrierOrderNewList.add(coModel);
-                    }
-                }
-            }
-        }
-        return carrierOrderNewList;
+        return carrierOrderRepository.findCarrierOrdersByCompanyName(companyName);
+        //wlasny select
+
+
+//        List<CarrierOrderModel> carrierOrderNewList = new ArrayList<>();
+//        for (var coModel : carrierOrderList) {
+//            for (var cModel : carrierService.getAllCarriers()) {
+//                if (coModel.getCarrierId().equals(cModel.getId())) {
+//                    if (cModel.getCompanyName().toLowerCase().equals(companyName.toLowerCase())) {
+//                        carrierOrderNewList.add(coModel);
+//                    }
+//                }
+//            }
+//        }
+//        return carrierOrderNewList;
     }
 
     // na te chwile nie wiem jak to bardziej zoptymalizować
     @Override
     public List<CarrierOrderModel> getCarrierOrdersByCompanyNameAndCity(String companyName, String startCity) {
-        List<CarrierOrderModel> carrierOrderByCompanyName = getCarrierOrdersByCompanyName(companyName);
-        List<CarrierOrderModel> carrierOrderListByCnAndCity = new ArrayList<>();
-
-        for (var coModel : carrierOrderByCompanyName) {
-            for (var cModel : carrierService.getAllCarriers()) {
-                if (coModel.getCarrierId().equals(cModel.getId())) {
-                    if (cModel.getCompanyName().toLowerCase().equals(companyName.toLowerCase())) {
-                        if (cModel.getStartCity().toLowerCase().equals(startCity.toLowerCase())) {
-                            carrierOrderListByCnAndCity.add(coModel);
-                        }
-                    }
-                }
-            }
-        }
-        return carrierOrderListByCnAndCity;
+//        List<CarrierOrderModel> carrierOrderByCompanyName = getCarrierOrdersByCompanyName(companyName);
+//        List<CarrierOrderModel> carrierOrderListByCnAndCity = new ArrayList<>();
+//
+//        for (var coModel : carrierOrderByCompanyName) {
+//            for (var cModel : carrierService.getAllCarriers()) {
+//                if (coModel.getCarrierId().equals(cModel.getId())) {
+//                    if (cModel.getCompanyName().toLowerCase().equals(companyName.toLowerCase())) {
+//                        if (cModel.getStartCity().toLowerCase().equals(startCity.toLowerCase())) {
+//                            carrierOrderListByCnAndCity.add(coModel);
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        return carrierOrderListByCnAndCity;
+        return carrierOrderRepository.findCarrierOrdersByCompanyNameAndCity(companyName, startCity);
     }
 
     @Override
     public List<CarrierOrderModel> getCarrierOrdersByCarrierIdSorted(String carrierId) {
-        List<CarrierOrderModel> carrierOrdersByCarrierId = new ArrayList<>();
-        for (var carrierOrder : carrierOrderList) {
-            if (carrierOrder.getCarrierId().equals(carrierId)) {
-                carrierOrdersByCarrierId.add(carrierOrder);
-            }
+//        List<CarrierOrderModel> carrierOrdersByCarrierId = new ArrayList<>();
+//        for (var carrierOrder : carrierOrderList) {
+//            if (carrierOrder.getCarrierId().equals(carrierId)) {
+//                carrierOrdersByCarrierId.add(carrierOrder);
+//            }
+//        }
+//
+//        sort(carrierOrdersByCarrierId);
+//        return carrierOrdersByCarrierId;
+        if (carrierOrderRepository.findByCarrierId(carrierId).isEmpty()) return null;
+        else {
+            var carrierOrdersByCarrierId = carrierOrderRepository.findByCarrierId(carrierId);
+            sort(carrierOrdersByCarrierId);
+            return carrierOrdersByCarrierId;
         }
-
-        sort(carrierOrdersByCarrierId);
-        return carrierOrdersByCarrierId;
     }
 
     @Override
@@ -250,7 +262,7 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
     }
 
     @Override
-    public CarrierOrderRepository getCarrierOrderRepository(){
+    public CarrierOrderRepository getCarrierOrderRepository() {
         return carrierOrderRepository;
     }
 
