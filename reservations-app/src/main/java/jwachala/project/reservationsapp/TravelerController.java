@@ -189,5 +189,6 @@ public class TravelerController {
         carrierOrderService.getCarrierOrderRepository().save(new CarrierOrderModel("jankowalski1@wp.pl", LocalDate.now().minusDays(14), carrierService.getCarrierRepository().findAll().get(0).getId()));
         carrierOrderService.getCarrierOrderRepository().save(new CarrierOrderModel("jankowalski2@wp.pl", LocalDate.now().minusDays(10), carrierService.getCarrierRepository().findAll().get(0).getId()));
         carrierOrderService.getCarrierOrderRepository().save(new CarrierOrderModel("jankowalski3@wp.pl", LocalDate.now().minusDays(5), carrierService.getCarrierRepository().findAll().get(1).getId()));
+        carrierOrderService.makePayment(carrierOrderService.getCarrierOrderRepository().findAll().get(0).getId());
     }
 }

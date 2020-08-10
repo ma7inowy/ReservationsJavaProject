@@ -141,9 +141,14 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
 
     @Override
     public void makePayment(String id) {
-        for (CarrierOrderModel co : carrierOrderList) {
-            if (co.getId().equals(id))
-                co.setPaid(true);
+//        for (CarrierOrderModel co : carrierOrderList) {
+//            if (co.getId().equals(id))
+//                co.setPaid(true);
+//        }
+        if(carrierOrderRepository.findById(id).isPresent()){
+            var coM = carrierOrderRepository.findById(id).get();
+            coM.setPaid(true);
+            carrierOrderRepository.save(coM);
         }
     }
 
