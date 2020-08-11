@@ -283,7 +283,8 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
 
     @Override
     public void removeCarrierOrder(CarrierOrderModel i) {
-        carrierOrderList.remove(i);
+//        carrierOrderList.remove(i);
+        carrierOrderRepository.delete(i);
     }
 
     @Override

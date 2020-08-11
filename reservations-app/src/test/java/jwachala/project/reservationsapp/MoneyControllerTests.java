@@ -18,7 +18,7 @@ public class MoneyControllerTests {
         var baM = new BankAccountModel("email");
         var baList = new ArrayList<BankAccountModel>();
         baList.add(baM);
-        Mockito.when(bankService.getBankAccountList()).thenReturn(baList);
+        Mockito.when(bankService.getBankAccounts()).thenReturn(baList);
         var sut = new MoneyController(bankService, null);
         var actual = sut.getAllAccounts();
         var expected = new BankAccountDTO();
