@@ -37,8 +37,9 @@ public class BankAccountServiceImpl implements BankAccountService {
         bankAccountList.add(new BankAccountModel("jankowalski10@wp.pl"));
         bankAccountList.add(new BankAccountModel("jankowalski11@wp.pl"));
     }
+
     @PostConstruct
-    public void init(){
+    public void init() {
         bankAccountRepository.save(new BankAccountModel("jankowalski1@wp.pl"));
         bankAccountRepository.save(new BankAccountModel("jankowalski2@wp.pl"));
         bankAccountRepository.save(new BankAccountModel("jankowalski3@wp.pl"));
@@ -78,7 +79,11 @@ public class BankAccountServiceImpl implements BankAccountService {
         return ba.getAccountBalance() == (actualState + money);
     }
 
-
+    @Override
+    public void chargeMoney(BankAccountModel account, double price) {
+        account.setAccountBalance(account.getAccountBalance() - price);
+        bankAccountRepository.save(account);
+    }
 
 
 }

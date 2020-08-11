@@ -215,30 +215,55 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
 
     @Override
     public boolean deleteOrder(String email, String carrierID) {
+//        double carrierCost = carrierService.getCarrierById(carrierID).getPrice();
+//        if (getCarrierOrderByEmailAndCarrierId(email, carrierID) != null) {
+//            var coM = getCarrierOrderByEmailAndCarrierId(email, carrierID);
+//            BankAccountModel baM = bankAccountService.getBankAccountByEmail(coM.getEmail());
+//            if (!coM.isPaid()) {
+//                carrierOrderList.remove(coM);
+//                return true;
+//            } else {
+//                //jesli zostalo wiecej niz 7 dni do wyjazdu zwroc 90%
+//                if (LocalDate.now().isBefore(carrierService.getCarrierById(coM.getCarrierId()).getDate().minusDays(7))) {
+//                    if (bankAccountService.addMoneyToAccount(baM.getEmail(), carrierCost * 0.9)) {
+//                        carrierOrderList.remove(coM);
+//                        return true;
+//                    }
+//                } else {
+//                    //jesli zostalo mniej niz 7 dni do wyjazdu zwroc 50%
+//                    if (bankAccountService.addMoneyToAccount(baM.getEmail(), carrierCost * 0.5)) {
+//                        carrierOrderList.remove(coM);
+//                        return true;
+//                    }
+//                }
+//            }
+//        }
+//        return false;
         double carrierCost = carrierService.getCarrierById(carrierID).getPrice();
         if (getCarrierOrderByEmailAndCarrierId(email, carrierID) != null) {
             var coM = getCarrierOrderByEmailAndCarrierId(email, carrierID);
             BankAccountModel baM = bankAccountService.getBankAccountByEmail(coM.getEmail());
             if (!coM.isPaid()) {
-                carrierOrderList.remove(coM);
+                carrierOrderRepository.delete(coM);
                 return true;
             } else {
                 //jesli zostalo wiecej niz 7 dni do wyjazdu zwroc 90%
                 if (LocalDate.now().isBefore(carrierService.getCarrierById(coM.getCarrierId()).getDate().minusDays(7))) {
                     if (bankAccountService.addMoneyToAccount(baM.getEmail(), carrierCost * 0.9)) {
-                        carrierOrderList.remove(coM);
+                        carrierOrderRepository.delete(coM);
                         return true;
                     }
                 } else {
                     //jesli zostalo mniej niz 7 dni do wyjazdu zwroc 50%
                     if (bankAccountService.addMoneyToAccount(baM.getEmail(), carrierCost * 0.5)) {
-                        carrierOrderList.remove(coM);
+                        carrierOrderRepository.delete(coM);
                         return true;
                     }
                 }
             }
         }
         return false;
+
 
     }
 
@@ -295,7 +320,7 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
 
         if (account.getAccountBalance() >= cModel.getPrice()) {
             makePayment(coModel.getId());
-            account.setAccountBalance(account.getAccountBalance() - cModel.getPrice());
+            bankAccountService.chargeMoney(account, cModel.getPrice());
             return true;
         } else return false;
     }

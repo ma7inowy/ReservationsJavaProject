@@ -6,4 +6,5 @@ public interface BankAccountService {
     Iterable<BankAccountModel> getBankAccounts();
     void addBankAccount(BankAccountModel bankAccountModel);
     boolean addMoneyToAccount(String email, double money);
+    void chargeMoney(BankAccountModel account, double price);
 }
