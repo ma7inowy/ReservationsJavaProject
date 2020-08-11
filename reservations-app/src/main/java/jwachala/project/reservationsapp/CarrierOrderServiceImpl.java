@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 
 // BAZA DANYCH O ZAKUPIONYCH BILETACH/MIEJSCA U PRZEWOŹNIKA
@@ -145,7 +146,7 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
 //            if (co.getId().equals(id))
 //                co.setPaid(true);
 //        }
-        if(carrierOrderRepository.findById(id).isPresent()){
+        if (carrierOrderRepository.findById(id).isPresent()) {
             var coM = carrierOrderRepository.findById(id).get();
             coM.setPaid(true);
             carrierOrderRepository.save(coM);
@@ -153,39 +154,63 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
     }
 
     @Override
-    public CarrierOrderModel getCarrierOrderById(String id) {
-        for (CarrierOrderModel co : carrierOrderList) {
-            if (co.getId().equals(id))
-                return co;
-        }
-        return null;
+    public Optional<CarrierOrderModel> getCarrierOrderById(String id) {
+//        for (CarrierOrderModel co : carrierOrderList) {
+//            if (co.getId().equals(id))
+//                return co;
+//        }
+//        return null;
+
+        var coM = carrierOrderRepository.findById(id);
+        return coM;
     }
 
     @Override
     public CarrierOrderModel getCarrierOrderByEmailAndCarrierId(String email, String carrierId) {
-        for (CarrierOrderModel co : carrierOrderList) {
-            if (co.getEmail().equals(email) && co.getCarrierId().equals(carrierId))
-                return co;
-        }
-        return null;
+//        for (CarrierOrderModel co : carrierOrderList) {
+////            if (co.getEmail().equals(email) && co.getCarrierId().equals(carrierId))
+////                return co;
+////        }
+////        return null;
+        if (carrierOrderRepository.findByEmailAndCarrierId(email, carrierId) != null) {
+            return carrierOrderRepository.findByEmailAndCarrierId(email, carrierId);
+        } else return null;
+
     }
 
     @Override
     public void refreshCarrierOrders() {
-        var coList = new ArrayList<CarrierOrderModel>();
+//        var coList = new ArrayList<CarrierOrderModel>();
+////
+////        for (CarrierOrderModel co : carrierOrderList) {
+////            if (!co.isPaid()) {
+////                // if order is still not paid and time remaining to carrier start is shorter than 5 days it needs to be removed
+////                if (LocalDate.now().isAfter(carrierService.getCarrierById(co.getCarrierId()).getDate().minusDays(5)))
+////                    coList.add(co);
+////            }
+////        }
+////        if (!coList.isEmpty()) {
+////            for (CarrierOrderModel co1 : coList) {
+////                carrierOrderList.remove(co1);
+////            }
+////        }
 
-        for (CarrierOrderModel co : carrierOrderList) {
+        var coList = carrierOrderRepository.findAll();
+        var carrierOrdersForDelete = new ArrayList<CarrierOrderModel>();
+
+        for (CarrierOrderModel co : coList) {
             if (!co.isPaid()) {
-                // if order is still not paid and time remaining to carrier start is shorter than 5 days it needs to be removed
                 if (LocalDate.now().isAfter(carrierService.getCarrierById(co.getCarrierId()).getDate().minusDays(5)))
-                    coList.add(co);
+                    carrierOrdersForDelete.add(co);
             }
         }
-        if (!coList.isEmpty()) {
-            for (CarrierOrderModel co1 : coList) {
-                carrierOrderList.remove(co1);
+
+        if (!carrierOrdersForDelete.isEmpty()) {
+            for (CarrierOrderModel co1 : carrierOrdersForDelete) {
+                carrierOrderRepository.delete(co1);
             }
         }
+
     }
 
     @Override
@@ -219,13 +244,20 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
 
     @Override
     public void removeAllOrders(List<CarrierOrderModel> coList) {
-        carrierOrderList.removeAll(coList);
+//        carrierOrderList.removeAll(coList);
+        for (CarrierOrderModel coM : coList)
+            carrierOrderRepository.delete(coM);
     }
 
     @Override
     public boolean addOrder(CarrierOrderModel model) {
+//        if (carrierService.availabilityMinusOne(model.getCarrierId())) {
+//            carrierOrderList.add(model);
+//            return true;
+//        }
+//        return false;
         if (carrierService.availabilityMinusOne(model.getCarrierId())) {
-            carrierOrderList.add(model);
+            carrierOrderRepository.save(model);
             return true;
         }
         return false;
@@ -233,19 +265,20 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
 
     @Override
     public Iterable<CarrierOrderModel> unpaidOrders(String email) {
-
-        var result = new ArrayList<CarrierOrderModel>();
-        for (CarrierOrderModel coModel : carrierOrderList) {
-            if (!coModel.isPaid() && coModel.getEmail().equals(email)) {
-                result.add(coModel);
-            }
-        }
-        return result;
+//        var result = new ArrayList<CarrierOrderModel>();
+//        for (CarrierOrderModel coModel : carrierOrderRepository.findAll()) {
+//            if (!coModel.isPaid() && coModel.getEmail().equals(email)) {
+//                result.add(coModel);
+//            }
+//        }
+//        return result;
+        return carrierOrderRepository.findUnpaidOrders(email);
     }
 
     @Override
     public Iterable<CarrierOrderModel> getCarrierOrderListIterable() {
-        return carrierOrderList;
+//        return carrierOrderList;
+        return carrierOrderRepository.findAll();
     }
 
     @Override

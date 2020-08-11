@@ -187,8 +187,12 @@ public class TravelerController {
     @GetMapping("add/orders")
     public void addOrders() {
         carrierOrderService.getCarrierOrderRepository().save(new CarrierOrderModel("jankowalski1@wp.pl", LocalDate.now().minusDays(14), carrierService.getCarrierRepository().findAll().get(0).getId()));
+        carrierOrderService.getCarrierOrderRepository().save(new CarrierOrderModel("jankowalski1@wp.pl", LocalDate.now().minusDays(5), carrierService.getCarrierRepository().findAll().get(1).getId()));
         carrierOrderService.getCarrierOrderRepository().save(new CarrierOrderModel("jankowalski2@wp.pl", LocalDate.now().minusDays(10), carrierService.getCarrierRepository().findAll().get(0).getId()));
-        carrierOrderService.getCarrierOrderRepository().save(new CarrierOrderModel("jankowalski3@wp.pl", LocalDate.now().minusDays(5), carrierService.getCarrierRepository().findAll().get(1).getId()));
-        carrierOrderService.makePayment(carrierOrderService.getCarrierOrderRepository().findAll().get(0).getId());
+        carrierOrderService.getCarrierOrderRepository().save(new CarrierOrderModel("jankowalski3@wp.pl", LocalDate.now().minusDays(2), carrierService.getCarrierRepository().findAll().get(1).getId()));
+        carrierOrderService.getCarrierOrderRepository().save(new CarrierOrderModel("jankowalski4@wp.pl", LocalDate.now().minusDays(5), carrierService.getCarrierRepository().findAll().get(2).getId()));
+        var coM = carrierOrderService.getCarrierOrderRepository().findAll().get(3);
+        coM.setPaid(true);
+        carrierOrderService.getCarrierOrderRepository().save(coM);
     }
 }

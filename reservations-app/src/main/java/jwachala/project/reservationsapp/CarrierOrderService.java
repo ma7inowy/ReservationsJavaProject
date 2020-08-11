@@ -1,6 +1,7 @@
 package jwachala.project.reservationsapp;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CarrierOrderService {
     List<CarrierOrderModel> getCarrierOrdersByCarrierId(String carrierId);
@@ -16,7 +17,7 @@ public interface CarrierOrderService {
 
     void makePayment(String id);
 
-    CarrierOrderModel getCarrierOrderById(String id);
+    Optional<CarrierOrderModel> getCarrierOrderById(String id);
 
     CarrierOrderModel getCarrierOrderByEmailAndCarrierId(String email, String carrierId);
 

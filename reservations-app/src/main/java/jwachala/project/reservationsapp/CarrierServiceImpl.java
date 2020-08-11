@@ -36,7 +36,7 @@ public class CarrierServiceImpl implements CarrierService {
     public CarrierServiceImpl() {
         this.carrierList = new ArrayList<>();
         carrierList.add(new CarrierModel("City1", "destCity1", LocalDate.now().plusDays(8), "Company0", 10));
-        carrierList.add(new CarrierModel("City2", "destCity2", LocalDate.now().plusDays(5), "Company1", 20));
+        carrierList.add(new CarrierModel("City2", "destCity2", LocalDate.now().plusDays(1), "Company1", 20));
         carrierList.add(new CarrierModel("City2", "destCity4", LocalDate.now().minusDays(3), "Company2", 30));
         carrierList.add(new CarrierModel("City3", "destCity4", LocalDate.now().minusDays(10), "Company3", 40));
         carrierList.add(new CarrierModel("City5", "destCity5", LocalDate.now().plusDays(1), "Company3", 50));
@@ -44,7 +44,7 @@ public class CarrierServiceImpl implements CarrierService {
     @PostConstruct
     public void addCarriersToRepository(){
         carrierRepository.save(new CarrierModel("City1", "destCity1", LocalDate.now().plusDays(8), "Company0", 10));
-        carrierRepository.save(new CarrierModel("City2", "destCity2", LocalDate.now().plusDays(5), "Company1", 20));
+        carrierRepository.save(new CarrierModel("City2", "destCity2", LocalDate.now().plusDays(1), "Company1", 20));
         carrierRepository.save(new CarrierModel("City2", "destCity4", LocalDate.now().minusDays(3), "Company2", 30));
         carrierRepository.save(new CarrierModel("City3", "destCity4", LocalDate.now().minusDays(10), "Company3", 40));
         carrierRepository.save(new CarrierModel("City5", "destCity5", LocalDate.now().plusDays(1), "Company3", 50));
