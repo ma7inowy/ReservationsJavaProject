@@ -202,7 +202,7 @@ public class CarrierController {
     // anulowanie przewozu - oddanie kasy albo jakiejs czesci
     @DeleteMapping("carriers/id/{carrierId}/delete")
     public ResponseEntity<?> deleteCarrier(@PathVariable(value = "carrierId") String carrierId) {
-        if (carrierService.deleteCarrier(carrierId))
+        if (carrierService.cancelCarrier(carrierId))
             return ResponseEntity.noContent().build();
         else return ResponseEntity.notFound().build();
 

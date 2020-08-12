@@ -131,8 +131,9 @@ public class CarrierServiceImpl implements CarrierService {
 
     }
 
+    // DELETE JAKO ODWOLANIE PRZEWOZU Z JAKICHS POWODOW
     @Override
-    public boolean deleteCarrier(String id) {
+    public boolean cancelCarrier(String id) {
 //        List<CarrierOrderModel> coList = carrierOrderService.getCarrierOrdersByCarrierId(id);
 ////        if (coList == null) return false;
 ////
@@ -157,7 +158,7 @@ public class CarrierServiceImpl implements CarrierService {
                 bankAccountService.addMoneyToAccount(baModel.getEmail(), getCarrierById(id).getPrice());
             }
         }
-        carrierList.remove(getCarrierById(id));
+        carrierRepository.delete(getCarrierById(id));
         carrierOrderService.removeAllOrders(coList);
         return true;
 
@@ -179,5 +180,12 @@ public class CarrierServiceImpl implements CarrierService {
     public CarrierRepository getCarrierRepository(){
         return carrierRepository;
     }
+
+    @Override
+    public void deleteCarrier(CarrierModel carrierModel){
+        carrierRepository.delete(carrierModel);
+    }
+
+
 
 }

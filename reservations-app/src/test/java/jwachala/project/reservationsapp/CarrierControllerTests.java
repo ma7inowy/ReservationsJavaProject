@@ -142,7 +142,7 @@ public class CarrierControllerTests {
     public void shouldDeleteOrder() {
         var carrierProvider = Mockito.mock(CarrierService.class);
         var model = new CarrierModel();
-        Mockito.when(carrierProvider.deleteCarrier(model.getId())).thenReturn(true);
+        Mockito.when(carrierProvider.cancelCarrier(model.getId())).thenReturn(true);
 
         var sut = new CarrierController(carrierProvider, null, null, null);
         var actual = sut.deleteCarrier(model.getId());
@@ -155,7 +155,7 @@ public class CarrierControllerTests {
     public void shouldNotDeleteOrder() {
         var carrierProvider = Mockito.mock(CarrierService.class);
         var model = new CarrierModel();
-        Mockito.when(carrierProvider.deleteCarrier(model.getId())).thenReturn(false);
+        Mockito.when(carrierProvider.cancelCarrier(model.getId())).thenReturn(false);
         var sut = new CarrierController(carrierProvider, null, null, null);
         var actual = sut.deleteCarrier(model.getId());
         var expected = ResponseEntity.notFound().build();

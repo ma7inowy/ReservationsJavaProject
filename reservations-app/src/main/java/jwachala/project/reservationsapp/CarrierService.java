@@ -14,13 +14,13 @@ public interface CarrierService {
 
     CarrierModel getCarrierById(String id);
 
-    boolean deleteCarrier(String id);
-
-    List<CarrierModel> getCarrierList();
+    boolean cancelCarrier(String id);
 
     Iterable<CarrierModel> getAllCarriers();
 
     void addCarrier(CarrierModel carrierModel);
 
     CarrierRepository getCarrierRepository();
+
+    void deleteCarrier(CarrierModel carrierModel);
 }

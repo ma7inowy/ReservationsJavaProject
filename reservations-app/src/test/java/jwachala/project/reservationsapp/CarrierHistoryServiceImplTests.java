@@ -38,7 +38,7 @@ public class CarrierHistoryServiceImplTests {
 
         //carrier
         var carrierProvider = Mockito.mock(CarrierService.class);
-        Mockito.when(carrierProvider.getCarrierList()).thenReturn(given);
+        Mockito.when(carrierProvider.getAllCarriers()).thenReturn(given);
         // carrierorder
         var carrierOrderServiceProvider = Mockito.mock(CarrierOrderService.class);
 

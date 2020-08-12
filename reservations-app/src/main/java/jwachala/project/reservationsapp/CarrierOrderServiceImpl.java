@@ -43,21 +43,21 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
 
     @PostConstruct
     public void init() {
-        carrierOrderList.add(new CarrierOrderModel("jankowalski1@wp.pl", LocalDate.now().minusDays(11), carrierService.getCarrierList().get(0).getId()));
-        carrierOrderList.get(0).setPaid(true);
-        carrierOrderList.add(new CarrierOrderModel("jankowalski2@wp.pl", LocalDate.now().minusDays(2), carrierService.getCarrierList().get(0).getId()));
-        carrierOrderList.add(new CarrierOrderModel("jankowalski3@wp.pl", LocalDate.now().plusDays(7), carrierService.getCarrierList().get(0).getId()));
-        carrierOrderList.get(2).setPaid(true);
-        carrierOrderList.add(new CarrierOrderModel("jankowalski4@wp.pl", LocalDate.now().plusDays(5), carrierService.getCarrierList().get(0).getId()));
-        carrierOrderList.add(new CarrierOrderModel("jankowalski5@wp.pl", LocalDate.now().plusDays(3), carrierService.getCarrierList().get(0).getId()));
-        carrierOrderList.add(new CarrierOrderModel("jankowalski6@wp.pl", LocalDate.now().plusDays(5), carrierService.getCarrierList().get(0).getId()));
-        carrierOrderList.get(5).setPaid(true);
-        carrierOrderList.add(new CarrierOrderModel("jankowalski7@wp.pl", LocalDate.now().plusDays(4), carrierService.getCarrierList().get(0).getId()));
-        carrierOrderList.add(new CarrierOrderModel("jankowalski8@wp.pl", LocalDate.now().plusDays(3), carrierService.getCarrierList().get(1).getId()));
-        carrierOrderList.add(new CarrierOrderModel("jankowalski9@wp.pl", LocalDate.now().plusDays(3), carrierService.getCarrierList().get(2).getId()));
-        carrierOrderList.add(new CarrierOrderModel("jankowalski10@wp.pl", LocalDate.now().plusDays(3), carrierService.getCarrierList().get(3).getId()));
-        carrierOrderList.add(new CarrierOrderModel("jankowalski11@wp.pl", LocalDate.now().plusDays(4), carrierService.getCarrierList().get(3).getId()));
-        carrierOrderList.add(new CarrierOrderModel("jankowalski11@wp.pl", LocalDate.now().minusDays(14), carrierService.getCarrierList().get(2).getId()));
+//        carrierOrderList.add(new CarrierOrderModel("jankowalski1@wp.pl", LocalDate.now().minusDays(11), carrierService.getCarrierList().get(0).getId()));
+//        carrierOrderList.get(0).setPaid(true);
+//        carrierOrderList.add(new CarrierOrderModel("jankowalski2@wp.pl", LocalDate.now().minusDays(2), carrierService.getCarrierList().get(0).getId()));
+//        carrierOrderList.add(new CarrierOrderModel("jankowalski3@wp.pl", LocalDate.now().plusDays(7), carrierService.getCarrierList().get(0).getId()));
+//        carrierOrderList.get(2).setPaid(true);
+//        carrierOrderList.add(new CarrierOrderModel("jankowalski4@wp.pl", LocalDate.now().plusDays(5), carrierService.getCarrierList().get(0).getId()));
+//        carrierOrderList.add(new CarrierOrderModel("jankowalski5@wp.pl", LocalDate.now().plusDays(3), carrierService.getCarrierList().get(0).getId()));
+//        carrierOrderList.add(new CarrierOrderModel("jankowalski6@wp.pl", LocalDate.now().plusDays(5), carrierService.getCarrierList().get(0).getId()));
+//        carrierOrderList.get(5).setPaid(true);
+//        carrierOrderList.add(new CarrierOrderModel("jankowalski7@wp.pl", LocalDate.now().plusDays(4), carrierService.getCarrierList().get(0).getId()));
+//        carrierOrderList.add(new CarrierOrderModel("jankowalski8@wp.pl", LocalDate.now().plusDays(3), carrierService.getCarrierList().get(1).getId()));
+//        carrierOrderList.add(new CarrierOrderModel("jankowalski9@wp.pl", LocalDate.now().plusDays(3), carrierService.getCarrierList().get(2).getId()));
+//        carrierOrderList.add(new CarrierOrderModel("jankowalski10@wp.pl", LocalDate.now().plusDays(3), carrierService.getCarrierList().get(3).getId()));
+//        carrierOrderList.add(new CarrierOrderModel("jankowalski11@wp.pl", LocalDate.now().plusDays(4), carrierService.getCarrierList().get(3).getId()));
+//        carrierOrderList.add(new CarrierOrderModel("jankowalski11@wp.pl", LocalDate.now().minusDays(14), carrierService.getCarrierList().get(2).getId()));
         //
     }
 
@@ -329,6 +329,8 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
     public CarrierOrderRepository getCarrierOrderRepository() {
         return carrierOrderRepository;
     }
+
+
 
 
 }

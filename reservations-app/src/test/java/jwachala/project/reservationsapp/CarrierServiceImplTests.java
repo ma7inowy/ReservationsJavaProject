@@ -1,14 +1,10 @@
 package jwachala.project.reservationsapp;
 
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
-
-import org.junit.jupiter.api.Test;
 
 public class CarrierServiceImplTests {
     @Test
@@ -118,7 +114,7 @@ public class CarrierServiceImplTests {
         coList.add(coM);
         Mockito.when(carrierOrderServiceProvider.getCarrierOrdersByCarrierId("123")).thenReturn(null);
         var sut = new CarrierServiceImpl(given, carrierOrderServiceProvider, bankServiceProvider);
-        var actual = sut.deleteCarrier("123");
+        var actual = sut.cancelCarrier("123");
         Assertions.assertThat(actual).isEqualTo(false);
     }
 
@@ -147,7 +143,7 @@ public class CarrierServiceImplTests {
         Mockito.when(carrierOrderServiceProvider.getCarrierOrdersByCarrierId("123")).thenReturn(coList);
         Mockito.when(bankServiceProvider.addMoneyToAccount("email",10)).thenReturn(true);
         var sut = new CarrierServiceImpl(given, carrierOrderServiceProvider, bankServiceProvider);
-        var actual = sut.deleteCarrier("123");
+        var actual = sut.cancelCarrier("123");
         Assertions.assertThat(given).isEmpty();
         Assertions.assertThat(actual).isEqualTo(true);
     }
