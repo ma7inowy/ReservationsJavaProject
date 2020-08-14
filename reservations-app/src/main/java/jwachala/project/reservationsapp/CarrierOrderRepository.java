@@ -16,9 +16,10 @@ public interface CarrierOrderRepository extends JpaRepository<CarrierOrderModel,
 
     @Query(value = "SELECT * FROM CARRIER_ORDER_MODEL WHERE CARRIER_ORDER_MODEL.CARRIER_ID = (SELECT ID FROM CARRIER_MODEL WHERE COMPANY_NAME = ?1 AND START_CITY = ?2)", nativeQuery = true)
     List<CarrierOrderModel> findCarrierOrdersByCompanyNameAndCity(String companyName, String city);
+
     CarrierOrderModel findByEmailAndCarrierId(String email, String id);
 
     @Query(value = "SELECT * FROM CARRIER_ORDER_MODEL WHERE EMAIL = ?1 AND PAID ='FALSE'", nativeQuery = true)
-    List<CarrierOrderModel> findUnpaidOrders(String email);
+    Iterable<CarrierOrderModel> findUnpaidOrders(String email);
 
 }

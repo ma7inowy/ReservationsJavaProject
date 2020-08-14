@@ -16,13 +16,12 @@ import java.util.Optional;
 public class CarrierOrderServiceImpl implements CarrierOrderService {
 
     //testy
-    public CarrierOrderServiceImpl(List<CarrierOrderModel> carrierOrderList, CarrierService carrierService, BankAccountService bankAccountService) {
-        this.carrierOrderList = carrierOrderList;
+    public CarrierOrderServiceImpl(CarrierService carrierService, BankAccountService bankAccountService, CarrierOrderRepository carrierOrderRepository) {
+        this.carrierOrderRepository = carrierOrderRepository;
         this.carrierService = carrierService;
         this.bankAccountService = bankAccountService;
     }
 
-    private List<CarrierOrderModel> carrierOrderList;
 
     private CarrierService carrierService;
 
@@ -35,7 +34,7 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
     @Autowired
     public CarrierOrderServiceImpl(CarrierService carrierService, BankAccountService bankAccountService) {
 //        this(new ArrayList<>(), carrierRepository, bankAccountService); // pisalo ze tak sie zapętla!
-        this.carrierOrderList = new ArrayList<>();
+//        this.carrierOrderList = new ArrayList<>();
         this.carrierService = carrierService;
         this.bankAccountService = bankAccountService;
 

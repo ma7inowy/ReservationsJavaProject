@@ -1,6 +1,7 @@
 package jwachala.project.reservationsapp;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -12,6 +13,7 @@ import java.util.UUID;
 //OBIEKT OFERTY PRZEWOZU DANEGO PRZEWOZNIKA NP PIOTRKOW->LODZ 23.07.2020, FIRMA MURAPOL
 @Data
 @Entity
+@NoArgsConstructor
 public class CarrierModel {
 
     @Id
@@ -24,9 +26,6 @@ public class CarrierModel {
     private static int counterID = 0;
     private boolean realized = false; // FLAGA INFORMUJACA CZY PRZEWOZ ZOSTAL JUZ ZREALIZOWANY
     private double price;
-
-    public CarrierModel() {
-    }
 
     public CarrierModel(String startCity, String destinationCity, LocalDate date, String companyName, double price) {
         this.startCity = startCity;
