@@ -179,6 +179,7 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
 
     @Override
     public void refreshCarrierOrders() {
+        // NIE ROB FINDALL TYLKO TO ZOPTYMALIZUJ
 //        var coList = new ArrayList<CarrierOrderModel>();
 ////
 ////        for (CarrierOrderModel co : carrierOrderList) {
