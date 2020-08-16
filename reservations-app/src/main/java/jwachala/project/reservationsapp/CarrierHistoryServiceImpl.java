@@ -19,18 +19,19 @@ public class CarrierHistoryServiceImpl implements CarrierHistoryService {
     private CarrierService carrierService;
     private CarrierOrderService carrierOrderService;
 
-    @Autowired
+   @Autowired
     private CarrierHistoryRepository carrierHistoryRepository;
 
-    public CarrierHistoryServiceImpl(List<CarrierModel> carrierHistoryList, CarrierService carrierService, CarrierOrderService carrierOrderService) {
-        this.carrierHistoryList = carrierHistoryList;
+    public CarrierHistoryServiceImpl(CarrierHistoryRepository carrierHistoryRepository, CarrierService carrierService, CarrierOrderService carrierOrderService) {
+        this.carrierHistoryRepository = carrierHistoryRepository;
         this.carrierService = carrierService;
         this.carrierOrderService = carrierOrderService;
     }
 
     @Autowired
     public CarrierHistoryServiceImpl(CarrierService carrierService, CarrierOrderService carrierOrderService) {
-        this(new ArrayList<>(), carrierService,carrierOrderService); // kiedy chcialem zrobic w ten sposob w innych Serwisach to blad ze sie zapetla
+        this.carrierService = carrierService;
+        this.carrierOrderService = carrierOrderService;
     }
 
     @Override
