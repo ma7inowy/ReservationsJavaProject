@@ -27,8 +27,8 @@ public class CarrierServiceImpl implements CarrierService {
     BankAccountService bankAccountService;
 
     //testy
-    public CarrierServiceImpl(List<CarrierModel> carrierList, CarrierOrderService carrierOrderService, BankAccountService bankAccountService) {
-        this.carrierList = carrierList;
+    public CarrierServiceImpl(CarrierRepository carrierRepository, CarrierOrderService carrierOrderService, BankAccountService bankAccountService) {
+        this.carrierRepository = carrierRepository;
         this.carrierOrderService = carrierOrderService;
         this.bankAccountService = bankAccountService;
     }
