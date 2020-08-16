@@ -22,4 +22,6 @@ public interface CarrierOrderRepository extends JpaRepository<CarrierOrderModel,
     @Query(value = "SELECT * FROM CARRIER_ORDER_MODEL WHERE EMAIL = ?1 AND PAID ='FALSE'", nativeQuery = true)
     Iterable<CarrierOrderModel> findUnpaidOrders(String email);
 
+    List<CarrierOrderModel> findByPaid(boolean bool);
+
 }

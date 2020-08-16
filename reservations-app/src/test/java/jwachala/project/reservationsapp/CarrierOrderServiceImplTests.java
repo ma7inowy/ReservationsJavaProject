@@ -188,21 +188,20 @@ public class CarrierOrderServiceImplTests {
 
     @Test
     public void shouldRefreshCarrierOrders() {
-//        var carrierProvider = Mockito.mock(CarrierService.class);
-//        var given = new ArrayList<CarrierOrderModel>();
-//        var cM = new CarrierModel();
-//        cM.setDate(LocalDate.now().plusDays(4));
-//
-//        // should be removed from given
-//        var coM = new CarrierOrderModel();
-//        coM.setCarrierId(cM.getId());
-//        coM.setOrderDate(cM.getDate().plusDays(3));
-//
-//        given.add(coM);
-//        Mockito.when(carrierProvider.getCarrierById(cM.getId())).thenReturn(cM);
-//        var sut = new CarrierOrderServiceImpl(carrierProvider, null, carrierOrderRepository);
-//        sut.refreshCarrierOrders();
-//        Assertions.assertThat(given).isEmpty();
+        var carrierProvider = Mockito.mock(CarrierService.class);
+        var cM = new CarrierModel();
+        cM.setDate(LocalDate.now().plusDays(4));
+
+        // should be removed from given
+        var coM = new CarrierOrderModel();
+        coM.setCarrierId(cM.getId());
+        coM.setOrderDate(cM.getDate().plusDays(3));
+
+        carrierOrderRepository.save(coM);
+        Mockito.when(carrierProvider.getCarrierById(cM.getId())).thenReturn(cM);
+        var sut = new CarrierOrderServiceImpl(carrierProvider, null, carrierOrderRepository);
+        sut.refreshCarrierOrders();
+        Assertions.assertThat(carrierOrderRepository.findAll()).isEmpty();
     }
 
     @Test

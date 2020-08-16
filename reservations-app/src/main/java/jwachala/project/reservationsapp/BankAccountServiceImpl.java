@@ -18,8 +18,8 @@ public class BankAccountServiceImpl implements BankAccountService {
     private BankAccountRepository bankAccountRepository;
 
     //testy
-    public BankAccountServiceImpl(List<BankAccountModel> bankAccountList) {
-        this.bankAccountList = bankAccountList;
+    public BankAccountServiceImpl(BankAccountRepository bankAccountRepository) {
+        this.bankAccountRepository = bankAccountRepository;
     }
 
 

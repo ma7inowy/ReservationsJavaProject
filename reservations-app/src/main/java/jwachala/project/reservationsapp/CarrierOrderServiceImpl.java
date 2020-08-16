@@ -195,14 +195,12 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
 ////            }
 ////        }
 
-        var coList = carrierOrderRepository.findAll();
+        var coList = carrierOrderRepository.findByPaid(false);
         var carrierOrdersForDelete = new ArrayList<CarrierOrderModel>();
 
         for (CarrierOrderModel co : coList) {
-            if (!co.isPaid()) {
                 if (LocalDate.now().isAfter(carrierService.getCarrierById(co.getCarrierId()).getDate().minusDays(5)))
                     carrierOrdersForDelete.add(co);
-            }
         }
 
         if (!carrierOrdersForDelete.isEmpty()) {
