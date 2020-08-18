@@ -35,7 +35,7 @@ public interface CarrierOrderService {
 
     void removeCarrierOrder(CarrierOrderModel i);
 
-    boolean payForOrder(String email,String carrierId);
+    boolean payForOrder(String email, String carrierId);
 
     CarrierOrderRepository getCarrierOrderRepository();
 }

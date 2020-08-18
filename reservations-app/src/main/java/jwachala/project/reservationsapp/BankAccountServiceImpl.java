@@ -1,18 +1,16 @@
 package jwachala.project.reservationsapp;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @Component
+@NoArgsConstructor // czy potrzebny?
 public class BankAccountServiceImpl implements BankAccountService {
-
-    private List<BankAccountModel> bankAccountList;
 
     @Autowired
     private BankAccountRepository bankAccountRepository;
@@ -20,22 +18,6 @@ public class BankAccountServiceImpl implements BankAccountService {
     //testy
     public BankAccountServiceImpl(BankAccountRepository bankAccountRepository) {
         this.bankAccountRepository = bankAccountRepository;
-    }
-
-
-    public BankAccountServiceImpl() {
-        bankAccountList = new ArrayList<>();
-        bankAccountList.add(new BankAccountModel("jankowalski1@wp.pl"));
-        bankAccountList.add(new BankAccountModel("jankowalski2@wp.pl"));
-        bankAccountList.add(new BankAccountModel("jankowalski3@wp.pl"));
-        bankAccountList.add(new BankAccountModel("jankowalski4@wp.pl"));
-        bankAccountList.add(new BankAccountModel("jankowalski5@wp.pl"));
-        bankAccountList.add(new BankAccountModel("jankowalski6@wp.pl"));
-        bankAccountList.add(new BankAccountModel("jankowalski7@wp.pl"));
-        bankAccountList.add(new BankAccountModel("jankowalski8@wp.pl"));
-        bankAccountList.add(new BankAccountModel("jankowalski9@wp.pl"));
-        bankAccountList.add(new BankAccountModel("jankowalski10@wp.pl"));
-        bankAccountList.add(new BankAccountModel("jankowalski11@wp.pl"));
     }
 
     @PostConstruct
@@ -48,14 +30,8 @@ public class BankAccountServiceImpl implements BankAccountService {
         bankAccountRepository.save(new BankAccountModel("jankowalski6@wp.pl"));
     }
 
-
     @Override
     public BankAccountModel getBankAccountByEmail(String email) {
-//        for (BankAccountModel bA : bankAccountList) {
-//            if (bA.getEmail().equals(email))
-//                return bA;
-//        }
-//        return null;
         return bankAccountRepository.findByEmail(email);
     }
 
@@ -66,7 +42,6 @@ public class BankAccountServiceImpl implements BankAccountService {
 
     @Override
     public void addBankAccount(BankAccountModel bankAccountModel) {
-//        bankAccountList.add(bankAccountModel);
         bankAccountRepository.save(bankAccountModel);
     }
 
@@ -84,8 +59,6 @@ public class BankAccountServiceImpl implements BankAccountService {
         account.setAccountBalance(account.getAccountBalance() - price);
         bankAccountRepository.save(account);
     }
-
-
 }
 
 

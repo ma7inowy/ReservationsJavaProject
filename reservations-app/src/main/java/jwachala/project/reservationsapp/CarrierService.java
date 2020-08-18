@@ -9,7 +9,6 @@ public interface CarrierService {
 
     List<CarrierModel> getCarriersbyCompanyName(String companyName);
 
-    // dodaj zlecenie do Carrier
     boolean availabilityMinusOne(String id);
 
     CarrierModel getCarrierById(String id);

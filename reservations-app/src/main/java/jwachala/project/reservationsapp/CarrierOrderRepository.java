@@ -10,7 +10,6 @@ import java.util.List;
 public interface CarrierOrderRepository extends JpaRepository<CarrierOrderModel, String> {
     List<CarrierOrderModel> findByCarrierId(String id);
 
-    //dodany wlasny select
     @Query(value = "SELECT * FROM CARRIER_ORDER_MODEL WHERE CARRIER_ORDER_MODEL.CARRIER_ID = (SELECT ID FROM CARRIER_MODEL WHERE COMPANY_NAME = ?1)", nativeQuery = true)
     List<CarrierOrderModel> findCarrierOrdersByCompanyName(String companyName);
 

@@ -26,8 +26,7 @@ public class CarrierController {
         this.resourceLocationBuilder = resourceLocationBuilder;
     }
 
-    //carriers operations
-    // WSZYSTKIE OFERTY PRZEWOZOW
+    // ---OPERACJE PRZEWOZNIKA---
     @GetMapping("carriers")
     public List<CarrierDTO> getCarriers() {
         List<CarrierDTO> dtoList = new ArrayList<>();
@@ -77,7 +76,7 @@ public class CarrierController {
         model.setCompanyName(dto.getCompanyName());
         model.setAvailability(dto.getAvailability());
         model.setPrice(dto.getPrice());
-        carrierService.addCarrier(model); // czy taka logika tutaj jest ok
+        carrierService.addCarrier(model);
         var uri = resourceLocationBuilder.build(model.getId());
 
         return ResponseEntity.created(uri).build();
@@ -102,7 +101,7 @@ public class CarrierController {
         return ResponseEntity.ok(cDTO);
     }
 
-    //carrierOrders operations
+    // ---OPERACJE NA BILETACH/ZAMOWIENIACH---
 
     // WSZYSTKIE ZAMOWIENIA/BILETY ZAKUPIONE PRZEZ PODROZNIKOW
     @GetMapping("/orders")
@@ -153,7 +152,7 @@ public class CarrierController {
         return dtoList;
     }
 
-    //history
+    // ---HISTORIA PRZEWOZOW---
 
     //HISTORIA WSZYSTKICH PRZEWOZOW DLA DANEJ FIRMY (TRAFIAJA TAM TE PRZEWOZY KTORYCH DATA < LocalDate.now() LUB KTORE MAJA POLE realized = true)
     @GetMapping("/carriers/company/{companyName}/history")
@@ -187,11 +186,6 @@ public class CarrierController {
         return carrierHistoryService.refreshHistory();
     }
 
-    @GetMapping("history")
-    public Iterable<CarrierModel> getCarrierHistoryService() {
-        return carrierHistoryService.getCarrierHistoryList();
-    }
-
     // ODSWIEZA LISTE ZLECEN, NP JESLI NIE OPLACONE 5 DNI PRZED WYJAZDEM TO ANULOWANE
     @GetMapping("orders/refresh")
     public String refreshOrders() {
@@ -199,13 +193,12 @@ public class CarrierController {
         return "refreshed!";
     }
 
-    // anulowanie przewozu - oddanie kasy albo jakiejs czesci
+    // ANULOWANIE PRZEWOZU (PRZEZ FIRME) - ODDANIE KASY KLIENTOM JESLI OPLACICLI PRZEJAZD
     @DeleteMapping("carriers/id/{carrierId}/delete")
     public ResponseEntity<?> deleteCarrier(@PathVariable(value = "carrierId") String carrierId) {
         if (carrierService.cancelCarrier(carrierId))
             return ResponseEntity.noContent().build();
         else return ResponseEntity.notFound().build();
-
     }
 
 }

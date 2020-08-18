@@ -6,6 +6,4 @@ public interface CarrierHistoryService {
     List<CarrierModel> getHistoryCarriersbyCompanyName(String companyName);
 
     List<CarrierModel> refreshHistory();
-
-    Iterable<CarrierModel> getCarrierHistoryList();
 }

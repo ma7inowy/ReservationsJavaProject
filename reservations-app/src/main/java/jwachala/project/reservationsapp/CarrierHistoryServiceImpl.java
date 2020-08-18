@@ -8,18 +8,16 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-// BAZA DANYCH HISTORII PRZEWOZOW
-// TRAFIAJA TAM PRZEWOZY Z PRZEDAWNIONA DATA LUB Z FLAGA (Z obiektu CarrierModel) realized = true
 
+// SERWIS DLA REPOZYTORIUM STARYCH PRZEWOZOW (ZREALIZOWANYCH)
 @NoArgsConstructor
 @Service
 public class CarrierHistoryServiceImpl implements CarrierHistoryService {
 
-    private List<CarrierModel> carrierHistoryList;
     private CarrierService carrierService;
     private CarrierOrderService carrierOrderService;
 
-   @Autowired
+    @Autowired
     private CarrierHistoryRepository carrierHistoryRepository;
 
     public CarrierHistoryServiceImpl(CarrierHistoryRepository carrierHistoryRepository, CarrierService carrierService, CarrierOrderService carrierOrderService) {
@@ -36,50 +34,11 @@ public class CarrierHistoryServiceImpl implements CarrierHistoryService {
 
     @Override
     public List<CarrierModel> getHistoryCarriersbyCompanyName(String companyName) {
-//        List<CarrierModel> carrierListbyCompanyName = new ArrayList<>();
-//        for (var carrier : carrierHistoryList) {
-//            if (carrier.getCompanyName().toLowerCase().equals(companyName.toLowerCase())) {
-//                carrierListbyCompanyName.add(carrier);
-//            }
-//        }
-//        return carrierListbyCompanyName;
         return carrierHistoryRepository.findByCompanyName(companyName);
     }
 
     @Override
     public List<CarrierModel> refreshHistory() {
-//        List<CarrierModel> cMList = carrierService.getCarrierList();
-//        List<CarrierModel> carriersforRemoveList = new ArrayList<>();
-//
-//        // przenoszenie obiektow ofert przewozow z CarrierRepository -> CarrierHistory
-//        for (int i = 0; i< cMList.size();i++) {
-//            if (cMList.get(i).getDate().compareTo(LocalDate.now()) < 0 || cMList.get(i).isRealized()) {
-//                carrierHistoryList.add(cMList.get(i));
-//                carriersforRemoveList.add(cMList.get(i));
-//            }
-//        }
-//
-//        // usuwanie starych zleceń/biletow
-//        List<CarrierOrderModel> CarrierOrderforRemoveList = new ArrayList<>();
-//        for(CarrierOrderModel coM : carrierOrderService.getCarrierOrderListIterable()){
-//            for(CarrierModel cM : carriersforRemoveList){
-//                if(coM.getCarrierId().equals(cM.getId()))
-//                    CarrierOrderforRemoveList.add(coM);
-//            }
-//        }
-//
-//        //usuwanie starych przewozów
-//        for(CarrierModel i : carriersforRemoveList)
-//            carrierService.getCarrierList().remove(i);
-//
-//        // usuwanie starych biletow / zlecen z bazy
-//        for(CarrierOrderModel i : CarrierOrderforRemoveList){
-//            carrierOrderService.removeCarrierOrder(i);
-//        }
-//
-//        return carriersforRemoveList;
-
-//        List<CarrierModel> cMList = carrierService.getCarrierRepository().findAll();
         Iterable<CarrierModel> cMList = carrierService.getAllCarriers();
         List<CarrierModel> carriersforRemoveList = new ArrayList<>();
 
@@ -93,27 +52,22 @@ public class CarrierHistoryServiceImpl implements CarrierHistoryService {
 
         // usuwanie starych zleceń/biletow
         List<CarrierOrderModel> CarrierOrderforRemoveList = new ArrayList<>();
-        for(CarrierOrderModel coM : carrierOrderService.getCarrierOrderListIterable()){
-            for(CarrierModel cM : carriersforRemoveList){
-                if(coM.getCarrierId().equals(cM.getId()))
+        for (CarrierOrderModel coM : carrierOrderService.getCarrierOrderListIterable()) {
+            for (CarrierModel cM : carriersforRemoveList) {
+                if (coM.getCarrierId().equals(cM.getId()))
                     CarrierOrderforRemoveList.add(coM);
             }
         }
 
         //usuwanie starych przewozów
-        for(CarrierModel i : carriersforRemoveList)
+        for (CarrierModel i : carriersforRemoveList)
             carrierService.deleteCarrier(i);
 
         // usuwanie starych biletow / zlecen z bazy
-        for(CarrierOrderModel i : CarrierOrderforRemoveList){
+        for (CarrierOrderModel i : CarrierOrderforRemoveList) {
             carrierOrderService.removeCarrierOrder(i);
         }
 
         return carriersforRemoveList;
-    }
-
-    @Override
-    public Iterable<CarrierModel> getCarrierHistoryList() {
-        return carrierHistoryList;
     }
 }

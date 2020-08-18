@@ -13,16 +13,13 @@ public class CarrierDTO {
     private String destinationCity;
     private LocalDate date;
     private String companyName;
-    private int availability; // nie pokazywac ile wolnych tylko pokazac
+    private int availability;
     private boolean realized;
     private double price;
-
-
 //    private Details details;
 
 //    @Data
 //    static class Details{
 //        private int distance;
 //    }
-
 }

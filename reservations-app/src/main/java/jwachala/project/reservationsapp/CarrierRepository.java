@@ -7,9 +7,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 
 @Repository
-public interface CarrierRepository extends JpaRepository<CarrierModel,String> {
+public interface CarrierRepository extends JpaRepository<CarrierModel, String> {
     List<CarrierModel> findByStartCity(String startCity);
-    List<CarrierModel> findByStartCityAndDestinationCity(String startCity, String destinationCity);
-    List<CarrierModel> findByCompanyName(String companyName);
 
+    List<CarrierModel> findByStartCityAndDestinationCity(String startCity, String destinationCity);
+
+    List<CarrierModel> findByCompanyName(String companyName);
 }

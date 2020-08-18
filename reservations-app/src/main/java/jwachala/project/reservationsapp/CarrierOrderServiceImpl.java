@@ -11,17 +11,9 @@ import java.util.List;
 import java.util.Optional;
 
 
-// BAZA DANYCH O ZAKUPIONYCH BILETACH/MIEJSCA U PRZEWOŹNIKA
+// SERWIS DLA BAZY DANYCH KTORA ZAWIERA ZAKUPIONE BILETY U PRZEWOŹNIKA
 @Service
 public class CarrierOrderServiceImpl implements CarrierOrderService {
-
-    //testy
-    public CarrierOrderServiceImpl(CarrierService carrierService, BankAccountService bankAccountService, CarrierOrderRepository carrierOrderRepository) {
-        this.carrierOrderRepository = carrierOrderRepository;
-        this.carrierService = carrierService;
-        this.bankAccountService = bankAccountService;
-    }
-
 
     private CarrierService carrierService;
 
@@ -33,44 +25,20 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
     //spring
     @Autowired
     public CarrierOrderServiceImpl(CarrierService carrierService, BankAccountService bankAccountService) {
-//        this(new ArrayList<>(), carrierRepository, bankAccountService); // pisalo ze tak sie zapętla!
-//        this.carrierOrderList = new ArrayList<>();
         this.carrierService = carrierService;
         this.bankAccountService = bankAccountService;
-
     }
 
-    @PostConstruct
-    public void init() {
-//        carrierOrderList.add(new CarrierOrderModel("jankowalski1@wp.pl", LocalDate.now().minusDays(11), carrierService.getCarrierList().get(0).getId()));
-//        carrierOrderList.get(0).setPaid(true);
-//        carrierOrderList.add(new CarrierOrderModel("jankowalski2@wp.pl", LocalDate.now().minusDays(2), carrierService.getCarrierList().get(0).getId()));
-//        carrierOrderList.add(new CarrierOrderModel("jankowalski3@wp.pl", LocalDate.now().plusDays(7), carrierService.getCarrierList().get(0).getId()));
-//        carrierOrderList.get(2).setPaid(true);
-//        carrierOrderList.add(new CarrierOrderModel("jankowalski4@wp.pl", LocalDate.now().plusDays(5), carrierService.getCarrierList().get(0).getId()));
-//        carrierOrderList.add(new CarrierOrderModel("jankowalski5@wp.pl", LocalDate.now().plusDays(3), carrierService.getCarrierList().get(0).getId()));
-//        carrierOrderList.add(new CarrierOrderModel("jankowalski6@wp.pl", LocalDate.now().plusDays(5), carrierService.getCarrierList().get(0).getId()));
-//        carrierOrderList.get(5).setPaid(true);
-//        carrierOrderList.add(new CarrierOrderModel("jankowalski7@wp.pl", LocalDate.now().plusDays(4), carrierService.getCarrierList().get(0).getId()));
-//        carrierOrderList.add(new CarrierOrderModel("jankowalski8@wp.pl", LocalDate.now().plusDays(3), carrierService.getCarrierList().get(1).getId()));
-//        carrierOrderList.add(new CarrierOrderModel("jankowalski9@wp.pl", LocalDate.now().plusDays(3), carrierService.getCarrierList().get(2).getId()));
-//        carrierOrderList.add(new CarrierOrderModel("jankowalski10@wp.pl", LocalDate.now().plusDays(3), carrierService.getCarrierList().get(3).getId()));
-//        carrierOrderList.add(new CarrierOrderModel("jankowalski11@wp.pl", LocalDate.now().plusDays(4), carrierService.getCarrierList().get(3).getId()));
-//        carrierOrderList.add(new CarrierOrderModel("jankowalski11@wp.pl", LocalDate.now().minusDays(14), carrierService.getCarrierList().get(2).getId()));
-        //
+    //testy
+    public CarrierOrderServiceImpl(CarrierService carrierService, BankAccountService bankAccountService, CarrierOrderRepository carrierOrderRepository) {
+        this.carrierOrderRepository = carrierOrderRepository;
+        this.carrierService = carrierService;
+        this.bankAccountService = bankAccountService;
     }
 
     @Override
     public List<CarrierOrderModel> getCarrierOrdersByCarrierId(String carrierId) {
-//        List<CarrierOrderModel> carrierOrdersByCarrierId = new ArrayList<>();
-////        for (var carrierOrder : carrierOrderList) {
-////            if (carrierOrder.getCarrierId().equals(carrierId)) {
-////                carrierOrdersByCarrierId.add(carrierOrder);
-////            }
-////        }
-////        return carrierOrdersByCarrierId;
-//        var carrierOrdersByCarrierId = carrierOrderRepository.findByCarrierId(carrierId);
-        return carrierOrderRepository.findByCarrierId(carrierId); // dziala
+        return carrierOrderRepository.findByCarrierId(carrierId);
 
     }
 
@@ -78,54 +46,16 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
     @Override
     public List<CarrierOrderModel> getCarrierOrdersByCompanyName(String companyName) {
         return carrierOrderRepository.findCarrierOrdersByCompanyName(companyName);
-        //wlasny select
-
-
-//        List<CarrierOrderModel> carrierOrderNewList = new ArrayList<>();
-//        for (var coModel : carrierOrderList) {
-//            for (var cModel : carrierService.getAllCarriers()) {
-//                if (coModel.getCarrierId().equals(cModel.getId())) {
-//                    if (cModel.getCompanyName().toLowerCase().equals(companyName.toLowerCase())) {
-//                        carrierOrderNewList.add(coModel);
-//                    }
-//                }
-//            }
-//        }
-//        return carrierOrderNewList;
     }
 
     // na te chwile nie wiem jak to bardziej zoptymalizować
     @Override
     public List<CarrierOrderModel> getCarrierOrdersByCompanyNameAndCity(String companyName, String startCity) {
-//        List<CarrierOrderModel> carrierOrderByCompanyName = getCarrierOrdersByCompanyName(companyName);
-//        List<CarrierOrderModel> carrierOrderListByCnAndCity = new ArrayList<>();
-//
-//        for (var coModel : carrierOrderByCompanyName) {
-//            for (var cModel : carrierService.getAllCarriers()) {
-//                if (coModel.getCarrierId().equals(cModel.getId())) {
-//                    if (cModel.getCompanyName().toLowerCase().equals(companyName.toLowerCase())) {
-//                        if (cModel.getStartCity().toLowerCase().equals(startCity.toLowerCase())) {
-//                            carrierOrderListByCnAndCity.add(coModel);
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        return carrierOrderListByCnAndCity;
         return carrierOrderRepository.findCarrierOrdersByCompanyNameAndCity(companyName, startCity);
     }
 
     @Override
     public List<CarrierOrderModel> getCarrierOrdersByCarrierIdSorted(String carrierId) {
-//        List<CarrierOrderModel> carrierOrdersByCarrierId = new ArrayList<>();
-//        for (var carrierOrder : carrierOrderList) {
-//            if (carrierOrder.getCarrierId().equals(carrierId)) {
-//                carrierOrdersByCarrierId.add(carrierOrder);
-//            }
-//        }
-//
-//        sort(carrierOrdersByCarrierId);
-//        return carrierOrdersByCarrierId;
         if (carrierOrderRepository.findByCarrierId(carrierId).isEmpty()) return null;
         else {
             var carrierOrdersByCarrierId = carrierOrderRepository.findByCarrierId(carrierId);
@@ -141,10 +71,6 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
 
     @Override
     public void makePayment(String id) {
-//        for (CarrierOrderModel co : carrierOrderList) {
-//            if (co.getId().equals(id))
-//                co.setPaid(true);
-//        }
         if (carrierOrderRepository.findById(id).isPresent()) {
             var coM = carrierOrderRepository.findById(id).get();
             coM.setPaid(true);
@@ -154,53 +80,27 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
 
     @Override
     public Optional<CarrierOrderModel> getCarrierOrderById(String id) {
-//        for (CarrierOrderModel co : carrierOrderList) {
-//            if (co.getId().equals(id))
-//                return co;
-//        }
-//        return null;
-
         var coM = carrierOrderRepository.findById(id);
         return coM;
     }
 
     @Override
     public CarrierOrderModel getCarrierOrderByEmailAndCarrierId(String email, String carrierId) {
-//        for (CarrierOrderModel co : carrierOrderList) {
-////            if (co.getEmail().equals(email) && co.getCarrierId().equals(carrierId))
-////                return co;
-////        }
-////        return null;
         if (carrierOrderRepository.findByEmailAndCarrierId(email, carrierId) != null) {
             return carrierOrderRepository.findByEmailAndCarrierId(email, carrierId);
         } else return null;
 
     }
 
+    // SLUZY DO ODSWIEZANIA BILETOW/ZAMOWIEN
     @Override
     public void refreshCarrierOrders() {
-        // NIE ROB FINDALL TYLKO TO ZOPTYMALIZUJ
-//        var coList = new ArrayList<CarrierOrderModel>();
-////
-////        for (CarrierOrderModel co : carrierOrderList) {
-////            if (!co.isPaid()) {
-////                // if order is still not paid and time remaining to carrier start is shorter than 5 days it needs to be removed
-////                if (LocalDate.now().isAfter(carrierService.getCarrierById(co.getCarrierId()).getDate().minusDays(5)))
-////                    coList.add(co);
-////            }
-////        }
-////        if (!coList.isEmpty()) {
-////            for (CarrierOrderModel co1 : coList) {
-////                carrierOrderList.remove(co1);
-////            }
-////        }
-
         var coList = carrierOrderRepository.findByPaid(false);
         var carrierOrdersForDelete = new ArrayList<CarrierOrderModel>();
-
+        //JESLI ZAMOWIENIE JEST NIEOPLACONE A ZOSTALO MNIEJ NIZ 5DNI TO NALEZY TAKIE ZAMOWIENIE USUNAC
         for (CarrierOrderModel co : coList) {
-                if (LocalDate.now().isAfter(carrierService.getCarrierById(co.getCarrierId()).getDate().minusDays(5)))
-                    carrierOrdersForDelete.add(co);
+            if (LocalDate.now().isAfter(carrierService.getCarrierById(co.getCarrierId()).getDate().minusDays(5)))
+                carrierOrdersForDelete.add(co);
         }
 
         if (!carrierOrdersForDelete.isEmpty()) {
@@ -211,32 +111,9 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
 
     }
 
+    // SLUZY DO ZREZYGNOWANIA PRZEZ KLIENTU Z ZAKUPIONEGO BILETU
     @Override
     public boolean deleteOrder(String email, String carrierID) {
-//        double carrierCost = carrierService.getCarrierById(carrierID).getPrice();
-//        if (getCarrierOrderByEmailAndCarrierId(email, carrierID) != null) {
-//            var coM = getCarrierOrderByEmailAndCarrierId(email, carrierID);
-//            BankAccountModel baM = bankAccountService.getBankAccountByEmail(coM.getEmail());
-//            if (!coM.isPaid()) {
-//                carrierOrderList.remove(coM);
-//                return true;
-//            } else {
-//                //jesli zostalo wiecej niz 7 dni do wyjazdu zwroc 90%
-//                if (LocalDate.now().isBefore(carrierService.getCarrierById(coM.getCarrierId()).getDate().minusDays(7))) {
-//                    if (bankAccountService.addMoneyToAccount(baM.getEmail(), carrierCost * 0.9)) {
-//                        carrierOrderList.remove(coM);
-//                        return true;
-//                    }
-//                } else {
-//                    //jesli zostalo mniej niz 7 dni do wyjazdu zwroc 50%
-//                    if (bankAccountService.addMoneyToAccount(baM.getEmail(), carrierCost * 0.5)) {
-//                        carrierOrderList.remove(coM);
-//                        return true;
-//                    }
-//                }
-//            }
-//        }
-//        return false;
         double carrierCost = carrierService.getCarrierById(carrierID).getPrice();
         if (getCarrierOrderByEmailAndCarrierId(email, carrierID) != null) {
             var coM = getCarrierOrderByEmailAndCarrierId(email, carrierID);
@@ -261,24 +138,16 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
             }
         }
         return false;
-
-
     }
 
     @Override
     public void removeAllOrders(List<CarrierOrderModel> coList) {
-//        carrierOrderList.removeAll(coList);
         for (CarrierOrderModel coM : coList)
             carrierOrderRepository.delete(coM);
     }
 
     @Override
     public boolean addOrder(CarrierOrderModel model) {
-//        if (carrierService.availabilityMinusOne(model.getCarrierId())) {
-//            carrierOrderList.add(model);
-//            return true;
-//        }
-//        return false;
         if (carrierService.availabilityMinusOne(model.getCarrierId())) {
             carrierOrderRepository.save(model);
             return true;
@@ -288,25 +157,16 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
 
     @Override
     public Iterable<CarrierOrderModel> unpaidOrders(String email) {
-//        var result = new ArrayList<CarrierOrderModel>();
-//        for (CarrierOrderModel coModel : carrierOrderRepository.findAll()) {
-//            if (!coModel.isPaid() && coModel.getEmail().equals(email)) {
-//                result.add(coModel);
-//            }
-//        }
-//        return result;
         return carrierOrderRepository.findUnpaidOrders(email);
     }
 
     @Override
     public Iterable<CarrierOrderModel> getCarrierOrderListIterable() {
-//        return carrierOrderList;
         return carrierOrderRepository.findAll();
     }
 
     @Override
     public void removeCarrierOrder(CarrierOrderModel i) {
-//        carrierOrderList.remove(i);
         carrierOrderRepository.delete(i);
     }
 
@@ -327,8 +187,5 @@ public class CarrierOrderServiceImpl implements CarrierOrderService {
     public CarrierOrderRepository getCarrierOrderRepository() {
         return carrierOrderRepository;
     }
-
-
-
 
 }

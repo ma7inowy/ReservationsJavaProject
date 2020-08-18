@@ -68,10 +68,4 @@ public class MoneyController {
         var uri = resourceLocationBuilder.build(email);
         return ResponseEntity.created(uri).build();
     }
-//    //dla testow
-//    @GetMapping("/add/accounts")
-//    public double addAccounts(@PathVariable(value = "email") String email) {
-//        return bankAccountService.getBankAccountByEmail(email).getAccountBalance();
-//    }
-
 }
