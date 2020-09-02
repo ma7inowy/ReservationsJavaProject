@@ -195,4 +195,13 @@ public class TravelerController {
         coM.setPaid(true);
         carrierOrderService.getCarrierOrderRepository().save(coM);
     }
+
+    @GetMapping("add/carriers")
+    public void addCarriersToRepository() {
+        carrierService.getCarrierRepository().save(new CarrierModel("City1", "destCity1", LocalDate.now().plusDays(8), "Company0", 10));
+        carrierService.getCarrierRepository().save(new CarrierModel("City2", "destCity2", LocalDate.now().plusDays(8), "Company1", 20));
+        carrierService.getCarrierRepository().save(new CarrierModel("City2", "destCity4", LocalDate.now().minusDays(3), "Company2", 30));
+        carrierService.getCarrierRepository().save(new CarrierModel("City3", "destCity4", LocalDate.now().minusDays(10), "Company3", 40));
+        carrierService.getCarrierRepository().save(new CarrierModel("City5", "destCity5", LocalDate.now().plusDays(1), "Company3", 50));
+    }
 }

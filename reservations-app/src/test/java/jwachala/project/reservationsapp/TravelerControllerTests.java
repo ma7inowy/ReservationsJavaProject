@@ -2,6 +2,7 @@ package jwachala.project.reservationsapp;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,8 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
+
+import static org.mockito.ArgumentMatchers.any;
 
 public class TravelerControllerTests {
     @Test
@@ -85,33 +88,58 @@ public class TravelerControllerTests {
     }
 
     // NIETESTOWALNE createOrder() bo nie sprawdze id modelu w metodzie createOrder
-//    @Test
-//    public void shouldCreateOrder(){
-//        var carrierProvider = Mockito.mock(CarrierService.class);
-//        var carrierOrderProvider = Mockito.mock(CarrierOrderService.class);
-//
-//        var dto = new CarrierOrderDTO();
-//        dto.setCarrierId("123");
-//        dto.setOrderDate(LocalDate.now());
-//        dto.setEmail("jakub@wp.pl");
-//        var model = new CarrierOrderModel();
-//        model.setEmail(dto.getEmail());
-//        model.setOrderDate(dto.getOrderDate());
-//        model.setCarrierId(dto.getCarrierId());
-//        model.setId("");
-//
-//        var uri = new AtomicReference<URI>();
-//        ResourceLocationBuilder resourceProvider = id -> {
-//            uri.set(URI.create(id));
-//            return uri.get();
-//        };
-//
-//        Mockito.when(carrierOrderProvider.addOrder(model)).thenReturn(true);
-//        var sut = new TravelerController(carrierProvider, carrierOrderProvider, null,resourceProvider);
-//        var actual = sut.createOrder(dto);
-//        var expected = ResponseEntity.created(uri.get()).build();
-//        Assertions.assertThat(actual).isEqualTo(expected);
-//    }
+    @Test
+    public void shouldCreateOrder(){
+        var carrierProvider = Mockito.mock(CarrierService.class);
+        var carrierOrderProvider = Mockito.mock(CarrierOrderService.class);
+
+        var validDto = new CarrierOrderDTO();
+        validDto.setCarrierId("123");
+        validDto.setOrderDate(LocalDate.now());
+        validDto.setEmail("jakub@wp.pl");
+
+
+        var uri = new AtomicReference<URI>();
+        ResourceLocationBuilder resourceProvider = id -> {
+            uri.set(URI.create(id));
+            return uri.get();
+        };
+
+        Mockito.when(carrierOrderProvider.addOrder(any())).thenReturn(true);
+        var sut = new TravelerController(carrierProvider, carrierOrderProvider, null,resourceProvider);
+        var actual = sut.createOrder(validDto);
+        var expected = ResponseEntity.created(uri.get()).build();
+        Assertions.assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    public void shouldMapOrder(){
+        var carrierProvider = Mockito.mock(CarrierService.class);
+        var carrierOrderProvider = Mockito.mock(CarrierOrderService.class);
+
+        var validDto = new CarrierOrderDTO();
+        validDto.setCarrierId("123");
+        validDto.setOrderDate(LocalDate.now());
+        validDto.setEmail("jakub@wp.pl");
+
+
+        var uri = new AtomicReference<URI>();
+        ResourceLocationBuilder resourceProvider = id -> {
+            uri.set(URI.create(id));
+            return uri.get();
+        };
+        var argument = ArgumentCaptor.forClass(CarrierOrderModel.class);
+        var sut = new TravelerController(carrierProvider, carrierOrderProvider, null,resourceProvider);
+        sut.createOrder(validDto);
+        Mockito.verify(carrierOrderProvider).addOrder(argument.capture());
+        var expected = new CarrierOrderModel();
+        expected.setCarrierId("123");
+        expected.setOrderDate(validDto.getOrderDate());
+        expected.setEmail("jakub@wp.pl");
+        var actual = argument.getValue();
+        expected.setId(actual.getId());
+        Assertions.assertThat(actual).isEqualTo(expected);
+    }
 
     @Test
     public void shouldPayOrder() {

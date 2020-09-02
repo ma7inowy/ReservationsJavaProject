@@ -1,0 +1,91 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="1" author="byku">
+        <!--        bankRepo BankAccountModel-->
+        <createTable tableName="bank_account_model">
+            <column name="email" type="varchar(50)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="account_balance" type="double">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <!--        CarrierHistoryRepository CarrierModel-->
+        <createTable tableName="carrier_history_model">
+            <column name="id" type="varchar(50)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="start_city" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="destination_city" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="company_name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="availability" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="realized" type="boolean"
+                    defaultValueBoolean="false"/>
+            <column name="price" type="double">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <!--        CarrierRepository CarrierModel-->
+        <createTable tableName="carrier_model">
+            <column name="id" type="varchar(50)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="start_city" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="destination_city" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="company_name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="availability" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="realized" type="boolean"
+                    defaultValueBoolean="false"/>
+            <column name="price" type="double">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <!--        CarrierOrderRepository CarrierOrderModel-->
+        <createTable tableName="carrier_order_model">
+            <column name="id" type="varchar(50)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="email" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="order_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="carrier_id" type="varchar(50)">
+                <constraints nullable="false" foreignKeyName="fk_carrier_id" references="carrier_model(id)"/>
+            </column>
+            <column name="paid" type="boolean"
+                    defaultValueBoolean="false"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

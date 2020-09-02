@@ -13,7 +13,7 @@ import java.util.List;
 // SERWIS OBSLUGUJACY BAZE DANYCH Z OFERTAMI PRZEWOZOW (DLA PRZEWOZNIKOW)
 @Component
 @Data
-@NoArgsConstructor // potrzebny bo inaczej zapetlenie dependency
+@NoArgsConstructor
 public class CarrierServiceImpl implements CarrierService {
 
     @Autowired
@@ -32,14 +32,14 @@ public class CarrierServiceImpl implements CarrierService {
         this.bankAccountService = bankAccountService;
     }
 
-    @PostConstruct
-    public void addCarriersToRepository() {
-        carrierRepository.save(new CarrierModel("City1", "destCity1", LocalDate.now().plusDays(8), "Company0", 10));
-        carrierRepository.save(new CarrierModel("City2", "destCity2", LocalDate.now().plusDays(8), "Company1", 20));
-        carrierRepository.save(new CarrierModel("City2", "destCity4", LocalDate.now().minusDays(3), "Company2", 30));
-        carrierRepository.save(new CarrierModel("City3", "destCity4", LocalDate.now().minusDays(10), "Company3", 40));
-        carrierRepository.save(new CarrierModel("City5", "destCity5", LocalDate.now().plusDays(1), "Company3", 50));
-    }
+//    @PostConstruct
+//    public void addCarriersToRepository() {
+//        carrierRepository.save(new CarrierModel("City1", "destCity1", LocalDate.now().plusDays(8), "Company0", 10));
+//        carrierRepository.save(new CarrierModel("City2", "destCity2", LocalDate.now().plusDays(8), "Company1", 20));
+//        carrierRepository.save(new CarrierModel("City2", "destCity4", LocalDate.now().minusDays(3), "Company2", 30));
+//        carrierRepository.save(new CarrierModel("City3", "destCity4", LocalDate.now().minusDays(10), "Company3", 40));
+//        carrierRepository.save(new CarrierModel("City5", "destCity5", LocalDate.now().plusDays(1), "Company3", 50));
+//    }
 
     @Override
     public List<CarrierModel> getCarriersbyStartCity(String city) { // CZY POWINIENEM TUTAJ ZROBIC JAKIES SPRAWDZENIE CZY ZNALAZLO CZY NIE

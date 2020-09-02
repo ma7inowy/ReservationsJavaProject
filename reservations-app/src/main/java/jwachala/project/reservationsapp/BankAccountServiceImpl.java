@@ -20,15 +20,15 @@ public class BankAccountServiceImpl implements BankAccountService {
         this.bankAccountRepository = bankAccountRepository;
     }
 
-    @PostConstruct
-    public void init() {
-        bankAccountRepository.save(new BankAccountModel("jankowalski1@wp.pl"));
-        bankAccountRepository.save(new BankAccountModel("jankowalski2@wp.pl"));
-        bankAccountRepository.save(new BankAccountModel("jankowalski3@wp.pl"));
-        bankAccountRepository.save(new BankAccountModel("jankowalski4@wp.pl"));
-        bankAccountRepository.save(new BankAccountModel("jankowalski5@wp.pl"));
-        bankAccountRepository.save(new BankAccountModel("jankowalski6@wp.pl"));
-    }
+//    @PostConstruct
+//    public void init() {
+//        bankAccountRepository.save(new BankAccountModel("jankowalski1@wp.pl"));
+//        bankAccountRepository.save(new BankAccountModel("jankowalski2@wp.pl"));
+//        bankAccountRepository.save(new BankAccountModel("jankowalski3@wp.pl"));
+//        bankAccountRepository.save(new BankAccountModel("jankowalski4@wp.pl"));
+//        bankAccountRepository.save(new BankAccountModel("jankowalski5@wp.pl"));
+//        bankAccountRepository.save(new BankAccountModel("jankowalski6@wp.pl"));
+//    }
 
     @Override
     public BankAccountModel getBankAccountByEmail(String email) {
